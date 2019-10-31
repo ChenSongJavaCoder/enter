@@ -1,0 +1,79 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      default-filters: SwaggerHeaderFilter
+      routes:
+        - id: test_route
+          uri: http://www.ityouknow.com
+          predicates:
+            - Path=/spring-cloud
+eureka:
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 360000
+        strategy: SEMAPHORE
+      circuitBreaker:
+        sleepWindowInMilliseconds: 5000
+      fallback:
+        isolation:
+          semaphore:
+            maxConcurrentRequests: 50
+  threadpool:
+    default:
+      coreSize: 100
+
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    enabled: true
+
+ribbon:
+  ReadTimeout: 300000
+  ConnectTimeout: 5000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 2
+  OkToRetryOnAllOperations: false
+#  retryableStatusCodes: 404,502
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  level:
+    org.springframework.cloud.gateway: info
+    org.springframework.http.server.reactive: info
+    org.springframework.web.reactive: info
+    reactor.ipc.netty: info

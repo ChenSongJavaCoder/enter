@@ -1,0 +1,38 @@
+server:
+  port: 8791
+  undertow:
+    io-threads: 4
+    worker-threads: 20
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: config-service
+  profiles:
+    active: develop
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ChenSongJavaCoder/config.git
+          search-paths: '{application}'
+          username: 424118306@qq.com
+          password: cs08142010
+eureka:
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    service-url:
+      defaultZone: http://eureka-service-${spring.profiles.active}-service:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
