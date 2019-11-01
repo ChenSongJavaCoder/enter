@@ -1,0 +1,26 @@
+server:
+  port: 8091
+  undertow:
+    io-threads: 4
+    worker-threads: 20
+    buffer-size: 1024
+    direct-buffers: true
+
+#swagger:
+#  enable: true
+
+spring:
+  application:
+    name: biz-service
+
+eureka:
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

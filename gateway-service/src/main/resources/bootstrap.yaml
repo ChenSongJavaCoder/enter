@@ -18,6 +18,11 @@ spring:
           uri: http://www.ityouknow.com
           predicates:
             - Path=/spring-cloud
+#        - id: biz_service
+#          uri: lb://biz-service
+#          predicates:
+#            - Path=/biz-service
+
 eureka:
   instance:
     appname: ${spring.application.name}
@@ -77,3 +82,4 @@ logging:
     org.springframework.http.server.reactive: info
     org.springframework.web.reactive: info
     reactor.ipc.netty: info
+

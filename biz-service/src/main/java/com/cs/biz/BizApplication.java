@@ -1,22 +1,22 @@
-package com.cs.gateway;
+package com.cs.biz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * @ClassName: GatewayApplication
+ * @ClassName: BizApplication
  * @Author: CS
- * @Date: 2019/10/31 14:26
+ * @Date: 2019/11/1 15:15
  * @Description:
  */
 @SpringBootApplication
+@EnableFeignClients
 @EnableDiscoveryClient
-@EnableEurekaClient
-public class GatewayApplication {
+public class BizApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GatewayApplication.class, args);
+		SpringApplication.run(BizApplication.class, args);
 	}
 }

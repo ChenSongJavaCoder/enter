@@ -8,6 +8,11 @@
         <module>config-service</module>
         <module>gateway-service</module>
         <module>biz-service</module>
+        <module>storage-service</module>
+        <module>message-service</module>
+        <module>mq-service</module>
+        <module>task-service</module>
+        <module>es-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,7 +29,9 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.2.0.RELEASE</spring-boot.version>
+        <!--        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>-->
+        <!--        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>-->
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
         <spring-cloud.version>Hoxton.RC1</spring-cloud.version>
         <targetJavaProject>${basedir}/src/main/java</targetJavaProject>
         <targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
@@ -55,6 +62,10 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -70,13 +81,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-sleuth</artifactId>
-                <version>2.1.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

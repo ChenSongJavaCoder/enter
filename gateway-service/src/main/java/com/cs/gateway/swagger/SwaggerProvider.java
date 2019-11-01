@@ -22,7 +22,7 @@ import java.util.List;
 public class SwaggerProvider implements SwaggerResourcesProvider {
 	public static final String API_URI = "/v2/api-docs";
 
-	public static final String EUREKA_SUB_PRIX = "CompositeDiscoveryClient_";
+	public static final String EUREKA_SUB_PREFIX = "ReactiveCompositeDiscoveryClient_";
 
 	public static final String ADMIN_SERVER = "admin-server";
 
@@ -41,7 +41,8 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
 					|| StringUtils.endsWithIgnoreCase(routeDefinition.getId(), GATEWAY_SERVICE)) {
 				return;
 			}
-			resources.add(swaggerResource(routeDefinition.getId().substring(EUREKA_SUB_PRIX.length()), routeDefinition.getPredicates().get(0).getArgs().get("pattern").replace("/**", API_URI)));
+			resources.add(swaggerResource(routeDefinition.getId().substring(EUREKA_SUB_PREFIX.length()),
+					routeDefinition.getPredicates().get(0).getArgs().get("pattern").replace("/**", API_URI)));
 		});
 
 		return resources;

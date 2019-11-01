@@ -1,22 +1,20 @@
-package com.cs.gateway;
+package com.cs.storage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
- * @ClassName: GatewayApplication
+ * @ClassName: StorageApplication
  * @Author: CS
- * @Date: 2019/10/31 14:26
+ * @Date: 2019/11/1 16:38
  * @Description:
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableEurekaClient
-public class GatewayApplication {
+public class StorageApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GatewayApplication.class, args);
+		SpringApplication.run(StorageApplication.class, args);
 	}
 }
