@@ -1,7 +1,6 @@
 package com.cs.storage.api;
 
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -13,6 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface TestApi {
 
 	@ApiOperation("测试接口")
-	@GetMapping(value = "/testApi", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/testApi")
 	String testApi();
 }
