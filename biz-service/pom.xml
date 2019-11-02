@@ -12,7 +12,6 @@
     <artifactId>biz-service</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.cs</groupId>
             <artifactId>storage-api</artifactId>
