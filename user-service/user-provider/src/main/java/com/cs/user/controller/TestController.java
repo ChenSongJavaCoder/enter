@@ -3,6 +3,8 @@ package com.cs.user.controller;
 import com.cs.user.api.TestApi;
 import com.cs.user.entity.UserCs;
 import com.cs.user.mapper.UserCsMapper;
+import com.cs.user.pojo.UserDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,5 +47,15 @@ public class TestController implements TestApi {
 			return "账号密码匹配成功！";
 		}
 		return "登录失败！";
+	}
+
+	@Override
+	public UserDto loadByName(String name) {
+		UserCs userCs = userCsMapper.selectOne(new UserCs().setName(name));
+		UserDto userDto = new UserDto();
+		if (Objects.nonNull(userCs)) {
+			BeanUtils.copyProperties(userCs, userDto);
+		}
+		return userDto;
 	}
 }

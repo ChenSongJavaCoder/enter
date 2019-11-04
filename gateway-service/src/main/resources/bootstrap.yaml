@@ -18,10 +18,6 @@ spring:
           uri: http://www.ityouknow.com
           predicates:
             - Path=/spring-cloud
-#        - id: biz_service
-#          uri: lb://biz-service
-#          predicates:
-#            - Path=/biz-service
 
 eureka:
   instance:

@@ -1,7 +1,6 @@
-package com.cs.auth.service;
+package com.cs.auth.security.service;
 
 import com.cs.auth.feign.FeignUserApi;
-import com.cs.auth.security.OauthUser;
 import com.cs.user.pojo.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Component
-public class UserService implements UserDetailsService {
+public class UsernamePasswordUserService implements UserDetailsService {
 
 	@Autowired
 	private FeignUserApi feignUserApi;
@@ -30,8 +29,8 @@ public class UserService implements UserDetailsService {
 		UserDto user = feignUserApi.loadByName(username);
 		//需要构造org.springframework.security.core.userdetails.User 对象包含账号密码还有用户的角色
 		if (user != null) {
-			User u = new User(user.getName(), user.getPassword(), AuthorityUtils.createAuthorityList("admin"));
-			return new OauthUser(user, u);
+			User u = new User(String.valueOf(user.getId()), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+			return u;
 		} else {
 			throw new UsernameNotFoundException("用户[" + username + "]不存在");
 		}
