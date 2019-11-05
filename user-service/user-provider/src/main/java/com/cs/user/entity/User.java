@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Table;
+
 /**
- * @ClassName: UserCs
+ * @ClassName: User
  * @Author: CS
  * @Date: 2019/11/2 10:48
  * @Description:
@@ -16,7 +18,8 @@ import lombok.experimental.Accessors;
 @ApiModel
 @Accessors(chain = true)
 @EqualsAndHashCode
-public class UserCs extends BaseEntity {
+@Table(name = "user_cs")
+public class User extends BaseEntity {
 
 	private String name;
 

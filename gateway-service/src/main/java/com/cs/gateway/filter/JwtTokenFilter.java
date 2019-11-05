@@ -58,7 +58,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 		String url = exchange.getRequest().getURI().getPath();
 		log.info(url);
 		//跳过不需要验证的路径
-		if (ignoreUriConfig.ignoreUrls().contains(url)) {
+        if (ignoreUriConfig.ignoreAuthUrls().contains(url)) {
 			return chain.filter(exchange);
 		}
 		if (StringUtils.endsWithIgnoreCase(url, SwaggerProvider.API_URI)) {

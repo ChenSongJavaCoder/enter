@@ -1,7 +1,7 @@
 package com.cs.user.controller;
 
 import com.cs.user.api.TestApi;
-import com.cs.user.entity.UserCs;
+import com.cs.user.entity.User;
 import com.cs.user.mapper.UserCsMapper;
 import com.cs.user.pojo.UserDto;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class TestController implements TestApi {
 
 	@Override
 	public String test() {
-		int record = userCsMapper.insertSelective(new UserCs().setAge(26).setName("cs_" + LocalDateTime.now().toString()).setPassword(passwordEncoder.encode(defaultPassword)));
+        int record = userCsMapper.insertSelective(new User().setAge(26).setName("cs_" + LocalDateTime.now().toString()).setPassword(passwordEncoder.encode(defaultPassword)));
 		if (1 == record) {
 			return "insert user success!";
 		}
@@ -44,9 +44,9 @@ public class TestController implements TestApi {
 
 	@Override
 	public String testLogin() {
-		UserCs userCs = new UserCs();
-		userCs.setId(3L);
-		UserCs a = userCsMapper.selectOne(userCs);
+        User user = new User();
+        user.setId(3L);
+        User a = userCsMapper.selectOne(user);
 		if (Objects.nonNull(a) && passwordEncoder.matches(defaultPassword, a.getPassword())) {
 			return "账号密码匹配成功！";
 		}
@@ -55,15 +55,15 @@ public class TestController implements TestApi {
 
 	@Override
 	public UserDto getUserByUsername(String name) {
-		UserCs userCs = null;
+        User user = null;
 		try {
-			userCs = userCsMapper.selectOne(new UserCs().setName(name));
+            user = userCsMapper.selectOne(new User().setName(name));
 		} catch (Exception e) {
 			log.error(e.getCause().getMessage());
 		}
 		UserDto userDto = new UserDto();
-		if (Objects.nonNull(userCs)) {
-			BeanUtils.copyProperties(userCs, userDto);
+        if (Objects.nonNull(user)) {
+            BeanUtils.copyProperties(user, userDto);
 		}
 		return userDto;
 	}

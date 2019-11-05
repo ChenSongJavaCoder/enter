@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @ClassName: UserApi
@@ -27,7 +28,7 @@ public interface UserApi {
 	 */
 	@ApiOperation("新增用户")
 	@PostMapping(value = "createUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	Result<String> createUser(UserInfo request);
+	Result<String> createUser(@RequestBody UserInfo request);
 
 	/**
 	 * 修改用户
@@ -37,7 +38,7 @@ public interface UserApi {
 	 */
 	@ApiOperation("修改用户")
 	@PostMapping(value = "updateUser", produces = MediaType.APPLICATION_JSON_VALUE)
-	Result<String> updateUser(UserInfo request);
+	Result<String> updateUser(@RequestBody UserInfo request);
 
 
 	/**

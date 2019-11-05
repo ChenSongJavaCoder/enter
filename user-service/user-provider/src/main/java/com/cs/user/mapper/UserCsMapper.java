@@ -1,7 +1,7 @@
 package com.cs.user.mapper;
 
 import com.cs.common.mybatis.BaseMapper;
-import com.cs.user.entity.UserCs;
+import com.cs.user.entity.User;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @Description:
  */
 @Repository
-public interface UserCsMapper extends BaseMapper<UserCs> {
+public interface UserCsMapper extends BaseMapper<User> {
 }

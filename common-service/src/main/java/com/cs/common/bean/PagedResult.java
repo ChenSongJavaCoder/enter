@@ -22,6 +22,6 @@ public class PagedResult<T> {
 	private List<T> rows;
 
 	@ApiModelProperty(value = "总条数", example = "100", required = true)
-	private long total;
+	private Long total;
 
 }

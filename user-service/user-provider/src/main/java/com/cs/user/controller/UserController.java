@@ -1,8 +1,9 @@
 package com.cs.user.controller;
 
+import com.cs.common.bean.MessageBuilder;
 import com.cs.common.bean.Result;
 import com.cs.user.api.UserApi;
-import com.cs.user.entity.UserCs;
+import com.cs.user.entity.User;
 import com.cs.user.mapper.UserCsMapper;
 import com.cs.user.pojo.UserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -22,31 +23,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController implements UserApi {
 
-	@Autowired
-	UserCsMapper userCsMapper;
+    @Autowired
+    UserCsMapper userCsMapper;
 
 
-	@Override
-	public Result<String> createUser(UserInfo request) {
+    @Override
+    public Result<String> createUser(UserInfo request) {
+        User user = new User();
+        BeanUtils.copyProperties(request, user);
+        userCsMapper.insertSelective(user);
+        return Result.success()
+                .data(MessageBuilder.successMessage())
+                .build();
+    }
 
-		UserCs userCs = new UserCs();
-		BeanUtils.copyProperties(request, userCs);
-		userCsMapper.insertSelective(userCs);
-		return null;
-	}
+    @Override
+    public Result<String> updateUser(UserInfo request) {
+        return null;
+    }
 
-	@Override
-	public Result<String> updateUser(UserInfo request) {
-		return null;
-	}
+    @Override
+    public Result<UserInfo> getUserInfoById(Long userId) {
+        return null;
+    }
 
-	@Override
-	public Result<UserInfo> getUserInfoById(Long userId) {
-		return null;
-	}
-
-	@Override
-	public Result<UserInfo> getUserInfoByUsername(String username) {
-		return null;
-	}
+    @Override
+    public Result<UserInfo> getUserInfoByUsername(String username) {
+        return null;
+    }
 }
