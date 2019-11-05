@@ -29,7 +29,7 @@ public class UsernamePasswordUserService implements UserDetailsService {
 		UserDto user = feignUserApi.loadByName(username);
 		//需要构造org.springframework.security.core.userdetails.User 对象包含账号密码还有用户的角色
 		if (user != null) {
-			User u = new User(String.valueOf(user.getId()), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+			User u = new User(user.getName(), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
 			return u;
 		} else {
 			throw new UsernameNotFoundException("用户[" + username + "]不存在");

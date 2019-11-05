@@ -81,7 +81,7 @@ public class JwtUserService implements UserDetailsService {
 		return JWT.create()
 				.withSubject(userDetails.getUsername())
 				.withIssuedAt(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()))
-				.withExpiresAt(Date.from(dateTime.plusSeconds(TOKEN_EXPIRED_SECONDS).atZone(ZoneId.systemDefault()).toInstant()))
+				.withExpiresAt(Date.from(dateTime.plusDays(1).atZone(ZoneId.systemDefault()).toInstant()))
 				.sign(algorithm);
 	}
 
