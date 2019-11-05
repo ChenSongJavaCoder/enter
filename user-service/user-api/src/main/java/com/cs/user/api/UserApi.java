@@ -41,6 +41,17 @@ public interface UserApi {
 	Result<String> updateUser(@RequestBody UserInfo request);
 
 
+    /**
+     * 根据用户名验证是否已存在
+     *
+     * @param username
+     * @return
+     */
+    @ApiOperation("根据用户名验证是否已存在")
+    @PostMapping(value = "checkExistByUsername/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    Result<Boolean> checkExistByUsername(@PathVariable String username);
+
+
 	/**
 	 * 根据ID查询用户信息
 	 *

@@ -1,5 +1,6 @@
 package com.cs.user.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,13 +16,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserInfo {
 
-	private Long id;
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private Integer age;
+    private Integer age;
 
-	private String password;
+    /**
+     * 使用该方式选择部分属性不参与序列化
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String password;
 
-	private Boolean deleted;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean deleted;
 }
