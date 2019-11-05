@@ -26,7 +26,7 @@ public class UsernamePasswordUserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		//查询用户信息
-		UserDto user = feignUserApi.loadByName(username);
+		UserDto user = feignUserApi.getUserByUsername(username);
 		//需要构造org.springframework.security.core.userdetails.User 对象包含账号密码还有用户的角色
 		if (user != null) {
 			User u = new User(user.getName(), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));

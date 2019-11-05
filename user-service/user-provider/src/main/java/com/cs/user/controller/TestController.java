@@ -4,10 +4,12 @@ import com.cs.user.api.TestApi;
 import com.cs.user.entity.UserCs;
 import com.cs.user.mapper.UserCsMapper;
 import com.cs.user.pojo.UserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.util.Objects;
  * @Date: 2019/11/2 11:03
  * @Description:
  */
+@Slf4j
+@Validated
 @RestController
 public class TestController implements TestApi {
 
@@ -50,8 +54,13 @@ public class TestController implements TestApi {
 	}
 
 	@Override
-	public UserDto loadByName(String name) {
-		UserCs userCs = userCsMapper.selectOne(new UserCs().setName(name));
+	public UserDto getUserByUsername(String name) {
+		UserCs userCs = null;
+		try {
+			userCs = userCsMapper.selectOne(new UserCs().setName(name));
+		} catch (Exception e) {
+			log.error(e.getCause().getMessage());
+		}
 		UserDto userDto = new UserDto();
 		if (Objects.nonNull(userCs)) {
 			BeanUtils.copyProperties(userCs, userDto);

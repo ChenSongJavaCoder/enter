@@ -24,5 +24,5 @@ public interface TestApi {
 
 	@ApiOperation("loadByName")
 	@GetMapping(value = "loadByName/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
-	UserDto loadByName(@PathVariable(value = "name") String name);
+	UserDto getUserByUsername(@PathVariable(value = "name") String name);
 }

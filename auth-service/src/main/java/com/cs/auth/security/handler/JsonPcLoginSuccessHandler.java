@@ -1,6 +1,7 @@
 package com.cs.auth.security.handler;
 
 import com.cs.auth.security.service.JwtUserService;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -27,6 +28,6 @@ public class JsonPcLoginSuccessHandler implements AuthenticationSuccessHandler {
 	                                    Authentication authentication) throws IOException, ServletException {
 		String token = jwtUserService.createPcAuthorizationToken((UserDetails) authentication.getPrincipal());
 		response.setHeader("Authorization", token);
-		response.setContentType("APPLICATION_JSON");
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 	}
 }

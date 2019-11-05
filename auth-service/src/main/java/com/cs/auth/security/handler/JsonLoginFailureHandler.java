@@ -1,6 +1,7 @@
 package com.cs.auth.security.handler;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -18,6 +19,6 @@ public class JsonLoginFailureHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		response.setContentType("APPLICATION_JSON");
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 	}
 }
