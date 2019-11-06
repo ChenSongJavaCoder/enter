@@ -126,7 +126,7 @@ public class UserController implements UserApi {
     private boolean checkExistByUserName(String name) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", name);
+	    criteria.andEqualTo("username", name);
 //        example.orderBy("").desc().orderBy("").asc();
         List<User> users = userCsMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(users)) {
