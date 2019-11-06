@@ -25,4 +25,16 @@ public class UserConverterConfig extends AbstractConverterConfig<UserConverterCo
         this.showDeleted = false;
         return this;
     }
+
+    @Override
+    public String[] ignoreProperties() {
+        String[] ignoreProperties = new String[2];
+        if (!this.showDeleted) {
+            ignoreProperties[0] = "deleted";
+        }
+        if (!this.showPassword) {
+            ignoreProperties[1] = "password";
+        }
+        return ignoreProperties;
+    }
 }

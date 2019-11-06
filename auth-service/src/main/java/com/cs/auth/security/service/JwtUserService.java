@@ -28,9 +28,9 @@ import java.util.Date;
 public class JwtUserService implements UserDetailsService {
 
     /**
-     * 端登录过期时间
+     * 端登录过期时间,24h
      */
-    private static Long TOKEN_EXPIRED_SECONDS = 60L * 60L;
+    private static Long TOKEN_EXPIRED_SECONDS = 60 * 60 * 24L;
 
     private PasswordEncoder passwordEncoder;
 
@@ -92,7 +92,7 @@ public class JwtUserService implements UserDetailsService {
         return JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withIssuedAt(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()))
-                .withExpiresAt(Date.from(dateTime.plusDays(1).atZone(ZoneId.systemDefault()).toInstant()))
+                .withExpiresAt(Date.from(dateTime.plusSeconds(TOKEN_EXPIRED_SECONDS).atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(algorithm);
     }
 

@@ -9,4 +9,6 @@ public abstract class AbstractConverterConfig<T> {
 
     public abstract T defaultConfig();
 
+    public abstract String[] ignoreProperties();
+
 }

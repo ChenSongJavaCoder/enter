@@ -26,10 +26,10 @@ public class ListUserInfoConverter implements SmartConverter<List<User>, List<Us
             return Collections.emptyList();
         }
 
-        //TODO use config
+
         List<UserInfo> userInfos = users.stream().map(p -> {
             UserInfo userInfo = new UserInfo();
-            BeanUtils.copyProperties(p, userInfo, "password");
+            BeanUtils.copyProperties(p, userInfo, config.ignoreProperties());
             return userInfo;
         }).collect(Collectors.toList());
 
@@ -40,4 +40,6 @@ public class ListUserInfoConverter implements SmartConverter<List<User>, List<Us
     public List<UserInfo> convert(List<User> users) {
         return convert(users, new UserConverterConfig().defaultConfig());
     }
+
+
 }

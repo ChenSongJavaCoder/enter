@@ -47,7 +47,7 @@ public class SystemAop {
         return retVal;
     }
 
-//    @Pointcut("execution(* cn.geeme.hairdressing.service.controller..*(..))")
+//    @Pointcut("execution(* com.cs.*.controller..*(..))")
 ////    public void controllerMethodPointcut() {
 ////    }
 ////
@@ -56,8 +56,6 @@ public class SystemAop {
 ////    public void after(JoinPoint point, Object response) {
 ////        SystemInfo systemInfo =  new SystemInfo();
 ////        if (response instanceof BaseResponse) {
-////            systemInfo.setSystem_code(SystemInfo.ResponseCodeEnum.SUCCESS.getCode()).setSystem_message(SUCCESS_MESSAGE);
-////            ((BaseResponse) response).setSystemInfo(systemInfo);
 ////        } else {
 ////            throw new IllegalStateException(SUCCESS_WITHOUT_BASERESPONSE);
 ////        }

@@ -29,14 +29,7 @@ public class SingleUserInfoConverter implements SmartConverter<User, UserInfo, U
         }
 
         UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(user, userInfo);
-
-        if (!config.isShowPassword()) {
-            userInfo.setPassword(null);
-        }
-        if (!config.isShowDeleted()) {
-            userInfo.setDeleted(null);
-        }
+        BeanUtils.copyProperties(user, userInfo, config.ignoreProperties());
 
         return userInfo;
     }
