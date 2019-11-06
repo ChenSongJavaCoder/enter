@@ -13,8 +13,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResultCode {
 
-	SUCCESS(1, "成功"),
-	FAILURE(0, "失败"),
+    SUCCESS(200, "成功"),
+    FAILURE(500, "失败"),
+    ILLEGAL(400, "参数不合法"),
 	;
 
 	private int code;

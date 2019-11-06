@@ -16,11 +16,13 @@ import lombok.experimental.Accessors;
 public class UserConverterConfig extends AbstractConverterConfig<UserConverterConfig> {
 
 
-    private boolean aConverter;
+    private boolean showPassword;
+    private boolean showDeleted;
 
     @Override
     public UserConverterConfig defaultConfig() {
-        this.aConverter = true;
+        this.showPassword = false;
+        this.showDeleted = false;
         return this;
     }
 }

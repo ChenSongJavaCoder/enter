@@ -19,18 +19,24 @@ public class SingleUserInfoConverter implements SmartConverter<User, UserInfo, U
 
     @Override
     public UserInfo convert(User user) {
-        return converter(user, new UserConverterConfig().defaultConfig());
+        return convert(user, new UserConverterConfig().defaultConfig());
     }
 
     @Override
-    public UserInfo converter(User user, UserConverterConfig config) {
+    public UserInfo convert(User user, UserConverterConfig config) {
         if (Objects.isNull(user)) {
             return null;
         }
-        // TODO use config
 
         UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(user, userInfo, "password");
+        BeanUtils.copyProperties(user, userInfo);
+
+        if (!config.isShowPassword()) {
+            userInfo.setPassword(null);
+        }
+        if (!config.isShowDeleted()) {
+            userInfo.setDeleted(null);
+        }
 
         return userInfo;
     }

@@ -22,21 +22,28 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @EqualsAndHashCode
 public class BaseEntity {
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * 创建时间
-	 */
-	@Column(name = "create_time")
-	private LocalDateTime createTime;
 
-	/**
-	 * 最后修改时间
-	 */
-	@Column(name = "modify_time")
-	private LocalDateTime modifyTime;
+    /**
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
+
+    /**
+     * 最后修改时间
+     */
+    @Column(name = "modify_time")
+    private LocalDateTime modifyTime;
+
+    /**
+     * 逻辑删除标识 TODO @LogicDeleted
+     */
+    @Column(name = "deleted")
+    private Boolean deleted;
 
 }

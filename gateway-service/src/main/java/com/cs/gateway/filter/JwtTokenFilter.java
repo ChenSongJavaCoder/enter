@@ -83,8 +83,8 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 				if (jwt.getExpiresAt().before(Calendar.getInstance().getTime())) {
 					throw new Exception("Token expires");
 				}
-				//TODO 可以进一步校验,识别用户身份信息
-				log.info("jwt ---- {}", objectMapper.writeValueAsString(jwt));
+				//TODO token刷新 可以进一步校验,识别用户身份信息 消息进行日志的记录
+				log.debug("jwt ---- {}", objectMapper.writeValueAsString(jwt));
 				return chain.filter(exchange);
 			} catch (ExpiredJwtException e) {
 				e.printStackTrace();

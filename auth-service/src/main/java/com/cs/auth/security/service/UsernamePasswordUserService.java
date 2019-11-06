@@ -1,7 +1,8 @@
 package com.cs.auth.security.service;
 
 import com.cs.auth.feign.FeignUserApi;
-import com.cs.user.pojo.UserDto;
+import com.cs.common.bean.Result;
+import com.cs.user.pojo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -20,19 +21,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsernamePasswordUserService implements UserDetailsService {
 
-	@Autowired
-	private FeignUserApi feignUserApi;
+    @Autowired
+    private FeignUserApi feignUserApi;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//查询用户信息
-		UserDto user = feignUserApi.getUserByUsername(username);
-		//需要构造org.springframework.security.core.userdetails.User 对象包含账号密码还有用户的角色
-		if (user != null) {
-			User u = new User(user.getName(), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
-			return u;
-		} else {
-			throw new UsernameNotFoundException("用户[" + username + "]不存在");
-		}
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //查询用户信息
+        Result<UserInfo> userInfoResult = feignUserApi.getUserInfoByUsername(username);
+        //需要构造org.springframework.security.core.userdetails.User 对象包含账号密码还有用户的角色
+        if (userInfoResult.isSuccess()) {
+            UserInfo user = userInfoResult.getData();
+            User u = new User(String.valueOf(user.getId()), user.getPassword(), AuthorityUtils.createAuthorityList("USER"));
+            return u;
+        } else {
+            throw new UsernameNotFoundException("用户[" + username + "]不存在");
+        }
+    }
 }

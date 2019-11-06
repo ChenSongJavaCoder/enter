@@ -16,6 +16,10 @@ import lombok.experimental.Accessors;
 @ApiModel
 @AllArgsConstructor
 public class Result<T> {
+
+    @ApiModelProperty(value = "是否成功", required = true)
+    private boolean success;
+
     @ApiModelProperty(value = "返回码", required = true)
     private int code;
 
@@ -26,20 +30,26 @@ public class Result<T> {
     private T data;
 
     public static Builder success() {
-        return new Builder(ResultCode.SUCCESS.getCode(), MessageBuilder.successMessage());
+        return new Builder(true, ResultCode.SUCCESS.getCode(), MessageBuilder.successMessage());
     }
 
     public static Builder failure() {
-        return new Builder(ResultCode.FAILURE.getCode(), MessageBuilder.failureMessage());
+        return new Builder(false, ResultCode.FAILURE.getCode(), MessageBuilder.failureMessage());
+    }
+
+    public static Builder illegal() {
+        return new Builder(false, ResultCode.ILLEGAL.getCode(), MessageBuilder.failureMessage());
     }
 
     @Accessors(chain = true)
     public static class Builder {
+        private boolean success;
         private int code;
         private String message;
         private Object data;
 
-        protected Builder(int code, String message) {
+        protected Builder(boolean success, int code, String message) {
+            this.success = success;
             this.code = code;
             this.message = message;
         }
@@ -56,7 +66,7 @@ public class Result<T> {
 
         @SuppressWarnings("unchecked")
         public <T> Result<T> build() {
-            return new Result<T>(code, message, (T) data);
+            return new Result<T>(success, code, message, (T) data);
         }
 
     }

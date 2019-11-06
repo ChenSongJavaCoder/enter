@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Min;
+
 /**
  * @ClassName: PagedRequest
  * @Author: CS
@@ -16,10 +18,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PagedRequest {
 
-	@ApiModelProperty(value = "当前页", example = "1", required = true)
-	private Integer currentPage;
+    @Min(0)
+    @ApiModelProperty(value = "当前页", example = "1", required = true)
+    private Integer currentPage;
 
-	@ApiModelProperty(value = "页行数", example = "10", required = true)
-	private Integer pageSize;
+    @Min(0)
+    @ApiModelProperty(value = "页行数", example = "10", required = true)
+    private Integer pageSize;
 
 }

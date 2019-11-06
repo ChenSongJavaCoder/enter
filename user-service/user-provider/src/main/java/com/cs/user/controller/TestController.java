@@ -35,7 +35,7 @@ public class TestController implements TestApi {
 
 	@Override
 	public String test() {
-        int record = userCsMapper.insertSelective(new User().setAge(26).setName("cs_" + LocalDateTime.now().toString()).setPassword(passwordEncoder.encode(defaultPassword)));
+		int record = userCsMapper.insertSelective(new User().setAge(26).setUsername("cs_" + LocalDateTime.now().toString()).setPassword(passwordEncoder.encode(defaultPassword)));
 		if (1 == record) {
 			return "insert user success!";
 		}
@@ -57,7 +57,7 @@ public class TestController implements TestApi {
 	public UserDto getUserByUsername(String name) {
         User user = null;
 		try {
-            user = userCsMapper.selectOne(new User().setName(name));
+			user = userCsMapper.selectOne(new User().setUsername(name));
 		} catch (Exception e) {
 			log.error(e.getCause().getMessage());
 		}

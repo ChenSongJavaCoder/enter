@@ -1,6 +1,6 @@
 package com.cs.auth.feign;
 
-import com.cs.user.api.TestApi;
+import com.cs.user.api.UserApi;
 import org.springframework.cloud.openfeign.FeignClient;
 
 /**
@@ -10,5 +10,5 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @Description:
  */
 @FeignClient("user-service")
-public interface FeignUserApi extends TestApi {
+public interface FeignUserApi extends UserApi {
 }

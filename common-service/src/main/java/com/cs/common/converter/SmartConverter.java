@@ -9,5 +9,5 @@ import org.springframework.core.convert.converter.Converter;
  **/
 public interface SmartConverter<S, T, C extends AbstractConverterConfig> extends Converter<S, T> {
 
-    T converter(S s, C config);
+    T convert(S s, C config);
 }
