@@ -8,7 +8,7 @@ import com.cs.user.converter.ListUserInfoConverter;
 import com.cs.user.converter.SingleUserInfoConverter;
 import com.cs.user.converter.config.UserConverterConfig;
 import com.cs.user.entity.User;
-import com.cs.user.mapper.UserCsMapper;
+import com.cs.user.mapper.UserMapper;
 import com.cs.user.pojo.PagedModelRequest;
 import com.cs.user.pojo.UserInfo;
 import com.github.pagehelper.PageHelper;
@@ -39,7 +39,7 @@ import java.util.List;
 public class UserController implements UserApi {
 
     @Autowired
-    UserCsMapper userCsMapper;
+    UserMapper userMapper;
 
     @Autowired
     SingleUserInfoConverter singleUserInfoConverter;
@@ -64,7 +64,7 @@ public class UserController implements UserApi {
         // 初始密码  两种实现：1.初始固定密码：123456。登陆后修改 2.随机六位数密码，短信提醒
         // 具体结合业务场景选择实现方式
         user.setPassword(passwordEncoder.encode(defaultPassword));
-        userCsMapper.insertSelective(user);
+        userMapper.insertSelective(user);
         return Result.success()
                 .data(MessageBuilder.successMessage())
                 .build();
@@ -74,7 +74,7 @@ public class UserController implements UserApi {
     public Result<String> updateUser(UserInfo request) {
         User user = new User();
         BeanUtils.copyProperties(request, user, "password");
-        userCsMapper.updateByPrimaryKeySelective(user);
+        userMapper.updateByPrimaryKeySelective(user);
         return Result.success()
                 .data(MessageBuilder.successMessage())
                 .build();
@@ -90,7 +90,7 @@ public class UserController implements UserApi {
     @Override
     public Result<UserInfo> getUserInfoById(Long userId) {
         return Result.success()
-                .data(singleUserInfoConverter.convert(userCsMapper.selectByPrimaryKey(userId)))
+                .data(singleUserInfoConverter.convert(userMapper.selectByPrimaryKey(userId)))
                 .build();
     }
 
@@ -99,7 +99,7 @@ public class UserController implements UserApi {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
-        User u = userCsMapper.selectOneByExample(example);
+        User u = userMapper.selectOneByExample(example);
 
         return Result.success()
                 .data(singleUserInfoConverter.convert(u, new UserConverterConfig().setShowPassword(true)))
@@ -112,7 +112,7 @@ public class UserController implements UserApi {
         BeanUtils.copyProperties(request.getUserInfo(), u, "id");
 
         PageHelper.startPage(request.getCurrentPage(), request.getPageSize());
-        List<User> users = userCsMapper.select(u);
+        List<User> users = userMapper.select(u);
         PageInfo<User> pageInfo = new PageInfo<>(users);
 
         return Result.success()
@@ -128,7 +128,7 @@ public class UserController implements UserApi {
         Example.Criteria criteria = example.createCriteria();
 	    criteria.andEqualTo("username", name);
 //        example.orderBy("").desc().orderBy("").asc();
-        List<User> users = userCsMapper.selectByExample(example);
+        List<User> users = userMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(users)) {
             return false;
         }
