@@ -1,6 +1,6 @@
 server:
   port: 8192
-    undertow:
+  undertow:
     io-threads: 4
     worker-threads: 20
     buffer-size: 1024
@@ -11,7 +11,7 @@ swagger:
 
 spring:
   application:
-    name: message-service
+    name: biz-service
   devtools:
     restart:
       enabled: true
@@ -43,7 +43,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-
-logging:
-  level:
-    com.cs.user.mapper: debug

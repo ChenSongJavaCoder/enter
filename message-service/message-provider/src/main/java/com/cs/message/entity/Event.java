@@ -1,7 +1,6 @@
 package com.cs.message.entity;
 
 import com.cs.common.mybatis.BaseEntity;
-import com.cs.message.pojo.event.EventType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,7 +24,7 @@ public class Event extends BaseEntity {
 	/**
 	 * 事件类型
 	 */
-	private EventType eventType;
+	private String eventType;
 
 	/**
 	 * 事件的参数

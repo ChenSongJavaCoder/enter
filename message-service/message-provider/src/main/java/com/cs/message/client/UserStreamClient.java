@@ -13,11 +13,11 @@ import org.springframework.messaging.MessageChannel;
  */
 public interface UserStreamClient {
 
-	/**
-	 * 创建用户
-	 *
-	 * @return
-	 */
-	@Output(UserChannel.CREATE_USER)
-	MessageChannel createStoreChannel();
+    /**
+     * 创建用户
+     *
+     * @return
+     */
+    @Output(UserChannel.CREATE_USER)
+    MessageChannel createStoreChannel();
 }
