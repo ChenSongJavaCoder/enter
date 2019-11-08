@@ -3,14 +3,19 @@ package com.cs.user.controller;
 import com.cs.common.bean.MessageBuilder;
 import com.cs.common.bean.PagedResult;
 import com.cs.common.bean.Result;
+import com.cs.common.util.UUIDUtil;
+import com.cs.message.pojo.event.EventInfo;
+import com.cs.message.pojo.event.EventType;
 import com.cs.user.api.UserApi;
 import com.cs.user.converter.ListUserInfoConverter;
 import com.cs.user.converter.SingleUserInfoConverter;
 import com.cs.user.converter.config.UserConverterConfig;
 import com.cs.user.entity.User;
+import com.cs.user.feign.FeignRabbitMqApi;
 import com.cs.user.mapper.UserMapper;
 import com.cs.user.pojo.PagedModelRequest;
 import com.cs.user.pojo.UserInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -47,6 +53,11 @@ public class UserController implements UserApi {
     @Autowired
     ListUserInfoConverter listUserInfoConverter;
 
+    @Autowired
+    FeignRabbitMqApi feignRabbitMqApi;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
     String defaultPassword = "123456";
     private PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
@@ -64,7 +75,27 @@ public class UserController implements UserApi {
         // 初始密码  两种实现：1.初始固定密码：123456。登陆后修改 2.随机六位数密码，短信提醒
         // 具体结合业务场景选择实现方式
         user.setPassword(passwordEncoder.encode(defaultPassword));
-        userMapper.insertSelective(user);
+        userMapper.insertUseGeneratedKeys(user);
+//        try {
+//            String userStr = objectMapper.writeValueAsString(user);
+//            EventInfo<User> eventInfo = new EventInfo()
+//                    .setEventId(UUIDUtil.uuid32())
+//                    .setEventType(EventType.CREATE_USER)
+//                    .setEventParam(userStr)
+//                    .setEventTime(LocalDateTime.now())
+//                    ;
+//            feignRabbitMqApi.publish(eventInfo);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+
+        request.setId(user.getId());
+        EventInfo<UserInfo> eventInfo = new EventInfo<UserInfo>()
+                .setEventId(UUIDUtil.uuid32())
+                .setEventType(EventType.CREATE_USER)
+                .setEventParam(request)
+                .setEventTime(LocalDateTime.now());
+        feignRabbitMqApi.publish(eventInfo);
         return Result.success()
                 .data(MessageBuilder.successMessage())
                 .build();

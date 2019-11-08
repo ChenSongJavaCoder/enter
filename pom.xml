@@ -10,7 +10,6 @@
         <module>biz-service</module>
         <module>storage-service</module>
         <module>message-service</module>
-        <module>mq-service</module>
         <module>task-service</module>
         <module>es-service</module>
         <module>auth-service</module>

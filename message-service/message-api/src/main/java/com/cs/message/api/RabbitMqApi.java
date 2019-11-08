@@ -1,9 +1,9 @@
-package com.cs.mq.api;
+package com.cs.message.api;
 
 import com.cs.common.bean.Result;
-import com.cs.mq.event.Event;
+import com.cs.message.pojo.event.EventInfo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,8 +16,9 @@ import javax.validation.Valid;
  **/
 public interface RabbitMqApi {
 
-    @PostMapping(value = "publish", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    Result<String> publish(@RequestBody @Valid Event event, BindingResult bindingResult);
+	@ApiOperation("发布消息")
+	@PostMapping(value = "publish", produces = MediaType.APPLICATION_JSON_VALUE)
+	Result<String> publish(@RequestBody @Valid EventInfo event);
 
 
 }

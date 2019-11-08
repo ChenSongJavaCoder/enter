@@ -1,4 +1,4 @@
-package com.cs.mq.event;
+package com.cs.message.pojo.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +12,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EventType {
 
-
-    CREATE_USER("CREATE_USER", "创建新用户"),
+	CREATE_USER("创建新用户"),
     ;
 
-    private String channel;
-
-    private String desc;
+	private String desc;
 }
