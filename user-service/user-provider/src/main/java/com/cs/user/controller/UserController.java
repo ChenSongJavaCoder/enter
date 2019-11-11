@@ -75,7 +75,7 @@ public class UserController implements UserApi {
         // 初始密码  两种实现：1.初始固定密码：123456。登陆后修改 2.随机六位数密码，短信提醒
         // 具体结合业务场景选择实现方式
         user.setPassword(passwordEncoder.encode(defaultPassword));
-        userMapper.insertUseGeneratedKeys(user);
+        userMapper.insertSelective(user);
 //        try {
 //            String userStr = objectMapper.writeValueAsString(user);
 //            EventInfo<User> eventInfo = new EventInfo()

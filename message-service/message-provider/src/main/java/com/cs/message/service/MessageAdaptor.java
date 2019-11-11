@@ -31,7 +31,7 @@ public class MessageAdaptor {
         Event e = new Event();
         BeanUtils.copyProperties(event, e);
         e.setEventType(event.getEventType().name());
-        eventMapper.insertSelective(e);
+//        eventMapper.insertSelective(e);
 
         boolean result;
         switch (event.getEventType()) {
