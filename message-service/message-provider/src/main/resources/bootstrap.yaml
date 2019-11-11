@@ -32,6 +32,10 @@ spring:
       connection-test-query: SELECT 1
   cloud:
     stream:
+      rabbit:
+        binder:
+          # 压缩等级，默认1（BEST_LEVEL）
+          compressionLevel: 1
       binders:
         defaultRabbit:
           type: rabbit
@@ -40,6 +44,7 @@ spring:
           group: USER-A
           destination: user.created
           defaultBinder: defaultRabbit
+
   rabbitmq:
     addresses: 127.0.0.1:5672
     username: guest
@@ -61,4 +66,4 @@ eureka:
 
 logging:
   level:
-    com.cs.user.mapper: debug
+    com.cs.message.mapper: debug
