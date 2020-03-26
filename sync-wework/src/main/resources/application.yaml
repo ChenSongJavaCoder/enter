@@ -1,0 +1,45 @@
+server:
+  port: 8190
+  undertow:
+    io-threads: 4
+    worker-threads: 20
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: work-wechat
+
+  datasource:
+    url: jdbc:mysql://rm-bp148q2xv8ye4ay3r5o.mysql.rds.aliyuncs.com:3306/dw_data?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: dbm
+    password: dbm@91dby
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 6
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+aliyun:
+  oss:
+    accessKeyId: LTAI5TarjLwVRouj
+    accessKeySecret: lVfyC3hXwhGAwHEyERWy7QFqKxMx1W
+    endPoint: oss-cn-hangzhou.aliyuncs.com
+    files:
+      bucketName: workwechat
+      prefix: file/
+      image: image/
+      video: video/
+      voice: voice/
+      file: file/
+    urlPrefix: https://workwechat.oss-cn-hangzhou.aliyuncs.com
+
+logging:
+  level:
+    com.cs.so.mapper: debug
