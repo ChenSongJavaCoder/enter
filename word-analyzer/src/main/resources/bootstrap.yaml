@@ -11,7 +11,7 @@ swagger:
 
 spring:
   application:
-    name: user-service
+    name: word-analyzer
   devtools:
     restart:
       enabled: true

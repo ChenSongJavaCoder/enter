@@ -149,7 +149,7 @@ public class SensitiveWordUtil {
     public static void main(String[] args) throws IOException {
 
         Set<String> sensitiveWordSet = new HashSet<>();
-        sensitiveWordSet.add("太多");
+        sensitiveWordSet.add("丁点儿");
         sensitiveWordSet.add("爱恋");
         sensitiveWordSet.add("静静");
         sensitiveWordSet.add("哈哈");
