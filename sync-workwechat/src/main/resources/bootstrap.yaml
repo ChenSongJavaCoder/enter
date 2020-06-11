@@ -1,0 +1,67 @@
+server:
+  port: 8190
+  undertow:
+    io-threads: 4
+    worker-threads: 20
+    buffer-size: 1024
+    direct-buffers: true
+
+spring:
+  application:
+    name: work-wechat
+
+  datasource:
+    url: jdbc:mysql://rm-bp148q2xv8ye4ay3r5o.mysql.rds.aliyuncs.com:3306/dw_data?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: dbm
+    password: dbm@91dby
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 6
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+# OSS
+aliyun:
+  oss:
+    accessKeyId: LTAI5TarjLwVRouj
+    accessKeySecret: lVfyC3hXwhGAwHEyERWy7QFqKxMx1W
+    endPoint: oss-cn-hangzhou.aliyuncs.com
+    files:
+      bucketName: workwechat
+      prefix: file/
+      image: image/
+      video: video/
+      voice: voice/
+      file: file/
+    urlPrefix: https://workwechat.oss-cn-hangzhou.aliyuncs.com
+
+# LOG
+logging:
+  level:
+    com.cs.wework.mapper: debug
+# DD
+dingtalk:
+  robot:
+    prefix: https://oapi.dingtalk.com/robot/send
+    access-token: 51e7c97226902b2760f016df93c2b6b0b957a157b63a29410bcf439aa170398f
+    secret:
+      secret-enabled: false
+      secret-token: NULL
+
+#企业微信配置
+workWechat:
+  config:
+    corpid: ww2cfbd257dae39722
+    agentid: 1000008
+    secret: 3Zs5pXBCMWhfzfI7SwmEYRghBDoXpO18vlao8AQyFMA
+    user:
+      token: 6qa8VFEt2vXh
+      encodingAESKey: ivdbGPzlD8jLUFCNUJl3qfC7sxR4VTlyVLyYySJn61a
+    external:
+      token: np1L91Jhmu95VVH9u
+      encodingAESKey: XoIrF1mgynB64JsnRS0mqUL3qEEa7HPQcEi89fvY6MD
