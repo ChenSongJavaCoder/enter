@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
  * @ClassName: PagedRequest
  * @Author: CS
  * @Date: 2019/11/5 14:55
- * @Description: 基础分页返回参数
+ * @Description: 基础返回参数
  */
 @Getter
 @ApiModel
