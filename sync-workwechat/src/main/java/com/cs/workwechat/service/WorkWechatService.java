@@ -1,5 +1,6 @@
 package com.cs.workwechat.service;
 
+import com.cs.workwechat.pojo.request.BaseSendMsg;
 import com.cs.workwechat.pojo.request.GroupChatStatisticRequest;
 import com.cs.workwechat.pojo.response.GroupChatStatisticResponse;
 
@@ -26,4 +27,7 @@ public interface WorkWechatService {
      * @param date
      */
     void pullAllGroupChatStatistic(LocalDate date);
+
+
+    void sendChatMsg(BaseSendMsg msg);
 }

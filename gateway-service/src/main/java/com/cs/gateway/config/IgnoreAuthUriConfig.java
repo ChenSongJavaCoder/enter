@@ -15,15 +15,15 @@ import java.util.List;
 public class IgnoreAuthUriConfig {
 
 
-    public static List<String> ignoreAuthUrls() {
-		return Arrays.asList(
-				"/auth-service/oauth/login",
-				"/auth-service/logout"
-		);
-	}
+    public List<String> ignoreAuthUrls() {
+        return Arrays.asList(
+                "/auth-service/oauth/login",
+                "/auth-service/logout"
+        );
+    }
 
 
-    public static List<String> ignoreSwaggerUrlSuffix() {
+    public List<String> ignoreSwaggerUrlSuffix() {
         return Arrays.asList(
                 "admin-server",
                 "auth-service",

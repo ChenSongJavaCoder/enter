@@ -43,5 +43,11 @@
             <artifactId>message-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/cn.snowheart/spring-boot-dingtalk-robot-starter -->
+        <dependency>
+            <groupId>cn.snowheart</groupId>
+            <artifactId>spring-boot-dingtalk-robot-starter</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
     </dependencies>
 </project>

@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.RestTemplate;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -15,6 +17,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @Date: 2020/3/12 5:13 下午
  * @Description: 彪悍的人生不需要解释
  */
+@EnableFeignClients
 @EnableScheduling
 @SpringBootApplication
 @MapperScan(basePackages = "com.cs.workwechat.mapper")
@@ -33,5 +36,10 @@ public class WorkWechatApplication {
         mapper.registerModule(new JavaTimeModule());
         mapper.configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true);
         return mapper;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.util.Assert;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
@@ -52,6 +49,19 @@ public class LocalDateTimeUtil {
     public static Long timeToEpochSecond(LocalDateTime time) {
         Assert.notNull(time, "time can not be null!");
         return time.toEpochSecond(DEFAULT_ZONE_OFFSET);
+    }
+
+    public static Long dayBetweenEpochDate(LocalDate start, LocalDate end) {
+        Assert.notNull(start, "缺少开始时间");
+        Assert.notNull(end, "缺少结束时间");
+        return (end.toEpochDay() - start.toEpochDay());
+    }
+
+    public static Long dayBetween(LocalDateTime start, LocalDateTime end) {
+        Assert.notNull(start, "缺少开始时间");
+        Assert.notNull(end, "缺少结束时间");
+        Duration duration = Duration.between(start, end);
+        return duration.toDays();
     }
 
     /**
@@ -209,5 +219,10 @@ public class LocalDateTimeUtil {
         map.put("end", endWeekYear);
 
         return map;
+    }
+
+
+    public static void main(String[] args) {
+        Long day = dayBetweenEpochDate(LocalDate.now(), LocalDate.now().plusDays(3));
     }
 }

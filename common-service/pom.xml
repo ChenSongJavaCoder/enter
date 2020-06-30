@@ -23,11 +23,5 @@
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>2.1.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/cn.snowheart/spring-boot-dingtalk-robot-starter -->
-        <dependency>
-            <groupId>cn.snowheart</groupId>
-            <artifactId>spring-boot-dingtalk-robot-starter</artifactId>
-            <version>1.0.3.RELEASE</version>
-        </dependency>
     </dependencies>
 </project>

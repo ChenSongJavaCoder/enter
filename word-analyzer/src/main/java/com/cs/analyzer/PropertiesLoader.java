@@ -30,16 +30,6 @@ public class PropertiesLoader {
 
     @PostConstruct
     private void init() {
-//        List<Keyword> list = new ArrayList<>();
-//        for (int i = 0; i < 1800; i++) {
-//            Keyword keyword = new Keyword();
-//            keyword.setKeyword(i + "");
-//            list.add(keyword);
-//        }
-//
-//        int size = keywordMapper.insertList(list);
-//        log.info("插入数据条数" + size);
-
         // 初始化读取数据库中的关键词
         List<Keyword> list = keywordMapper.selectAll();
         sensitiveWordMap = list.stream().collect(Collectors.toMap(p -> p.getKeyword(), p -> p));

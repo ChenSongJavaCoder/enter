@@ -39,7 +39,6 @@ public abstract class AbstractWorkWechatService {
     @Autowired
     ObjectMapper objectMapper;
 
-
     @Autowired
     private WorkWechatConfig workWechatConfig;
 

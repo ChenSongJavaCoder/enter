@@ -247,6 +247,32 @@ public interface WorkWechatOpenApi {
      */
     String GROUP_CHAT_STATISTIC = "https://qyapi.weixin.qq.com/cgi-bin/externalcontact/groupchat/statistic?access_token=%s";
 
+
+    /**
+     * 应用支持推送文本、图片、视频、文件、图文等类型。
+     * <p>
+     * 请求方式：POST（HTTPS）
+     * 请求地址： https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN
+     * <p>
+     * 其中text参数的content字段可以支持换行、以及A标签，即可打开自定义的网页（可参考以上示例代码）(注意：换行符请用转义过的\n)
+     * {
+     * "touser" : "UserID1|UserID2|UserID3",
+     * "toparty" : "PartyID1|PartyID2",
+     * "totag" : "TagID1 | TagID2",
+     * "msgtype" : "text",
+     * "agentid" : 1,
+     * "text" : {
+     * "content" : "你的快递已到，请携带工卡前往邮件中心领取。\n出发前可查看<a href=\"http://work.weixin.qq.com\">邮件中心视频实况</a>，聪明避开排队。"
+     * },
+     * "safe":0,
+     * "enable_id_trans": 0,
+     * "enable_duplicate_check": 0,
+     * "duplicate_check_interval": 1800
+     * }
+     */
+    String SEND_CHAT_MSG = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s";
+
+
     /**
      * 企业微信成功状态码
      */
