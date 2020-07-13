@@ -20,6 +20,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.9</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
@@ -39,11 +45,11 @@
             <version>2.8.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/cn.snowheart/spring-boot-dingtalk-robot-starter -->
-        <dependency>
-            <groupId>cn.snowheart</groupId>
-            <artifactId>spring-boot-dingtalk-robot-starter</artifactId>
-            <version>1.0.3.RELEASE</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>cn.snowheart</groupId>-->
+        <!--            <artifactId>spring-boot-dingtalk-robot-starter</artifactId>-->
+        <!--            <version>1.0.3.RELEASE</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>

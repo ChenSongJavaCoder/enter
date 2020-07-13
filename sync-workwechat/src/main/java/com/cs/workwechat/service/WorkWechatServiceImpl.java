@@ -1,6 +1,5 @@
 package com.cs.workwechat.service;
 
-import com.cs.common.util.LocalDateTimeUtil;
 import com.cs.workwechat.constants.WorkWechatOpenApi;
 import com.cs.workwechat.converter.GroupChatStatisticResponseToEntityConverter;
 import com.cs.workwechat.entity.GroupChatStatistic;
@@ -9,6 +8,7 @@ import com.cs.workwechat.pojo.request.BaseSendMsg;
 import com.cs.workwechat.pojo.request.GroupChatStatisticRequest;
 import com.cs.workwechat.pojo.response.GroupChatStatisticResponse;
 import com.cs.workwechat.pojo.response.SendMsgResponse;
+import com.cs.workwechat.util.LocalDateTimeUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class WorkWechatServiceImpl extends AbstractWorkWechatService implements 
         }
         if (!CollectionUtils.isEmpty(data)) {
             groupChatStatisticMapper.insertList(data);
-            dingTalkRobotClient.sendTextMessage("企业微信同步群统计数据: " + data.size() + "条" + "数据日期：" + date.format(DateTimeFormatter.ISO_DATE));
+//            dingTalkRobotClient.sendTextMessage("企业微信同步群统计数据: " + data.size() + "条" + "数据日期：" + date.format(DateTimeFormatter.ISO_DATE));
         }
     }
 

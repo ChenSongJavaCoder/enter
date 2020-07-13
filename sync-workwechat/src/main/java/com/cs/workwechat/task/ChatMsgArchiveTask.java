@@ -14,6 +14,7 @@ import com.tencent.wework.Finance;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -51,13 +52,14 @@ public class ChatMsgArchiveTask {
      */
     private String ignoreAction = "\"action\":\"switch\"";
 
-    //    @Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(fixedRate = 60 * 1000 * 10)
     public void pullChatData() {
         try {
             getChatData();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Transactional(rollbackFor = Exception.class)

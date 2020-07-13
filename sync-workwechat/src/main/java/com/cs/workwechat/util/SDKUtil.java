@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @Author: CS
@@ -35,6 +37,21 @@ public class SDKUtil {
 
     public static String getCorpId() {
         return CORP_ID;
+    }
+
+
+    static {
+        try {
+            Properties properties = FileUtil.loadProperties();
+            SECRET = properties.getProperty("secret");
+            CORP_ID = properties.getProperty("corpid");
+        } catch (IOException e) {
+            log.error("读取配置失败！");
+            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("读取文件失败！");
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -55,13 +55,20 @@ dingtalk:
 
 #企业微信配置
 workWechat:
+  # 企业配置
   config:
     corpid: ww2cfbd257dae39722
     agentid: 1000008
     secret: 3Zs5pXBCMWhfzfI7SwmEYRghBDoXpO18vlao8AQyFMA
+    # 企业员工
     user:
       token: 6qa8VFEt2vXh
       encodingAESKey: ivdbGPzlD8jLUFCNUJl3qfC7sxR4VTlyVLyYySJn61a
+    # 外部联系人
     external:
       token: np1L91Jhmu95VVH9u
       encodingAESKey: XoIrF1mgynB64JsnRS0mqUL3qEEa7HPQcEi89fvY6MD
+    # 会话存档消息
+    msgArchive:
+      secret: 23_HzEpTWCF6y2dxQtIGukH-pRcHFnb3r54ME3Rl8m0
+      priKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD1fwdcXwiAdDbWGCQKSyyuT2diVZEGkA9/JGmXCA6i1925YkU2ffqz0UsntrAy7D9t+jWzgLwRw1Nl0qsx+ch/c8d6AV1Yh7n4Ntr1O/CPq5bxaTG031Dw0L5Len5MOLq05xkdyLNAMlw5cRtOv5HFUbj5kufa1Z7tVzIAAY1XS2CPEvzQktrB8Cuk4Be4o/cCazC/pXCowPTCQBvbjpk5HPwTx6qU+0K8TZ9SyQcKuYkM5M0eZpe1bVFkuNkE0hcPeb4iqtzVhWjhvY0h5V0K56qwUvW8TS83pVDMAVofieepx6kuw/Dq3gQ/YCXNSsz3Ong4LQcwEw1eKo2qTGrfAgMBAAECggEAM7CedSWRXbKahTOqCvzPGJihdQP9ODuG98dL8EADDOiUx97YIeQesFPmFiOSL/asWFSxj+0QLFFLMwpLf4dPXv6axqaY5/YUAx5Rtgb73NRNQOFcVPAcU8gv+SZ+hz/+l+58zFeg3mh8IKAfFtKhN8HAR9RVuy71epW8cmHhR7qutEs6EqLauMpjD0KkbI5Zb5r1AH+kYU7o/t2VDGy0kdcAnWEodeMeuDUwiz0Q11x0LQI8KRoHeBsmdGYzLsyNNLX9LhqnbqCxSBnYdXWuugKSqyrVedOHJOxoIUnHMm8Z1lcxJcM+iES1++Y2528N3bHvYHqh5+pHQkG+4W7qwQKBgQD8ukjcexSVCuL6wSQpTisVuVL5OWmdd6x87XpSQb1b6l1aUiOPGAOFbtr873C9cILRfyLMeWi5W+bSo1wdtCMaCx/TgoTbukDZz2msN/sBGwCaAtPDCl0EsfDxbVBXv3Jk0j+FQfsdCTGsxXXgEttyaBXBmjofhe7r0ehiurVbPwKBgQD4rMYmPG5GF7luYLAVF+HwxwANA1r+pD7tmpUlRDkAVdyoTFcsxyDNb87S/I4bB15fEgIFxvT9dYJKvmG63rReTJbhcMnA5H/yGzrz58eDz6wOlg5odxwGE+CeRF4lkJAYMkm43J5NBFxu6iuGDggIHlA8M+exPcGsB3Zx5O0oYQKBgQDqqzc4s3jbJC67VFh1mkXbeCgZjzwIobUik4h/lNd139srIRYvqsaqQdNKBjOTVEPEr97qKtoZM8LTWCkS08+8QRQeXBVtyjapiTTAW4LQ9ffLClEDzD2vPGNUaoKt1/EquSeOX0QDJCRiH0Bi/l+Sjh+Vk9Xgq4a8pj64XlJEFQKBgQD4J7I1RejlmZc6RtJwujyGgo/SbJ7Jri39/l0Hq2UWqJhieowj6zMYz5KdidplrpzGUroh+cFRjYpP/FyaltN3pwaKQnuTOnNTr0jNTWcUapFQnP4T0Yjtp7hnN+Kbqf+hpc1b5Q0z3j4/kP+N70Kkl1uKOGHlxbMXcPsJ/WGNAQKBgCU0ul2aD2rFL44K/heSczNrwJ7llJixkPIQpU5+tzDHAbjrxEXATqpWvLW7rfThdgjr3o040dqJa04EhKC3gc9wK5yXnKnsaWlMcw5sFRUlXr9tPcQnqbOfr7xF9xa3dCVQElqrNFDstM1Daa2n5j+loN4fK3H/8OyYYw0BLmLL

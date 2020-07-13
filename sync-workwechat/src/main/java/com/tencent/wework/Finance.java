@@ -1,24 +1,27 @@
 package com.tencent.wework;
-/* sdk返回数据
-typedef struct Slice_t {
-		char* buf;
-		int len;
-		} Slice_t;
 
-		typedef struct MediaData {
-		char* outindexbuf;
-		int out_len;
-		char* data;
-		int data_len;
-		int is_finish;
-		} MediaData_t;
-		*/
-
-import com.cs.common.util.ShellUtil;
+import com.cs.workwechat.util.ShellUtil;
 
 import java.io.File;
+/*
+ */
+
 
 /**
+ * sdk返回数据
+ *         typedef struct Slice_t {
+ *         char* buf;
+ *         int len;
+ *         } Slice_t;
+ *
+ *         typedef struct MediaData {
+ *         char* outindexbuf;
+ *         int out_len;
+ *         char* data;
+ *         int data_len;
+ *         int is_finish;
+ *         } MediaData_t;
+ *
  * //返回码	错误说明
  * //10000	参数错误，请求参数错误
  * //10001	网络错误，网络请求错误
@@ -142,7 +145,7 @@ public class Finance {
 
     static {
         // 通过调用linux系统的命令，实现对so文件的上传，主要实现服务器自动部署
-        String findJarShell = "find -name *sync-wework*.jar";
+        String findJarShell = "find -name *sync-work*.jar";
         ShellUtil.CommandResult reader = ShellUtil.execCommand(findJarShell, false);
         String jarName = reader.successMsg.substring(reader.successMsg.lastIndexOf(File.separator) + 1);
         String path = Finance.class.getClassLoader().getResource("").getPath().replace("file:", "");

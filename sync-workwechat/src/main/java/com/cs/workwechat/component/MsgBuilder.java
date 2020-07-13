@@ -75,6 +75,18 @@ public class MsgBuilder {
                 voiceMsg.setSeq(seq);
                 uploadOss(voiceMsg.getVoice().getSdkfileid(), MediaType.voice, voiceMsg);
                 return voiceMsg;
+            case meeting_voice_call:
+                MeetingVoiceCallMsg meetingVoiceCallMsg = objectMapper.readValue(chatData, MeetingVoiceCallMsg.class);
+                meetingVoiceCallMsg.setContent(meetingVoiceCallMsg.getMeeting_voice_call());
+                meetingVoiceCallMsg.setSeq(seq);
+                uploadOss(meetingVoiceCallMsg.getMeeting_voice_call().getSdkfileid(), MediaType.voice, meetingVoiceCallMsg);
+                return meetingVoiceCallMsg;
+            case voip_doc_share:
+                VoipDocShareMsg voipDocShareMsg = objectMapper.readValue(chatData, VoipDocShareMsg.class);
+                voipDocShareMsg.setContent(voipDocShareMsg.getVoip_doc_share());
+                voipDocShareMsg.setSeq(seq);
+                uploadOss(voipDocShareMsg.getVoip_doc_share().getSdkfileid(), MediaType.voice, voipDocShareMsg);
+                return voipDocShareMsg;
             case weapp:
                 WeappMsg weappMsg = objectMapper.readValue(chatData, WeappMsg.class);
                 weappMsg.setContent(weappMsg.getWeapp());

@@ -38,6 +38,8 @@ public enum MsgType {
     news("图文消息", NewsMsg.class),
     calendar("日程消息", CalendarMsg.class),
     mixed("混合消息", MixedMsg.class),
+    meeting_voice_call("音频存档消息", Object.class),
+    voip_doc_share("音频共享文档消息", Object.class),
     ;
 
     private String desc;

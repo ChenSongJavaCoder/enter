@@ -11,6 +11,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 
 /**
@@ -64,34 +65,43 @@ public class RSAUtils {
      */
     private static final int DEFAULT_KEY_SIZE = 1024;
 
-    private static final String PRI_KEY =
-            "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD1fwdcXwiAdDbW\n" +
-                    "GCQKSyyuT2diVZEGkA9/JGmXCA6i1925YkU2ffqz0UsntrAy7D9t+jWzgLwRw1Nl\n" +
-                    "0qsx+ch/c8d6AV1Yh7n4Ntr1O/CPq5bxaTG031Dw0L5Len5MOLq05xkdyLNAMlw5\n" +
-                    "cRtOv5HFUbj5kufa1Z7tVzIAAY1XS2CPEvzQktrB8Cuk4Be4o/cCazC/pXCowPTC\n" +
-                    "QBvbjpk5HPwTx6qU+0K8TZ9SyQcKuYkM5M0eZpe1bVFkuNkE0hcPeb4iqtzVhWjh\n" +
-                    "vY0h5V0K56qwUvW8TS83pVDMAVofieepx6kuw/Dq3gQ/YCXNSsz3Ong4LQcwEw1e\n" +
-                    "Ko2qTGrfAgMBAAECggEAM7CedSWRXbKahTOqCvzPGJihdQP9ODuG98dL8EADDOiU\n" +
-                    "x97YIeQesFPmFiOSL/asWFSxj+0QLFFLMwpLf4dPXv6axqaY5/YUAx5Rtgb73NRN\n" +
-                    "QOFcVPAcU8gv+SZ+hz/+l+58zFeg3mh8IKAfFtKhN8HAR9RVuy71epW8cmHhR7qu\n" +
-                    "tEs6EqLauMpjD0KkbI5Zb5r1AH+kYU7o/t2VDGy0kdcAnWEodeMeuDUwiz0Q11x0\n" +
-                    "LQI8KRoHeBsmdGYzLsyNNLX9LhqnbqCxSBnYdXWuugKSqyrVedOHJOxoIUnHMm8Z\n" +
-                    "1lcxJcM+iES1++Y2528N3bHvYHqh5+pHQkG+4W7qwQKBgQD8ukjcexSVCuL6wSQp\n" +
-                    "TisVuVL5OWmdd6x87XpSQb1b6l1aUiOPGAOFbtr873C9cILRfyLMeWi5W+bSo1wd\n" +
-                    "tCMaCx/TgoTbukDZz2msN/sBGwCaAtPDCl0EsfDxbVBXv3Jk0j+FQfsdCTGsxXXg\n" +
-                    "EttyaBXBmjofhe7r0ehiurVbPwKBgQD4rMYmPG5GF7luYLAVF+HwxwANA1r+pD7t\n" +
-                    "mpUlRDkAVdyoTFcsxyDNb87S/I4bB15fEgIFxvT9dYJKvmG63rReTJbhcMnA5H/y\n" +
-                    "Gzrz58eDz6wOlg5odxwGE+CeRF4lkJAYMkm43J5NBFxu6iuGDggIHlA8M+exPcGs\n" +
-                    "B3Zx5O0oYQKBgQDqqzc4s3jbJC67VFh1mkXbeCgZjzwIobUik4h/lNd139srIRYv\n" +
-                    "qsaqQdNKBjOTVEPEr97qKtoZM8LTWCkS08+8QRQeXBVtyjapiTTAW4LQ9ffLClED\n" +
-                    "zD2vPGNUaoKt1/EquSeOX0QDJCRiH0Bi/l+Sjh+Vk9Xgq4a8pj64XlJEFQKBgQD4\n" +
-                    "J7I1RejlmZc6RtJwujyGgo/SbJ7Jri39/l0Hq2UWqJhieowj6zMYz5KdidplrpzG\n" +
-                    "Uroh+cFRjYpP/FyaltN3pwaKQnuTOnNTr0jNTWcUapFQnP4T0Yjtp7hnN+Kbqf+h\n" +
-                    "pc1b5Q0z3j4/kP+N70Kkl1uKOGHlxbMXcPsJ/WGNAQKBgCU0ul2aD2rFL44K/heS\n" +
-                    "czNrwJ7llJixkPIQpU5+tzDHAbjrxEXATqpWvLW7rfThdgjr3o040dqJa04EhKC3\n" +
-                    "gc9wK5yXnKnsaWlMcw5sFRUlXr9tPcQnqbOfr7xF9xa3dCVQElqrNFDstM1Daa2n\n" +
-                    "5j+loN4fK3H/8OyYYw0BLmLL";
+    private static String PRI_KEY
+//            ="MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD1fwdcXwiAdDbW\n" +
+//                    "GCQKSyyuT2diVZEGkA9/JGmXCA6i1925YkU2ffqz0UsntrAy7D9t+jWzgLwRw1Nl\n" +
+//                    "0qsx+ch/c8d6AV1Yh7n4Ntr1O/CPq5bxaTG031Dw0L5Len5MOLq05xkdyLNAMlw5\n" +
+//                    "cRtOv5HFUbj5kufa1Z7tVzIAAY1XS2CPEvzQktrB8Cuk4Be4o/cCazC/pXCowPTC\n" +
+//                    "QBvbjpk5HPwTx6qU+0K8TZ9SyQcKuYkM5M0eZpe1bVFkuNkE0hcPeb4iqtzVhWjh\n" +
+//                    "vY0h5V0K56qwUvW8TS83pVDMAVofieepx6kuw/Dq3gQ/YCXNSsz3Ong4LQcwEw1e\n" +
+//                    "Ko2qTGrfAgMBAAECggEAM7CedSWRXbKahTOqCvzPGJihdQP9ODuG98dL8EADDOiU\n" +
+//                    "x97YIeQesFPmFiOSL/asWFSxj+0QLFFLMwpLf4dPXv6axqaY5/YUAx5Rtgb73NRN\n" +
+//                    "QOFcVPAcU8gv+SZ+hz/+l+58zFeg3mh8IKAfFtKhN8HAR9RVuy71epW8cmHhR7qu\n" +
+//                    "tEs6EqLauMpjD0KkbI5Zb5r1AH+kYU7o/t2VDGy0kdcAnWEodeMeuDUwiz0Q11x0\n" +
+//                    "LQI8KRoHeBsmdGYzLsyNNLX9LhqnbqCxSBnYdXWuugKSqyrVedOHJOxoIUnHMm8Z\n" +
+//                    "1lcxJcM+iES1++Y2528N3bHvYHqh5+pHQkG+4W7qwQKBgQD8ukjcexSVCuL6wSQp\n" +
+//                    "TisVuVL5OWmdd6x87XpSQb1b6l1aUiOPGAOFbtr873C9cILRfyLMeWi5W+bSo1wd\n" +
+//                    "tCMaCx/TgoTbukDZz2msN/sBGwCaAtPDCl0EsfDxbVBXv3Jk0j+FQfsdCTGsxXXg\n" +
+//                    "EttyaBXBmjofhe7r0ehiurVbPwKBgQD4rMYmPG5GF7luYLAVF+HwxwANA1r+pD7t\n" +
+//                    "mpUlRDkAVdyoTFcsxyDNb87S/I4bB15fEgIFxvT9dYJKvmG63rReTJbhcMnA5H/y\n" +
+//                    "Gzrz58eDz6wOlg5odxwGE+CeRF4lkJAYMkm43J5NBFxu6iuGDggIHlA8M+exPcGs\n" +
+//                    "B3Zx5O0oYQKBgQDqqzc4s3jbJC67VFh1mkXbeCgZjzwIobUik4h/lNd139srIRYv\n" +
+//                    "qsaqQdNKBjOTVEPEr97qKtoZM8LTWCkS08+8QRQeXBVtyjapiTTAW4LQ9ffLClED\n" +
+//                    "zD2vPGNUaoKt1/EquSeOX0QDJCRiH0Bi/l+Sjh+Vk9Xgq4a8pj64XlJEFQKBgQD4\n" +
+//                    "J7I1RejlmZc6RtJwujyGgo/SbJ7Jri39/l0Hq2UWqJhieowj6zMYz5KdidplrpzG\n" +
+//                    "Uroh+cFRjYpP/FyaltN3pwaKQnuTOnNTr0jNTWcUapFQnP4T0Yjtp7hnN+Kbqf+h\n" +
+//                    "pc1b5Q0z3j4/kP+N70Kkl1uKOGHlxbMXcPsJ/WGNAQKBgCU0ul2aD2rFL44K/heS\n" +
+//                    "czNrwJ7llJixkPIQpU5+tzDHAbjrxEXATqpWvLW7rfThdgjr3o040dqJa04EhKC3\n" +
+//                    "gc9wK5yXnKnsaWlMcw5sFRUlXr9tPcQnqbOfr7xF9xa3dCVQElqrNFDstM1Daa2n\n" +
+//                    "5j+loN4fK3H/8OyYYw0BLmLL"
+            ;
 
+    static {
+        try {
+            Properties properties = FileUtil.loadProperties();
+            PRI_KEY = properties.getProperty("priKey");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 生成密钥对(公钥和私钥)

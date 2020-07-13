@@ -1,6 +1,5 @@
 package com.cs.workwechat.service;
 
-import cn.snowheart.dingtalk.robot.starter.client.DingTalkRobotClient;
 import com.cs.workwechat.config.WorkWechatConfig;
 import com.cs.workwechat.constants.WorkWechatOpenApi;
 import com.cs.workwechat.pojo.response.AbstractResponse;
@@ -33,8 +32,8 @@ public abstract class AbstractWorkWechatService {
      */
     public volatile long expireTime = 0;
 
-    @Autowired
-    DingTalkRobotClient dingTalkRobotClient;
+//    @Autowired
+//    DingTalkRobotClient dingTalkRobotClient;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -56,7 +55,7 @@ public abstract class AbstractWorkWechatService {
             token = tokenRes.getAccess_token();
         } else {
             //TODO retry & remind
-            dingTalkRobotClient.sendTextMessage("企业微信获取token失败!");
+//            dingTalkRobotClient.sendTextMessage("企业微信获取token失败!");
             throw new IllegalStateException("企业微信获取token失败");
         }
 
