@@ -58,7 +58,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         String url = exchange.getRequest().getURI().getPath();
         log.info(url);
         // 跳过不需要验证的路径
-        if (ignoreUriConfig.ignoreAuthUrls().contains(url)) {
+        if (ignoreUriConfig.ignoreAuthUrls().contains(url) || ignoreUriConfig.whiteUrls().contains(url)) {
             return chain.filter(exchange);
         }
         // swagger
@@ -78,7 +78,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         }
         if (StringUtils.isBlank(token)) {
             //没有token
-            return returnAuthFail(exchange, "吼吼.要先登录的哦~");
+            return returnAuthFail(exchange, "if you want, you should login");
         } else {
             //有token
             try {
@@ -89,7 +89,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
                     throw new Exception("Token expires");
                 }
                 //TODO token刷新 可以进一步校验,识别用户身份信息 消息进行日志的记录
-                log.debug("jwt ---- {}", objectMapper.writeValueAsString(jwt));
+                log.info("jwt ---- {}", objectMapper.writeValueAsString(jwt));
                 return chain.filter(exchange);
             } catch (ExpiredJwtException e) {
                 e.printStackTrace();
@@ -111,7 +111,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED);
         String resultData = message;
-        byte[] bytes = resultData.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = resultData.getBytes(StandardCharsets.ISO_8859_1);
         DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
         return exchange.getResponse().writeWith(Flux.just(buffer));
     }

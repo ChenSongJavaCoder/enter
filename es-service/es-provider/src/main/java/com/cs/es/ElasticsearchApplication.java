@@ -12,10 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @Date 2019-12-04 14:40
  * @Description
  **/
-@SpringBootApplication(exclude = {
-        DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class,
-        HibernateJpaAutoConfiguration.class})
+@SpringBootApplication
 @EnableDiscoveryClient
 public class ElasticsearchApplication {
 

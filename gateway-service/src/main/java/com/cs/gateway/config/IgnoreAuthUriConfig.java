@@ -18,7 +18,8 @@ public class IgnoreAuthUriConfig {
     public List<String> ignoreAuthUrls() {
         return Arrays.asList(
                 "/auth-service/oauth/login",
-                "/auth-service/logout"
+                "/auth-service/logout",
+                "/user-service/createUser"
         );
     }
 
@@ -28,6 +29,13 @@ public class IgnoreAuthUriConfig {
                 "admin-server",
                 "auth-service",
                 "gateway-service"
+        );
+    }
+
+    public List<String> whiteUrls() {
+        return Arrays.asList(
+                "/spring-cloud",
+                "/test_route"
         );
     }
 }

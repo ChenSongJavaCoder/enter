@@ -32,6 +32,7 @@ import tk.mybatis.mapper.entity.Example;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @ClassName: UserController
@@ -89,13 +90,13 @@ public class UserController implements UserApi {
 //            e.printStackTrace();
 //        }
 
-        request.setId(user.getId());
-        EventInfo<UserInfo> eventInfo = new EventInfo<UserInfo>()
-                .setEventId(UUIDUtil.uuid32())
-                .setEventType(EventType.CREATE_USER)
-                .setEventParam(request)
-                .setEventTime(LocalDateTime.now());
-        feignRabbitMqApi.publish(eventInfo);
+//        request.setId(user.getId());
+//        EventInfo<UserInfo> eventInfo = new EventInfo<UserInfo>()
+//                .setEventId(UUIDUtil.uuid32())
+//                .setEventType(EventType.CREATE_USER)
+//                .setEventParam(request)
+//                .setEventTime(LocalDateTime.now());
+//        feignRabbitMqApi.publish(eventInfo);
         return Result.success()
                 .data(MessageBuilder.successMessage())
                 .build();
@@ -131,7 +132,9 @@ public class UserController implements UserApi {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
         User u = userMapper.selectOneByExample(example);
-
+        if(Objects.isNull(u)){
+            return Result.failure().message("请先注册账号").build();
+        }
         return Result.success()
                 .data(singleUserInfoConverter.convert(u, new UserConverterConfig().setShowPassword(true)))
                 .build();
