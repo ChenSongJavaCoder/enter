@@ -18,6 +18,7 @@
         <module>word-analyzer</module>
         <module>sync-workwechat</module>
         <module>design-patterns</module>
+        <module>db-repository</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,7 +28,7 @@
     </parent>
 
     <groupId>com.cs</groupId>
-    <artifactId>enter</artifactId>
+    <artifactId>base</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>base</name>
     <description>Demo project for Spring Boot</description>

@@ -18,6 +18,11 @@
             <artifactId>common-service</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.cs</groupId>
+            <artifactId>db-repository</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.github.pagehelper</groupId>
