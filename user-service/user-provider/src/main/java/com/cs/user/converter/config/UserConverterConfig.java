@@ -1,6 +1,6 @@
 package com.cs.user.converter.config;
 
-import com.cs.common.converter.AbstractConverterConfig;
+import com.cs.common.converter.ConverterConfig;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @ApiModel
 @Accessors(chain = true)
-public class UserConverterConfig extends AbstractConverterConfig<UserConverterConfig> {
+public class UserConverterConfig implements ConverterConfig<UserConverterConfig> {
 
 
     private boolean showPassword;

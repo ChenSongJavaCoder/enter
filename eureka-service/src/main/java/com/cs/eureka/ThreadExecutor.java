@@ -1,7 +1,9 @@
-package com.cs.common.thread;
+package com.cs.eureka;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: CS
@@ -16,8 +18,7 @@ public class ThreadExecutor {
             60L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(100),
-            (r)-> new Thread(r, "thread-pool-" + r.hashCode()),
-            new ThreadPoolExecutor.CallerRunsPolicy());
+            r -> new Thread(r, "thread-pool-" + r.hashCode()));
 
     public static void execute(List<Runnable> runnable) {
         runnable.forEach(r -> executor.execute(r));
@@ -29,8 +30,5 @@ public class ThreadExecutor {
 
     public static ThreadPoolExecutor getExecutor() {
         return executor;
-    }
-
-    public static void main(String[] args) {
     }
 }

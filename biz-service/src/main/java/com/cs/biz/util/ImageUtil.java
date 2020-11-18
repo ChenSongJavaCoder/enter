@@ -13,6 +13,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.Hashtable;
 
 /**
@@ -24,7 +25,7 @@ public class ImageUtil {
     /**
      * 字符集
      */
-    private static final String CHARSET = "utf-8";
+    private static final String CHARSET = Charset.defaultCharset().name();
     /**
      * 格式化名称
      */
@@ -32,15 +33,15 @@ public class ImageUtil {
     /**
      * 二维码尺寸
      */
-    private static final int QRCODE_SIZE = 600;
+    private static final int QRCODE_SIZE = 300;
     /**
      * LOGO宽度
      */
-    private static final int WIDTH = 300;
+    private static final int WIDTH = 90;
     /**
      * LOGO高度
      */
-    private static final int HEIGHT = 300;
+    private static final int HEIGHT = 90;
 
     private static Hashtable HINTS = new Hashtable();
 
@@ -204,8 +205,8 @@ public class ImageUtil {
 
     public static void main(String[] args) throws Exception {
 
-        encode("just kidding", "/Users/chensong/Desktop/图片/test.png");
-        encode("hello world", "/Users/chensong/Desktop/图片/IMG_2245.JPG", "/Users/chensong/Desktop/图片/test.png", true);
+//        encode("oh, sweetheart", "/Users/chensong/Desktop/WechatIMG1.jpeg");
+        encode("https://www.bilibili.com/video/BV1jE41137PK?from=search&seid=6511489059997668968", "/Users/chensong/Desktop/1594117789245.jpg", "/Users/chensong/Desktop/test4.png", true);
 
     }
 }

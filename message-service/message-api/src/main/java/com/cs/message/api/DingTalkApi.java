@@ -14,10 +14,10 @@ import javax.validation.Valid;
 public interface DingTalkApi {
 
     /**
-     * 发送钉钉消息
+     * 发送普通文本钉钉消息
      *
      * @param dingTalkMsg
      * @return
      */
-    Result<Boolean> sendMessage(@RequestBody @Valid DingTalkMsg dingTalkMsg);
+    Result<Boolean> sendSimpleMessage(@RequestBody @Valid DingTalkMsg dingTalkMsg);
 }

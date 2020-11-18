@@ -1,8 +1,6 @@
 package com.cs.analyzer.util;
 
 
-import com.cs.analyzer.PropertiesLoader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
@@ -18,8 +16,6 @@ import java.util.*;
  * @Description:
  */
 public class SensitiveWordUtil {
-    @Autowired
-    PropertiesLoader propertiesLoader;
 
     /**
      * 敏感词集合

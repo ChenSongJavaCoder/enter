@@ -44,7 +44,7 @@ spring:
           group: USER-A
           destination: user.created
           defaultBinder: defaultRabbit
-
+#  rabbitmq配置
   rabbitmq:
     addresses: 127.0.0.1:5672
     username: guest

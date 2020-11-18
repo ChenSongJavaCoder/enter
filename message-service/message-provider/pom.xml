@@ -49,5 +49,10 @@
             <artifactId>spring-boot-dingtalk-robot-starter</artifactId>
             <version>1.0.3.RELEASE</version>
         </dependency>
+        <!--邮件-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -12,7 +12,7 @@ import javax.validation.Valid;
 /**
  * @Author chenS
  * @Date 2019-11-08 10:32
- * @Description
+ * @Description 消息队列，可以说所有的事件消息（包括短信邮件钉钉消息等等推送至第三方的消息）都可以使用此方式进行消息推送，后续逻辑的处理
  **/
 public interface RabbitMqApi {
 
