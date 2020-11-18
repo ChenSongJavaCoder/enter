@@ -14,10 +14,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * @Date: 2019/10/31 14:26
  * @Description:
  */
-@SpringBootApplication(exclude = {
-		DataSourceAutoConfiguration.class,
-		DataSourceTransactionManagerAutoConfiguration.class,
-		HibernateJpaAutoConfiguration.class})
+@SpringBootApplication
 @EnableDiscoveryClient
 @EnableEurekaClient
 public class GatewayApplication {

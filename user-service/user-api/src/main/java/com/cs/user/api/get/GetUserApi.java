@@ -42,7 +42,7 @@ public interface GetUserApi {
      * @return
      */
     @ApiOperation("根据username查询用户信息")
-    @GetMapping(value = "getUserInfoByUsername/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "getUserInfoByUsername/{username}")
     Result<UserInfo> getUserInfoByUsername(@PathVariable(value = "username") String username);
 
 }
