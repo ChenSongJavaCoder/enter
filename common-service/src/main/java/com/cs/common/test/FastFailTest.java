@@ -1,7 +1,8 @@
 package com.cs.common.test;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author skywang
@@ -19,7 +20,7 @@ import java.util.concurrent.*;
 public class FastFailTest {
 
     private static List<String> list = new ArrayList<String>();
-    //private static List<String> list = new CopyOnWriteArrayList<String>();
+//    private static List<String> list = new CopyOnWriteArrayList<String>();
 
     public static void main(String[] args) {
 

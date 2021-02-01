@@ -14,6 +14,11 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.cs</groupId>
+            <artifactId>db-repository</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--分词-->
         <dependency>
             <groupId>com.janeluo</groupId>

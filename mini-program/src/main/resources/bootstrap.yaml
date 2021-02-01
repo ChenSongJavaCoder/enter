@@ -1,5 +1,5 @@
 server:
-  port: 8190
+  port: 8192
   undertow:
     io-threads: 4
     worker-threads: 20
@@ -11,13 +11,10 @@ swagger:
 
 spring:
   application:
-    name: user-service
+    name: mini-program
   devtools:
     restart:
-      #开启热部署
       enabled: true
-      #重启目录
-      additional-paths: src/main/java
   datasource:
     url: jdbc:mysql://118.178.193.138:3306/test?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
@@ -34,6 +31,8 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
 
+#  redis:
+
 eureka:
   instance:
     appname: ${spring.application.name}
@@ -48,4 +47,4 @@ eureka:
 
 logging:
   level:
-    com.cs.user.mapper: debug
+    com.cs.miniprogram.mapper: debug

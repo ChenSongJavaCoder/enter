@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * @ClassName: UserInfo
  * @Author: CS
@@ -20,12 +23,14 @@ public class UserInfo {
     @ApiModelProperty(value = "id", example = "1")
     private Long id;
 
+    @NotNull
     @ApiModelProperty(value = "用户名 可用作登陆，具有唯一性（eg：工号，手机号）", example = "0001")
     private String username;
 
     @ApiModelProperty(value = "姓名 昵称", example = "霸王龙")
     private String nickname;
 
+    @Min(0)
     @ApiModelProperty(value = "年龄", example = "26")
     private Integer age;
 

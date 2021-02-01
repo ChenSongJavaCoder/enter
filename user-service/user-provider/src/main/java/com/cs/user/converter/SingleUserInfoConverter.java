@@ -27,10 +27,8 @@ public class SingleUserInfoConverter implements SmartConverter<User, UserInfo, U
         if (Objects.isNull(user)) {
             return null;
         }
-
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(user, userInfo, config.ignoreProperties());
-
         return userInfo;
     }
 

@@ -1,6 +1,5 @@
 package com.cs.user.converter;
 
-import com.cs.common.converter.ConverterConfig;
 import com.cs.common.converter.SmartConverter;
 import com.cs.user.converter.config.UserConverterConfig;
 import com.cs.user.entity.User;
@@ -19,10 +18,10 @@ import java.util.stream.Collectors;
  * @Description
  **/
 @Component
-public class ListUserInfoConverter implements SmartConverter<List<User>, List<UserInfo>> {
+public class ListUserInfoConverter implements SmartConverter<List<User>, List<UserInfo>, UserConverterConfig> {
 
     @Override
-    public List<UserInfo> convert(List<User> users, ConverterConfig config) {
+    public List<UserInfo> convert(List<User> users, UserConverterConfig config) {
         if (CollectionUtils.isEmpty(users)) {
             return Collections.emptyList();
         }
@@ -40,7 +39,6 @@ public class ListUserInfoConverter implements SmartConverter<List<User>, List<Us
     public List<UserInfo> convert(List<User> users) {
         return convert(users, new UserConverterConfig().defaultConfig());
     }
-
 
 
 }

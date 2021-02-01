@@ -39,7 +39,6 @@ public class SystemAop {
             for (FieldError error : errors) {
                 sb.append(error.getField()).append(error.getDefaultMessage()).append("; ");
             }
-//            throw new IllegalArgumentException(sb.toString());
             return Result.illegal().message(sb.toString()).build();
         } else {
             retVal = pjp.proceed();

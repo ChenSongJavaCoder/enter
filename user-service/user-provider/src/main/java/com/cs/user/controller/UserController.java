@@ -14,6 +14,7 @@ import com.cs.user.entity.User;
 import com.cs.user.feign.FeignRabbitMqApi;
 import com.cs.user.mapper.UserMapper;
 import com.cs.user.pojo.PagedModelRequest;
+import com.cs.user.pojo.UserCenterCode;
 import com.cs.user.pojo.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
@@ -57,7 +58,9 @@ public class UserController implements UserApi {
     @Autowired
     FeignRabbitMqApi feignRabbitMqApi;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
+
 
     String defaultPassword = "123456";
     private PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -66,37 +69,22 @@ public class UserController implements UserApi {
     @Override
     public Result<String> createUser(UserInfo request) {
         User user = new User();
-
         if (checkExistByUserName(request.getUsername())) {
-            return Result.failure()
-                    .data("该用户名已被注册")
-                    .build();
+            return Result.failure(UserCenterCode.USER_EXISTED).build();
         }
-        BeanUtils.copyProperties(request, user);
-        // 初始密码  两种实现：1.初始固定密码：123456。登陆后修改 2.随机六位数密码，短信提醒
-        // 具体结合业务场景选择实现方式
+        BeanUtils.copyProperties(request, user, new String[]{"password", "deleted"});
+//         初始密码  两种实现：1.初始固定密码：123456。登陆后修改 2.随机六位数密码，短信提醒
+//         具体结合业务场景选择实现方式
         user.setPassword(passwordEncoder.encode(defaultPassword));
         userMapper.insertSelective(user);
-//        try {
-//            String userStr = objectMapper.writeValueAsString(user);
-//            EventInfo<User> eventInfo = new EventInfo()
-//                    .setEventId(UUIDUtil.uuid32())
-//                    .setEventType(EventType.CREATE_USER)
-//                    .setEventParam(userStr)
-//                    .setEventTime(LocalDateTime.now())
-//                    ;
-//            feignRabbitMqApi.publish(eventInfo);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
 
-//        request.setId(user.getId());
-//        EventInfo<UserInfo> eventInfo = new EventInfo<UserInfo>()
-//                .setEventId(UUIDUtil.uuid32())
-//                .setEventType(EventType.CREATE_USER)
-//                .setEventParam(request)
-//                .setEventTime(LocalDateTime.now());
-//        feignRabbitMqApi.publish(eventInfo);
+        request.setId(user.getId());
+        EventInfo<UserInfo> eventInfo = new EventInfo<UserInfo>()
+                .setEventId(UUIDUtil.uuid32())
+                .setEventType(EventType.CREATE_USER)
+                .setEventParam(request)
+                .setEventTime(LocalDateTime.now());
+        feignRabbitMqApi.publish(eventInfo);
         return Result.success()
                 .data(MessageBuilder.successMessage())
                 .build();
@@ -132,7 +120,7 @@ public class UserController implements UserApi {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
         User u = userMapper.selectOneByExample(example);
-        if(Objects.isNull(u)){
+        if (Objects.isNull(u)) {
             return Result.failure().message("请先注册账号").build();
         }
         return Result.success()
@@ -160,7 +148,7 @@ public class UserController implements UserApi {
     private boolean checkExistByUserName(String name) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
-	    criteria.andEqualTo("username", name);
+        criteria.andEqualTo("username", name);
 //        example.orderBy("").desc().orderBy("").asc();
         List<User> users = userMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(users)) {

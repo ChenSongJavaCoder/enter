@@ -32,7 +32,7 @@ public interface UserApi extends GetUserApi {
      */
     @ApiOperation("新增用户")
     @PostMapping(value = "createUser", produces = MediaType.APPLICATION_JSON_VALUE)
-    Result<String> createUser(@RequestBody UserInfo request);
+    Result<String> createUser(@RequestBody @Valid UserInfo request);
 
     /**
      * 修改用户

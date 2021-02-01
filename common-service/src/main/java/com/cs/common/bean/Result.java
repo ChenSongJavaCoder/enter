@@ -1,5 +1,7 @@
 package com.cs.common.bean;
 
+import com.cs.common.exception.BaseCode;
+import com.cs.common.exception.BaseCodeException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -33,8 +35,33 @@ public class Result<T> {
         return new Builder(true, ResultCode.SUCCESS.getCode(), MessageBuilder.successMessage());
     }
 
+    /**
+     * 默认无参的失败信息返回
+     *
+     * @return
+     */
     public static Builder failure() {
         return new Builder(false, ResultCode.FAILURE.getCode(), MessageBuilder.failureMessage());
+    }
+
+    /**
+     * 实现了统一的异常码返回，可以构筑整体的异常信息，支持各业务线的扩展
+     *
+     * @param e
+     * @return
+     */
+    public static Builder failure(BaseCode e) {
+        return new Builder(false, e.getCode(), e.getDesc());
+    }
+
+    /**
+     * 实现了统一的异常码返回，可以构筑整体的异常信息，支持各业务线的扩展
+     *
+     * @param e
+     * @return
+     */
+    public static Builder failure(BaseCodeException e) {
+        return new Builder(false, e.getCode(), e.getDesc());
     }
 
     public static Builder illegal() {
