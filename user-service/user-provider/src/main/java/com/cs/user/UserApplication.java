@@ -14,10 +14,10 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
- * @ClassName: UserApplication
- * @Author: CS
- * @Date: 2019/11/2 9:47
- * @Description:
+ * @className: UserApplication
+ * @author: CS
+ * @date: 2019/11/2 9:47
+ * @description:
  */
 @SpringBootApplication
 @EnableDiscoveryClient
