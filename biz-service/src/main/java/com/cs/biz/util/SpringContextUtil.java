@@ -1,14 +1,20 @@
-package com.cs.common.util;
+package com.cs.biz.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * @Author: CS
  * @Date: 2020/4/16 4:43 下午
  * @Description:
  */
-public class SpringContextUtil {
+@Component
+public class SpringContextUtil implements ApplicationContextAware {
 
     public static ApplicationContext context;
 
@@ -68,6 +74,13 @@ public class SpringContextUtil {
             return (T) context.getBean(clazz);
         } else {
             return (T) context.getBean(beanId, clazz);
+        }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if (Objects.isNull(context)) {
+            context = applicationContext;
         }
     }
 }

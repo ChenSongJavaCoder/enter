@@ -20,7 +20,8 @@ public class ThreadLocalTest {
         for (int i = 0; i < 10; i++) {
             ThreadExecutor.execute(() -> {
                 names.set("name" + atomicInteger.incrementAndGet());
-                System.out.println(names.get());
+                System.out.println("1" + names.get());
+                System.out.println("2" + names.get());
             });
         }
 
