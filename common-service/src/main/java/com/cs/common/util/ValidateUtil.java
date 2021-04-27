@@ -45,7 +45,8 @@ public class ValidateUtil {
                     && field.getType() != Byte.class && field.getType() != Short.class) {
                 //非字符串类型非List的引用类型，递归
                 field.setAccessible(true);
-                if (field.get(obj) != null) {
+                //枚举类型需要过滤
+                if (field.get(obj) != null && !(field.get(obj) instanceof Enum)) {
                     return valid(field.get(obj));
                 }
             }

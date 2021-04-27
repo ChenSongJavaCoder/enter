@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @ApiModel
 @Accessors(chain = true)
-public class IdNameBean {
-	private Long id;
-	private String name;
+public class IdNameBean<K, V> {
+    private K id;
+    private V name;
 }

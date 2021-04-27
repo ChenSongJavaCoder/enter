@@ -1,6 +1,7 @@
 package com.cs.common.bean;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -13,7 +14,8 @@ import lombok.experimental.Accessors;
 @Data
 @ApiModel
 @Accessors(chain = true)
-public class NameValBean {
-	private String name;
-	private String value;
+@AllArgsConstructor
+public class NameValBean<K, V> {
+    private K name;
+    private V value;
 }

@@ -1,6 +1,6 @@
 package com.cs.common.test;
 
-import java.util.Stack;
+import cn.hutool.system.SystemUtil;
 
 /**
  * @Author: CS
@@ -36,6 +36,6 @@ public class UtilTest {
 //            System.out.println(bean.getName());
 //        }
 
-
+        System.out.println(SystemUtil.getHostInfo().getName());
     }
 }

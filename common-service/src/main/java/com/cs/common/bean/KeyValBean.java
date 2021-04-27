@@ -9,11 +9,12 @@ import lombok.experimental.Accessors;
  * @Author: CS
  * @Date: 2019/11/5 16:16
  * @Description:
+ * @see cn.hutool.core.lang.Pair
  */
 @Data
 @ApiModel
 @Accessors(chain = true)
-public class KeyValBean {
-	private String key;
-	private String value;
+public class KeyValBean<K, V> {
+    private K key;
+    private V value;
 }

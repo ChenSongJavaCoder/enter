@@ -19,6 +19,8 @@ public interface ConverterConfig<T> {
      *
      * @return
      */
-    String[] ignoreProperties();
+    default String[] ignoreProperties() {
+        return new String[]{};
+    }
 
 }
