@@ -11,7 +11,22 @@ server:
 
 spring:
   application:
-    name: storage-service
+    name: elasticsearch-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/mine?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 6
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
   elasticsearch:
     rest:
       uris: 127.0.0.1:9200

@@ -1,17 +1,23 @@
 package com.cs.es.controller;
 
+import com.cs.common.bean.PagedResult;
+import com.cs.common.bean.Result;
 import com.cs.es.common.EsIndices;
 import com.cs.es.common.EsRestService;
+import com.cs.es.entity.BmSpfl;
+import com.cs.es.entity.KeywordMapping;
+import com.cs.es.entity.KeywordMatch;
+import com.cs.es.mapper.KeywordMappingMapper;
+import com.cs.es.mapper.KeywordMatchMapper;
 import com.cs.es.model.DemoTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author chenS
@@ -27,7 +33,14 @@ public class TestController {
     @Autowired
     EsRestService esRestService;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    KeywordMappingMapper keywordMappingMapper;
+
+    @Autowired
+    KeywordMatchMapper keywordMatchMapper;
 
 
     @ApiOperation("测试连接")
@@ -41,5 +54,38 @@ public class TestController {
         return esRestService.testClient();
     }
 
+    @ApiOperation("新增数据")
+    @GetMapping("add")
+    public String add() throws JsonProcessingException {
+        BmSpfl bmSpfl = new BmSpfl();
+        bmSpfl.setBm("4567898765678");
+        bmSpfl.setHbbm("fghjhghjkhjk");
+        bmSpfl.setMc("融易算专有分类");
 
+        esRestService.createOrUpdateDocument(EsIndices.BM_SPFL, null, objectMapper.writeValueAsString(bmSpfl));
+        return esRestService.testClient();
+    }
+
+    @ApiOperation("query")
+    @GetMapping("query/{keyword}")
+    public PagedResult<BmSpfl> query(@PathVariable String keyword) throws JsonProcessingException {
+        PagedResult<BmSpfl> list = esRestService.pagedSearch(EsIndices.BM_SPFL, keyword, null, new TypeReference<BmSpfl>() {
+        }, 0, 10, null, true);
+
+        return list;
+    }
+
+    @ApiOperation("新增关键字映射")
+    @PostMapping("addKeywordMapping")
+    public Result<String> addKeywordMapping(@RequestBody KeywordMapping keywordMapping) throws JsonProcessingException {
+        keywordMappingMapper.insertSelective(keywordMapping);
+        return Result.success().build();
+    }
+
+    @ApiOperation("新增关键字匹配")
+    @PostMapping("addKeywordMatch")
+    public Result<String> addKeywordMatch(@RequestBody KeywordMatch keywordMatch) throws JsonProcessingException {
+        keywordMatchMapper.insertSelective(keywordMatch);
+        return Result.success().build();
+    }
 }

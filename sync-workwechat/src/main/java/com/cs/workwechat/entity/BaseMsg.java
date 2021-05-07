@@ -1,7 +1,7 @@
 package com.cs.workwechat.entity;
 
-import com.cs.workwechat.handler.JsonHandler;
-import com.cs.workwechat.handler.StringListHandler;
+import com.cs.common.mybatis.handler.JsonHandler;
+import com.cs.common.mybatis.handler.StringListHandler;
 import com.cs.workwechat.pojo.enums.MsgType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.cs.workwechat.handler;
+package com.cs.common.mybatis.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

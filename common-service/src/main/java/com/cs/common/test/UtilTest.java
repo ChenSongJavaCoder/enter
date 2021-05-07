@@ -2,6 +2,8 @@ package com.cs.common.test;
 
 import cn.hutool.system.SystemUtil;
 
+import java.lang.management.ThreadMXBean;
+
 /**
  * @Author: CS
  * @Date: 2020/7/13 5:17 下午
@@ -37,5 +39,6 @@ public class UtilTest {
 //        }
 
         System.out.println(SystemUtil.getHostInfo().getName());
+        ThreadMXBean info = SystemUtil.getThreadMXBean();
     }
 }

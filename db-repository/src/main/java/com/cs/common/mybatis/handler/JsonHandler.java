@@ -1,4 +1,4 @@
-package com.cs.workwechat.handler;
+package com.cs.common.mybatis.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.type.BaseTypeHandler;

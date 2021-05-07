@@ -1,5 +1,10 @@
 package com.cs.es.common;
 
+import com.cs.common.bean.PagedResult;
+import com.cs.es.entity.KeywordMapping;
+import com.cs.es.mapper.KeywordMappingMapper;
+import com.cs.es.mapper.KeywordMatchMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +14,15 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggregationBuilder;
@@ -21,10 +32,14 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilde
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName: EsRestService
@@ -35,7 +50,7 @@ import java.util.List;
 @Slf4j
 @Component
 public class
-EsRestService<T> {
+EsRestService {
 
 
     @Autowired
@@ -44,9 +59,14 @@ EsRestService<T> {
     @Autowired
     QueryItemsBuilder queryItemsBuilder;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
 
-    RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    KeywordMappingMapper keywordMappingMapper;
+
+    @Autowired
+    KeywordMatchMapper keywordMatchMapper;
 
     private static final int TIMEOUT = 15;
     private static final int SHOW_SIZE = 1000;
@@ -84,6 +104,7 @@ EsRestService<T> {
         }
         return false;
     }
+
 
     /**
      * 创建或更新
@@ -129,6 +150,57 @@ EsRestService<T> {
             }
         } catch (IOException e) {
             log.error(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 分页查询
+     *
+     * @param index
+     * @param condition
+     * @param pageIndex
+     * @param pageSize
+     * @param sortColumn
+     * @param desc
+     * @return
+     */
+    public <T> PagedResult<T> pagedSearch(EsIndices index, String keyword, List<Map<String, Object>> condition, TypeReference<T> typeReference, int pageIndex, int pageSize, String sortColumn, boolean desc) {
+        KeywordMapping s = new KeywordMapping();
+        s.setKeyword(keyword);
+        List<KeywordMapping> keywordMapping = keywordMappingMapper.select(s);
+        List<String> bm = keywordMatchMapper.selectBmByKeywordAndOrderBy(keyword);
+        String gjz = keywordMapping.stream().flatMap(e -> e.getMapping().stream()).collect(Collectors.joining(","));
+        gjz = keyword + gjz;
+        SearchRequest request = new SearchRequest(index.getIndexName());
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        // 动态调节权重boost
+        AtomicInteger boost = new AtomicInteger(11);
+        bm.stream().limit(5).forEach(e -> boolQueryBuilder.should(QueryBuilders.matchQuery("bm", e).boost(boost.getAndAdd(-2))));
+        boolQueryBuilder.should(QueryBuilders.matchQuery("mc", keyword).boost(2.0f));
+        boolQueryBuilder.should(QueryBuilders.matchQuery("gjz", gjz).boost(1.0f));
+        builder.query(boolQueryBuilder);
+        builder.from((pageIndex > 0 ? pageIndex - 1 : 0) * pageSize);
+        builder.size(pageSize);
+        builder.timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));
+        log.info(builder.toString());
+        request.source(builder);
+        try {
+            SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+            SearchHits hits = response.getHits();
+            List<T> data = new ArrayList<>();
+            hits.forEach(hit -> {
+                try {
+                    data.add(objectMapper.readValue(hit.getSourceAsString(), typeReference));
+                } catch (IOException e) {
+                    log.error("序列化出错，原因是：{}", e.getCause().getMessage());
+                }
+            });
+            return new PagedResult<T>().setRows(data).setTotal(hits.getTotalHits());
+        } catch (Exception e) {
+            log.error("查询索引出错，原因是：{}", e.getCause().getMessage());
+            return null;
         }
     }
 
