@@ -2,6 +2,7 @@ package com.cs.es.entity;
 
 import com.cs.common.mybatis.BaseEntity;
 import com.cs.common.mybatis.handler.StringListHandler;
+import com.cs.es.binlog.annotation.TableMapping;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tk.mybatis.mapper.annotation.ColumnType;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Table
+@TableMapping(databaseName = "mine")
 public class KeywordMapping extends BaseEntity {
     private String keyword;
 

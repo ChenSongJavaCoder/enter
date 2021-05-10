@@ -1,6 +1,7 @@
 package com.cs.es.entity;
 
 import com.cs.common.mybatis.BaseEntity;
+import com.cs.es.binlog.annotation.TableMapping;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,9 +15,8 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table
+@TableMapping(databaseName = "mine")
 public class KeywordMatch extends BaseEntity {
     private String keyword;
-
     private String bm;
-
 }

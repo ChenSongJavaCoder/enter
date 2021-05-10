@@ -3,6 +3,7 @@ package com.cs.es.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -68,6 +69,9 @@ public class JacksonConfig {
 
         // 忽略反序列化时在json字符串中存在, 但在java对象中不存在的属性
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+        // 对象属性命名策略
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
         return objectMapper;
     }
