@@ -4,6 +4,7 @@ import com.cs.common.bean.PagedResult;
 import com.cs.es.entity.KeywordMapping;
 import com.cs.es.mapper.KeywordMappingMapper;
 import com.cs.es.mapper.KeywordMatchMapper;
+import com.cs.es.service.EsBaseService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -31,6 +32,7 @@ import org.elasticsearch.search.aggregations.bucket.histogram.ExtendedBounds;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -49,18 +51,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class
-EsRestService {
+public class EsRestService extends EsBaseService {
 
 
     @Autowired
     RestHighLevelClient client;
-
-    @Autowired
-    QueryItemsBuilder queryItemsBuilder;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     KeywordMappingMapper keywordMappingMapper;
@@ -79,6 +74,7 @@ EsRestService {
      */
     public String testClient() {
         try {
+            boolean b = elasticsearchRestTemplate.indexExists(EsIndices.BM_SPFL.getIndexName());
             return "es连接成功：" + client.ping(RequestOptions.DEFAULT);
         } catch (IOException e) {
             return "es连接失败：" + e.getMessage();
@@ -177,7 +173,7 @@ EsRestService {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         // 动态调节权重boost
         AtomicInteger boost = new AtomicInteger(11);
-        bm.stream().limit(5).forEach(e -> boolQueryBuilder.should(QueryBuilders.matchQuery("bm", e).boost(boost.getAndAdd(-2))));
+        bm.stream().limit(5).forEach(e -> boolQueryBuilder.should(QueryBuilders.termQuery("bm", e).boost(boost.getAndAdd(-2))));
         boolQueryBuilder.should(QueryBuilders.matchQuery("mc", keyword).boost(2.0f));
         boolQueryBuilder.should(QueryBuilders.matchQuery("gjz", gjz).boost(1.0f));
         builder.query(boolQueryBuilder);

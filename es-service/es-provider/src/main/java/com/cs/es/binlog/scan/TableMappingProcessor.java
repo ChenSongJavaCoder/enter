@@ -1,11 +1,13 @@
 package com.cs.es.binlog.scan;
 
-import com.cs.es.binlog.annotation.*;
+import cn.hutool.core.util.ClassUtil;
 import com.cs.es.binlog.annotation.ColumnMapping;
+import com.cs.es.binlog.annotation.*;
 import com.cs.es.binlog.config.*;
 import com.google.common.base.CaseFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -24,10 +26,10 @@ import java.util.Set;
 public class TableMappingProcessor {
 
     @Autowired
-    ClassScanner classScanner;
-
-    @Autowired
     SynchronizedConfiguration synchronizedConfiguration;
+
+    @Value("${elasticsearch.document.path:com.cs.es.document}")
+    private String documentPath;
 
     /**
      * 数据库-javaBean映射
@@ -37,8 +39,8 @@ public class TableMappingProcessor {
 
     @PostConstruct
     public void init() {
-
-        Set<Class> classes = classScanner.scan("com.cs.es.entity", TableMapping.class);
+        // 该方法可扫描子路径下的类
+        Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation(documentPath, TableMapping.class);
         classes.forEach(clazz -> {
             TableMapping annotation = AnnotationUtils.findAnnotation(clazz, TableMapping.class);
             // 若表名未定义取类名驼峰转下划线作为表名
@@ -79,7 +81,7 @@ public class TableMappingProcessor {
 
                     synchronizedConfiguration.addEntityRelated(clazz, entityRelatedMapping);
                 } else {
-                    log.error("Document [{}] field[{}] with any mapping or related configuration! The value of this field will not be set!", clazz.getSimpleName(), field.getName());
+                    log.warn("Document [{}] field[{}] with any mapping or related configuration! The value of this field will not be set!", clazz.getSimpleName(), field.getName());
                 }
             }
         });

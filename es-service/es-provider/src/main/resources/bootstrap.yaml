@@ -27,11 +27,13 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       connection-test-query: SELECT 1
+  # 使用rest连接es
   elasticsearch:
     rest:
       uris: 127.0.0.1:9200
       username: elasticsearch
       password:
+
 
 eureka:
   instance:
@@ -44,3 +46,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+
+
+elasticsearch:
+  document:
+    path: com.cs.es.document
+

@@ -13,12 +13,15 @@ import com.github.shyiko.mysql.binlog.event.WriteRowsEventData;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author: CS
@@ -37,6 +40,9 @@ public class WriteEventHandler implements Handler {
 
     @Autowired
     SynchronizedConfiguration synchronizedConfiguration;
+
+    @Autowired
+    ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Override
     public boolean support(Event event) {
@@ -61,14 +67,22 @@ public class WriteEventHandler implements Handler {
                 beanMap.put(columnMetadata.getName(), row[j]);
                 j++;
             }
+            // 拿到对应的document class
             List<Class> javaClass = synchronizedConfiguration.getMappingDocumentClass(new DatabaseTablePair(tableMetadata.getDatabase(), tableMetadata.getTable()));
-            if (!CollectionUtils.isEmpty(javaClass)) {
+            javaClass.forEach(clazz -> {
+                Object instance = null;
                 try {
-                    Object bean = objectMapper.readValue(objectMapper.writeValueAsString(beanMap), javaClass.get(0));
+                    instance = objectMapper.readValue(objectMapper.writeValueAsString(beanMap), clazz);
+                    IndexQuery indexQuery = new IndexQueryBuilder()
+                            .withId(Objects.nonNull(beanMap.get("id")) ? String.valueOf(beanMap.get("id")) : null)
+                            .withObject(instance)
+                            .build();
+                    elasticsearchRestTemplate.index(indexQuery);
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-            }
+            });
+
         }
     }
 }

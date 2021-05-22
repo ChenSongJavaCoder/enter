@@ -1,6 +1,5 @@
 package com.cs.es.entity;
 
-import com.cs.es.binlog.annotation.TableMapping;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @Table(name = "bm_spfl")
-@TableMapping(databaseName = "mine")
 public class BmSpfl {
     /**
      * 编码

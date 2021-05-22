@@ -1,4 +1,4 @@
-package com.cs.es.config;
+package com.cs.common.config.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -24,13 +24,21 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author: CS
  * @date: 2021/5/7 上午10:43
- * @description:
+ * @description: jackson配置，默认全局通用，子系统有特殊需求自定义处理
  */
 @Configuration
 public class JacksonConfig {
-
+    /**
+     * 支持的日期时间格式
+     */
     private static final String STANDARD_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * 支持的日期格式
+     */
     private static final String DATE_PATTERN = "yyyy-MM-dd";
+    /**
+     * 支持的时间格式
+     */
     private static final String TIME_PATTERN = "HH:mm:ss";
 
     @Bean
@@ -70,8 +78,8 @@ public class JacksonConfig {
         // 忽略反序列化时在json字符串中存在, 但在java对象中不存在的属性
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        // 对象属性命名策略
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        // 对象属性命名策略,使用java命名规范
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
 
         return objectMapper;
     }

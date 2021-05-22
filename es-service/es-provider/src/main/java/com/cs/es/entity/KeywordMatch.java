@@ -15,7 +15,6 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table
-@TableMapping(databaseName = "mine")
 public class KeywordMatch extends BaseEntity {
     private String keyword;
     private String bm;

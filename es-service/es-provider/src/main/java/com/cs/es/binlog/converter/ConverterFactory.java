@@ -1,8 +1,7 @@
 package com.cs.es.binlog.converter;
 
+import cn.hutool.core.util.ClassUtil;
 import com.cs.es.binlog.bean.SourceTargetPair;
-import com.cs.es.binlog.scan.ClassScanner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,10 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class ConverterFactory {
 
+    /**
+     * converter容器
+     */
     private static final Map<SourceTargetPair, Converter> converters = new ConcurrentHashMap<>(16);
-
-    @Autowired
-    ClassScanner classScanner;
 
     /**
      * 注册converter
@@ -44,14 +43,13 @@ public class ConverterFactory {
      */
     @PostConstruct
     public <T extends Converter> void init() {
-        Set<Class<?>> classes = cn.hutool.core.lang.ClassScanner.scanPackageBySuper("com.cs.es.binlog.converter.impl", Converter.class);
-//        Set<Class> classes = classScanner.scan("com.cs.es.binlog.converter.impl");
+        // 获取当前类的包
+        Package pkg = this.getClass().getPackage();
+        Set<Class<?>> classes = ClassUtil.scanPackageBySuper(pkg.getName(), Converter.class);
         classes.forEach(aClass -> {
             try {
                 Object instance = aClass.newInstance();
-                if (instance instanceof Converter) {
-                    register((T) instance);
-                }
+                register((T) instance);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

@@ -88,4 +88,10 @@ public class TestController {
         keywordMatchMapper.insertSelective(keywordMatch);
         return Result.success().build();
     }
+
+    @ApiOperation("更新字段")
+    @GetMapping("update")
+    public Result<String> update(){
+        return Result.success().data(esRestService.updateDocument()).build();
+    }
 }
