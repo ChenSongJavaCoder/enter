@@ -1,5 +1,6 @@
 package com.cs.es.document;
 
+import com.cs.es.binlog.annotation.ColumnMapping;
 import com.cs.es.binlog.annotation.TableMapping;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,9 +24,15 @@ import javax.persistence.Id;
 public class EsKeywordMatch {
     @Id
     @Field(type = FieldType.Long)
+    @ColumnMapping(columnName = "id")
     private Long id;
+    @ColumnMapping(columnName = "keyword")
     @Field(type = FieldType.Keyword)
     private String keyword;
+    @ColumnMapping(columnName = "bm")
     @Field(type = FieldType.Keyword)
     private String bm;
+    @ColumnMapping(columnName = "create_time")
+    @Field(type = FieldType.Date)
+    private String createTime;
 }

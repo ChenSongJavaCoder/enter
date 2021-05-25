@@ -20,7 +20,7 @@ public class ConverterFactory {
     /**
      * converter容器
      */
-    private static final Map<SourceTargetPair, Converter> converters = new ConcurrentHashMap<>(16);
+    private Map<SourceTargetPair, Converter> converters;
 
     /**
      * 注册converter
@@ -46,6 +46,7 @@ public class ConverterFactory {
         // 获取当前类的包
         Package pkg = this.getClass().getPackage();
         Set<Class<?>> classes = ClassUtil.scanPackageBySuper(pkg.getName(), Converter.class);
+        converters = new ConcurrentHashMap<>(classes.size());
         classes.forEach(aClass -> {
             try {
                 Object instance = aClass.newInstance();

@@ -64,7 +64,7 @@ public class TableMappingProcessor {
                 }
 
                 if (null != mappingAnnotation) {
-                    synchronizedConfiguration.addColumnMapping(documentTableMapping, mappingAnnotation.columnName(), field.getName());
+                    synchronizedConfiguration.addColumnMapping(documentTableMapping, field.getName(), mappingAnnotation.columnName());
                 } else if (null != relatedColumnAnnotation) {
                     DatabaseTablePair databaseTablePair = new DatabaseTablePair(relatedColumnAnnotation.databaseName(), relatedColumnAnnotation.tableName());
 

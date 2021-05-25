@@ -91,7 +91,7 @@ public class SynchronizedConfiguration {
         if (!this.columnMappings.containsKey(documentTableMapping)) {
             this.columnMappings.put(documentTableMapping, new HashMap<>());
         }
-        this.columnMappings.get(documentTableMapping).put(tableColumn, documentField);
+        this.columnMappings.get(documentTableMapping).put(documentField, tableColumn);
     }
 
     public Map<String, String> getColumnMapping(DocumentTableMapping documentTableMapping) {

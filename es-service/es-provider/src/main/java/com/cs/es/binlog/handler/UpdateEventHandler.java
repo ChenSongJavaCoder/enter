@@ -3,6 +3,7 @@ package com.cs.es.binlog.handler;
 import com.cs.es.binlog.mysql.TableMetadataBuilder;
 import com.github.shyiko.mysql.binlog.event.Event;
 import com.github.shyiko.mysql.binlog.event.EventType;
+import com.github.shyiko.mysql.binlog.event.UpdateRowsEventData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,5 +28,8 @@ public class UpdateEventHandler implements Handler {
     @Override
     public void handle(Event event) {
         log.info("监听到更新事件：{}", event.toString());
+        UpdateRowsEventData updateRowsEventData = event.getData();
+
+
     }
 }

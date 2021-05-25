@@ -1,11 +1,12 @@
 package com.cs.es.binlog.handler;
 
+import com.cs.es.binlog.builder.DocumentMappingBuilder;
 import com.cs.es.binlog.config.DatabaseTablePair;
+import com.cs.es.binlog.config.DocumentTableMapping;
 import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.mysql.ColumnMetadata;
 import com.cs.es.binlog.mysql.TableMetadata;
 import com.cs.es.binlog.mysql.TableMetadataCache;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.shyiko.mysql.binlog.event.Event;
 import com.github.shyiko.mysql.binlog.event.EventType;
@@ -19,6 +20,7 @@ import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,11 +40,15 @@ public class WriteEventHandler implements Handler {
     @Autowired
     TableMetadataCache tableMetadataCache;
 
+    private static final String TABLE_ID = "id";
+
     @Autowired
     SynchronizedConfiguration synchronizedConfiguration;
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
+    @Autowired
+    DocumentMappingBuilder documentMappingBuilder;
 
     @Override
     public boolean support(Event event) {
@@ -51,7 +57,7 @@ public class WriteEventHandler implements Handler {
 
     @Override
     public void handle(Event event) {
-        log.info("监听到写入事件：{}", event.toString());
+        log.debug("监听到写入事件：{}", event.toString());
         WriteRowsEventData writeRowsEventData = event.getData();
 
         TableMetadata tableMetadata = tableMetadataCache.get(writeRowsEventData.getTableId());
@@ -69,20 +75,21 @@ public class WriteEventHandler implements Handler {
             }
             // 拿到对应的document class
             List<Class> javaClass = synchronizedConfiguration.getMappingDocumentClass(new DatabaseTablePair(tableMetadata.getDatabase(), tableMetadata.getTable()));
+            List<IndexQuery> indexQueries = new ArrayList<>();
             javaClass.forEach(clazz -> {
-                Object instance = null;
-                try {
-                    instance = objectMapper.readValue(objectMapper.writeValueAsString(beanMap), clazz);
-                    IndexQuery indexQuery = new IndexQueryBuilder()
-                            .withId(Objects.nonNull(beanMap.get("id")) ? String.valueOf(beanMap.get("id")) : null)
-                            .withObject(instance)
-                            .build();
-                    elasticsearchRestTemplate.index(indexQuery);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            });
+                // 单表可以直接进行映射转换，对于关联组合字段需要独立逻辑处理
+                // 关联表数据更新，存在先后关系
+                DocumentTableMapping documentTableMapping = new DocumentTableMapping(clazz, tableMetadata.getDatabase(), tableMetadata.getTable());
+                Object instance = documentMappingBuilder.build(documentTableMapping, beanMap);
+                IndexQuery indexQuery = new IndexQueryBuilder()
+                        // 对于符合数据库规范来说id即documentId
+                        .withId(Objects.nonNull(beanMap.get(TABLE_ID)) ? String.valueOf(beanMap.get(TABLE_ID)) : null)
+                        .withObject(instance)
+                        .build();
+                indexQueries.add(indexQuery);
 
+            });
+            elasticsearchRestTemplate.bulkIndex(indexQueries);
         }
     }
 }
