@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author keosn
@@ -19,8 +19,8 @@ import java.util.HashMap;
 public class RedisCacheConfig {
 
     @Bean("es_redistemplate")
-    public RedisTemplate<String, HashMap<String, Serializable>> getRedisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, HashMap<String, Serializable>> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Map<String, Serializable>> getRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Map<String, Serializable>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         //key序列化方式,但是如果方法上有Long等非String类型的话，会报类型转换错误
         //所以在没有自己定义key生成策略的时候，以下这个代码建议不要这么写，可以不配置或者自己实现ObjectRedisSerializer

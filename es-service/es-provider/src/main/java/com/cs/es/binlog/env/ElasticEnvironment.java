@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
  * @author keosn
  * @date 2019/4/3 17:49
  */
-@Component("elasticEnvironment")
 @Data
+@Component
 public class ElasticEnvironment {
 
     @Value("${spring.profiles.active:local}")

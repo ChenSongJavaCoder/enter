@@ -82,6 +82,7 @@ public class DocumentMappingBuilder {
                     if (null != relatedColumnMappings && relatedColumnMappings.keySet().contains(field.getName())) {
                         log.trace("Got related mapping column {}", field.getName());
                         ColumnRelatedMapping relatedColumnMapping = relatedColumnMappings.get(field.getName());
+                        // 获取关联字段值 类似'join on'中的'on'字段值
                         Serializable relatedValue;
                         String relatedCol = relatedColumnMapping.getRelatedColumn();
                         if (relatedCol.startsWith(LOCAL_FIELD_PREFIX)) {
@@ -89,6 +90,7 @@ public class DocumentMappingBuilder {
                         } else {
                             relatedValue = keyValues.get(relatedCol);
                         }
+                        // 获取关联值
                         Serializable value = relatedValueGetter.getValue(relatedColumnMapping, relatedValue);
                         Class<?> valueClass = null == value ? Null.class : value.getClass();
                         Converter converter = getConverter(field, valueClass);

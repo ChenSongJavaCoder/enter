@@ -11,16 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class RowValuesKeyProvider {
 
-    private static final String SPARATOR = ":";
+    private static final String SEPARATOR = ":";
+
     @Autowired
     ElasticEnvironment elasticEnvironment;
 
     public String key(String database, String table, String column, String value) {
         return new StringBuffer(elasticEnvironment.getProfile())
-                .append(SPARATOR).append(database)
-                .append(SPARATOR).append(table)
-                .append(SPARATOR).append(column)
-                .append(SPARATOR).append(value)
+                .append(SEPARATOR).append(database)
+                .append(SEPARATOR).append(table)
+                .append(SEPARATOR).append(column)
+                .append(SEPARATOR).append(value)
                 .toString();
     }
 

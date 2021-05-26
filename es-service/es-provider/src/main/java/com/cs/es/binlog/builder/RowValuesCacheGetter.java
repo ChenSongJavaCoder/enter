@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -26,21 +27,19 @@ public class RowValuesCacheGetter {
 
 
     public Serializable getValue(String database, String table, String relatedColumn, Object value, String valueColumn) {
-        String key = rowValuesKeyProvider.key(database, table, relatedColumn, String.valueOf(value));
+        Map<String, Serializable> rowValue = getRowValue(database, table, relatedColumn, String.valueOf(value));
 
-        Map<String, Serializable> rowValue = rowValuesCache.get(key);
-        if (null == rowValue || CollectionUtils.isEmpty(rowValue)) {
-            log.warn("Got date consistency issue, key: {} - value column: {}", key, valueColumn);
-            return null;
-        }
-        Serializable retVal = rowValuesCache.get(key).get(valueColumn);
-
-        return retVal;
+        return rowValue.get(valueColumn);
     }
 
     public Map<String, Serializable> getRowValue(String database, String table, String relatedColumn, Object value) {
         String key = rowValuesKeyProvider.key(database, table, relatedColumn, String.valueOf(value));
-        return rowValuesCache.get(key);
+        Map<String, Serializable> rowValue = rowValuesCache.get(key);
+        if (CollectionUtils.isEmpty(rowValue)) {
+            log.warn("Got data consistency issue, key: {} - value column: {}", key);
+            return Collections.emptyMap();
+        }
+        return rowValue;
     }
 
 }

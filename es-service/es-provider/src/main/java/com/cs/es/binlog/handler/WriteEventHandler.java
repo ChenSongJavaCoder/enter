@@ -1,6 +1,8 @@
 package com.cs.es.binlog.handler;
 
 import com.cs.es.binlog.builder.DocumentMappingBuilder;
+import com.cs.es.binlog.cache.RowValuesCache;
+import com.cs.es.binlog.cache.RowValuesKeyProvider;
 import com.cs.es.binlog.config.DatabaseTablePair;
 import com.cs.es.binlog.config.DocumentTableMapping;
 import com.cs.es.binlog.config.SynchronizedConfiguration;
@@ -47,8 +49,15 @@ public class WriteEventHandler implements Handler {
 
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
+
     @Autowired
     DocumentMappingBuilder documentMappingBuilder;
+
+    @Autowired
+    RowValuesCache rowValuesCache;
+
+    @Autowired
+    RowValuesKeyProvider rowValuesKeyProvider;
 
     @Override
     public boolean support(Event event) {
@@ -73,11 +82,15 @@ public class WriteEventHandler implements Handler {
                 beanMap.put(columnMetadata.getName(), row[j]);
                 j++;
             }
+
+            // 拿到数据录入缓存
+            rowValuesCache.put(rowValuesKeyProvider.key(tableMetadata.getDatabase(), tableMetadata.getTable(), TABLE_ID, String.valueOf(beanMap.get(TABLE_ID))), beanMap);
+
             // 拿到对应的document class
             List<Class> javaClass = synchronizedConfiguration.getMappingDocumentClass(new DatabaseTablePair(tableMetadata.getDatabase(), tableMetadata.getTable()));
             List<IndexQuery> indexQueries = new ArrayList<>();
             javaClass.forEach(clazz -> {
-                // 单表可以直接进行映射转换，对于关联组合字段需要独立逻辑处理
+                // 单表可以直接进行映射转换，对于关联组合字段需要独立逻辑处理 objectMapper.readValue()
                 // 关联表数据更新，存在先后关系
                 DocumentTableMapping documentTableMapping = new DocumentTableMapping(clazz, tableMetadata.getDatabase(), tableMetadata.getTable());
                 Object instance = documentMappingBuilder.build(documentTableMapping, beanMap);

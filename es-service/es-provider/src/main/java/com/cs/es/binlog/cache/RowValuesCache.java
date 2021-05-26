@@ -2,40 +2,46 @@ package com.cs.es.binlog.cache;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author keosn
- * @date 2019/4/3 17:32
+ * @author: CS
+ * @date: 2021/5/8 下午2:22
+ * @description: binlog数据缓存 memory + redis
  */
 @Component
 @Slf4j
 public class RowValuesCache {
 
     /**
-     * 内存缓存数据时间默认1分钟
+     * 内存缓存数据时间默认1分钟,毫秒单位
      */
-    private static final int MEMORY_CACHE_TIME = 60 * 1;
+    private static final int MEMORY_CACHE_TIME = 1000 * 60 * 1;
+    private static final int REDIS_CACHE_TIME = MEMORY_CACHE_TIME * 60 * 24;
 
-    @Autowired
-    @Qualifier(value = "es_redistemplate")
-    RedisTemplate<String, HashMap<String, Serializable>> redisTemplate;
 
     @Autowired
     MemoryCache memoryCache;
 
-    public Boolean put(String key, HashMap<String, Serializable> value) {
+    @Autowired
+    RedisCache redisCache;
+
+    /**
+     * 系统缓存
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Boolean put(String key, Map<String, Serializable> value) {
         long start = System.currentTimeMillis();
-        memoryCache.put(new MemoryCacheNode(key, value, MEMORY_CACHE_TIME));
-
-        new RedisSavingThread(redisTemplate, key, value).start();
-
+        // 系统缓存
+        memoryCache.put(new CacheNode(key, value, MEMORY_CACHE_TIME));
+        // redis缓存
+        redisCache.put(new CacheNode(key, value, REDIS_CACHE_TIME));
         log.info("Saving key:{} used: {}", key, System.currentTimeMillis() - start);
         return Boolean.TRUE;
     }
@@ -48,31 +54,11 @@ public class RowValuesCache {
             return result;
         }
 
-        result = redisTemplate.opsForValue().get(key);
+        result = redisCache.get(key);
         log.info("Getting from redis key:{} used: {}", key, System.currentTimeMillis() - start);
 
-        memoryCache.put(new MemoryCacheNode(key, result, MEMORY_CACHE_TIME));
+        memoryCache.put(new CacheNode(key, result, MEMORY_CACHE_TIME));
         return result;
     }
 
-    private class RedisSavingThread extends Thread {
-        private RedisTemplate<String, HashMap<String, Serializable>> redisTemplate;
-
-        private String key;
-
-        private HashMap<String, Serializable> value;
-
-        public RedisSavingThread(RedisTemplate<String, HashMap<String, Serializable>> redisTemplate, String key, HashMap<String, Serializable> value) {
-            this.redisTemplate = redisTemplate;
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public void run() {
-            redisTemplate.opsForValue().set(key, value);
-        }
-    }
-
-    //TODO 内存缓存过期
 }
