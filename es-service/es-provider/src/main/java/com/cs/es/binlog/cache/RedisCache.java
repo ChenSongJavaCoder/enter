@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisCache implements Cache {
 
     @Autowired
-    @Qualifier(value = "es_redistemplate")
+    @Qualifier(value = "cache_redis_template")
     RedisTemplate<String, Map<String, Serializable>> redisTemplate;
 
     @Override

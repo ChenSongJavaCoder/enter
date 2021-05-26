@@ -54,6 +54,11 @@ eureka:
 elasticsearch:
   document:
     path: com.cs.es.document
+    serviceId: 1
+    dbHost: localhost
+    dbPort: 3306
+    username: test
+    password: test
 
 # 指定日志级别
 logging:

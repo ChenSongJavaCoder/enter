@@ -18,7 +18,7 @@ import java.util.Map;
 @Configuration
 public class RedisCacheConfig {
 
-    @Bean("es_redistemplate")
+    @Bean("cache_redis_template")
     public RedisTemplate<String, Map<String, Serializable>> getRedisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Map<String, Serializable>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
@@ -41,6 +41,17 @@ public class RedisCacheConfig {
         redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
         redisTemplate.afterPropertiesSet();
 
+        return redisTemplate;
+    }
+
+    @Bean("binlog_redis_template")
+    public RedisTemplate<String, String> binlogRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(factory);
+        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(redisSerializer);
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 }

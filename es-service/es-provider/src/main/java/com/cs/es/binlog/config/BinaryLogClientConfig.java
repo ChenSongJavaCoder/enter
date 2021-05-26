@@ -6,10 +6,11 @@ import com.github.shyiko.mysql.binlog.event.deserialization.EventDeserializer;
 import com.github.shyiko.mysql.binlog.jmx.BinaryLogClientStatistics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 
 /**
  * @author: CS
@@ -20,31 +21,45 @@ import org.springframework.context.annotation.DependsOn;
 @Configuration
 public class BinaryLogClientConfig {
 
+    public static final String BINLOG_FILE_PREFIX = "BinlogFile-";
+
+    public static final String BINLOG_POSITION_PREFIX = "BinlogPosition-";
+
     @Autowired
-    DataSourceProperties dataSourceProperties;
+    DocumentDatabaseConfig documentDatabaseConfig;
 
     @Autowired
     HandlerDispatcher handlerDispatcher;
 
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
+
+
     @Bean
-    @DependsOn(value = "handlerDispatcher")
+    @DependsOn(value = {"handlerDispatcher"})
     public BinaryLogClient binaryLogClient() {
-        String url = dataSourceProperties.getUrl();
-        url = url.substring(url.indexOf("//") + 2);
-        String host = url.substring(0, url.indexOf(":"));
-        String port = url.substring(url.indexOf(":") + 1, url.indexOf("/"));
-        BinaryLogClient client = new BinaryLogClient(host, Integer.valueOf(port), "test", "test");
+        // binlog file 避免多个订阅者影响了数据同步
+        String binFile = redisTemplate.opsForValue().get(BINLOG_FILE_PREFIX + documentDatabaseConfig.getServiceId());
+        String binPosition = redisTemplate.opsForValue().get(BINLOG_POSITION_PREFIX + documentDatabaseConfig.getServiceId());
+        BinaryLogClient client = new BinaryLogClient(documentDatabaseConfig.getDbHost(), documentDatabaseConfig.getDbPort(), documentDatabaseConfig.getUsername(), documentDatabaseConfig.getPassword());
         EventDeserializer eventDeserializer = new EventDeserializer();
         eventDeserializer.setCompatibilityMode(
 //                    EventDeserializer.CompatibilityMode.DATE_AND_TIME_AS_LONG,
 //                    EventDeserializer.CompatibilityMode.CHAR_AND_BINARY_AS_BYTE_ARRAY,
                 EventDeserializer.CompatibilityMode.INVALID_DATE_AND_TIME_AS_ZERO
         );
+        if (StringUtils.hasText(binFile) && StringUtils.hasText(binPosition)) {
+            client.setBinlogFilename(binFile);
+            client.setBinlogPosition(Long.valueOf(binPosition));
+        }
         client.setEventDeserializer(eventDeserializer);
-        client.setServerId(1);
+        client.setServerId(documentDatabaseConfig.getServiceId());
         client.registerEventListener((event ->
                 handlerDispatcher.getHandler(event).ifPresent(handler -> handler.handle(event))
         ));
+        redisTemplate.opsForValue().set(BINLOG_FILE_PREFIX + documentDatabaseConfig.getServiceId(), client.getBinlogFilename());
+        redisTemplate.opsForValue().set(BINLOG_POSITION_PREFIX + documentDatabaseConfig.getServiceId(), String.valueOf(client.getBinlogPosition()));
+
         return client;
     }
 
