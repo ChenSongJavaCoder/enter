@@ -36,13 +36,13 @@ import java.util.Objects;
 @Component
 public class WriteEventHandler implements Handler {
 
+    private static final String TABLE_ID = "id";
+
     @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
     TableMetadataCache tableMetadataCache;
-
-    private static final String TABLE_ID = "id";
 
     @Autowired
     SynchronizedConfiguration synchronizedConfiguration;

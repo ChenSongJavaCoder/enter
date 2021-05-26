@@ -18,6 +18,8 @@ public interface Cache {
     void put(CacheNode cacheNode);
 
     /**
+     * 获取缓存对象
+     *
      * @param key
      * @return
      */

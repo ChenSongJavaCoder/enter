@@ -50,8 +50,12 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
-
+# 自定义elasticsearch的配置
 elasticsearch:
   document:
     path: com.cs.es.document
 
+# 指定日志级别
+logging:
+  level:
+    com.cs.es.binlog: debug

@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * @author: CS
  * @date: 2021/5/8 下午2:22
- * @description:
+ * @description: 处理映射表结构关系
  */
 @Slf4j
 @Component

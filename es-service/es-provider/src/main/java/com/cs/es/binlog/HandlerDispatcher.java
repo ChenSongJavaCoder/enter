@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * @author: CS
  * @date: 2021/5/8 下午2:25
- * @description: 处理器分发
+ * @description: 处理器分发器
  */
 @Component
 public class HandlerDispatcher {
@@ -19,7 +19,7 @@ public class HandlerDispatcher {
     @Autowired
     List<Handler> handlerList;
 
-    Optional<Handler> getHandler(Event event) {
+    public Optional<Handler> getHandler(Event event) {
         return handlerList.stream().filter(f -> f.support(event)).findAny();
     }
 

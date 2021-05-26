@@ -20,6 +20,9 @@ public class RowValuesCache {
      * 内存缓存数据时间默认1分钟,毫秒单位
      */
     private static final int MEMORY_CACHE_TIME = 1000 * 60 * 1;
+    /**
+     * redis缓存时间1天
+     */
     private static final int REDIS_CACHE_TIME = MEMORY_CACHE_TIME * 60 * 24;
 
 
