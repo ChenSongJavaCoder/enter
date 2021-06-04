@@ -25,7 +25,7 @@ public class BinlogWatcher {
     BinaryLogClientStatistics binaryLogClientStatistics;
 
     @PostConstruct
-    public void onEvent() {
+    public void start() {
         new SynchronizeThread(client).start();
         new BinaryLogClientStatisticsThread(binaryLogClientStatistics).start();
     }
@@ -37,12 +37,14 @@ public class BinlogWatcher {
         private BinaryLogClient client;
 
         public SynchronizeThread(BinaryLogClient client) {
+            super("BinlogSynchronize");
             this.client = client;
         }
 
         @Override
         public void run() {
             try {
+                log.info("BinaryLogClient binlogFile:{} binlogPosition:{}", client.getBinlogFilename(), client.getBinlogPosition());
                 client.connect();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -57,6 +59,7 @@ public class BinlogWatcher {
         private BinaryLogClientStatistics binaryLogClientStatistics;
 
         public BinaryLogClientStatisticsThread(BinaryLogClientStatistics binaryLogClientStatistics) {
+            super("BinaryLogClientStatistics");
             this.binaryLogClientStatistics = binaryLogClientStatistics;
         }
 

@@ -126,7 +126,7 @@ public class SynchronizedConfiguration {
         if (!this.relatedColumnMappingForClass.containsKey(clazz)) {
             this.relatedColumnMappingForClass.put(clazz, new HashMap<>());
         }
-        this.relatedColumnMappingForClass.get(clazz).put(columnRelated.getColumn(), columnRelated);
+        this.relatedColumnMappingForClass.get(clazz).put(columnRelated.getFieldName(), columnRelated);
     }
 
     public Map<Class, List<ColumnRelatedMapping>> getRelatedClassMapping(DatabaseTablePair databaseTablePair) {

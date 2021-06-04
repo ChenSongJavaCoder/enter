@@ -78,6 +78,17 @@ public class LocalDateTimeUtil {
     /**
      * 时间格式化
      *
+     * @param date
+     * @return
+     */
+    public static String dateFormatPattern(LocalDate date) {
+        Assert.notNull(date, "date can not be null!");
+        return date.format(DEFAULT_DATETIME_FORMATTER);
+    }
+
+    /**
+     * 时间格式化
+     *
      * @param time    需要处理的时间
      * @param pattern 格式花类型
      * @return

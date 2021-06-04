@@ -13,16 +13,28 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class ColumnRelatedMapping {
-
-    private String column;
-
+    /**
+     * 类字段名称
+     */
+    private String fieldName;
+    /**
+     * 关联字段数据库名称
+     */
     private String relatedDatabase;
-
+    /**
+     * 关联字段数据表名称
+     */
     private String relatedTable;
-
+    /**
+     * 关联字段表字段
+     */
     private String relatedColumn;
-
+    /**
+     * 被关联字段表字段 关联字段
+     */
     private String relatedTargetColumn;
-
+    /**
+     * 被关联字段表字段，目标字段
+     */
     private String targetColumn;
 }

@@ -1,6 +1,5 @@
-package com.cs.es.binlog;
+package com.cs.es.binlog.handler;
 
-import com.cs.es.binlog.handler.Handler;
 import com.github.shyiko.mysql.binlog.event.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
