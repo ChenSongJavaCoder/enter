@@ -80,7 +80,7 @@ public class DocumentMappingBuilder {
                     }
                     // 关联字段映射
                     if (null != relatedColumnMappings && relatedColumnMappings.keySet().contains(field.getName())) {
-                        log.trace("Got related mapping column {}", field.getName());
+                        log.info("Got related mapping column {}", field.getName());
                         ColumnRelatedMapping relatedColumnMapping = relatedColumnMappings.get(field.getName());
                         // 获取关联字段值 类似'join on'中的'on'字段值
                         Serializable relatedValue;

@@ -3,7 +3,6 @@ package com.cs.es.binlog.cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +25,7 @@ public class MemoryCache implements Cache {
 
     @Override
     public Map<String, Serializable> get(String key) {
-        log.debug("memory cache size: {}", cache.size());
+        log.info("memory cache size: {}", cache.size());
         CacheNode node = cache.get(key);
         if (null == node) {
             return null;
@@ -38,7 +37,7 @@ public class MemoryCache implements Cache {
     /**
      * 缓存失效
      */
-    @PostConstruct
+//    @PostConstruct
     public void expire() {
         new ExpireMonitor().start();
     }

@@ -83,7 +83,7 @@ public class WriteEventHandler implements Handler {
                 j++;
             }
 
-            // 拿到数据录入缓存
+            // 拿到数据录入缓存 eg: key=local:mine:user_role:user_id:3
             rowValuesCache.put(rowValuesKeyProvider.key(tableMetadata.getDatabase(), tableMetadata.getTable(), TABLE_ID, String.valueOf(beanMap.get(TABLE_ID))), beanMap);
 
             // 拿到对应的document class

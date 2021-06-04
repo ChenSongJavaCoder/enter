@@ -63,4 +63,4 @@ elasticsearch:
 # 指定日志级别
 logging:
   level:
-    com.cs.es.binlog: debug
+    com.cs.es.binlog: info

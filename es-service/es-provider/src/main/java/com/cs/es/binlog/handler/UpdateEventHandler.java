@@ -98,7 +98,7 @@ public class UpdateEventHandler implements Handler {
         List<IndexQuery> indexQueries = new ArrayList<>();
 
         for (Map.Entry<Serializable[], Serializable[]> entry : updateRowsEventData.getRows()) {
-            int idx = 1;
+            Long idx = 1L;
             // 组装数据
             Map<String, Serializable> beanMap = new LinkedHashMap<>();
             for (Serializable value : entry.getValue()) {
@@ -151,7 +151,7 @@ public class UpdateEventHandler implements Handler {
         int index = Math.min(oldValues.length, newValues.length);
         for (int i = 0; i < index; i++) {
             if (!Objects.equals(oldValues[i], newValues[i])) {
-                modifyColumns.add(new ColumnModifyBean(columnMetadata.get(Long.valueOf(i)).getName(), newValues[i], newValues[i]));
+                modifyColumns.add(new ColumnModifyBean(columnMetadata.get(Long.valueOf(i + 1)).getName(), oldValues[i], newValues[i]));
             }
         }
         log.info("数据变动：{}", JSONUtil.toJsonStr(modifyColumns));
@@ -206,10 +206,10 @@ public class UpdateEventHandler implements Handler {
             updateByQueryRequest.setScript(script);
             updateByQueryRequest.setRefresh(true);
             updateByQueryRequest.setBatchSize(100);
-            log.info("更新elasticsearchDSL：{}", JSONUtil.toJsonStr(updateByQueryRequest));
+            log.info("更新elasticsearch script: {} DSL: {}", scriptString.toString(), queryBuilder.toString(false));
             try {
                 BulkByScrollResponse response = elasticsearchRestTemplate.getClient().updateByQuery(updateByQueryRequest, RequestOptions.DEFAULT);
-                log.info("表【{}】 引起【{}】更新的结果：{}", databaseTablePair.getDatabase() + "." + databaseTablePair.getTable(), clazz, JSONUtil.toJsonStr(response));
+                log.info("表【{}】变动 引起【{}】更新的文档数量数量：{}", databaseTablePair.getDatabase() + "." + databaseTablePair.getTable(), clazz, response.getUpdated());
             } catch (IOException e) {
                 log.error("更新elasticsearch数据出错: ", e);
                 e.printStackTrace();
