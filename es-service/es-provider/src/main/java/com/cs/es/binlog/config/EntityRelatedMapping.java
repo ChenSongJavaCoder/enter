@@ -1,5 +1,6 @@
 package com.cs.es.binlog.config;
 
+import com.cs.es.document.EsDocument;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,19 +23,25 @@ public class EntityRelatedMapping {
     private String tableName;
 
     /**
-     * 被关联表的列名
+     * 关联表的列名
      */
-    private String targetField;
+    private String relatedValueColumn;
 
     /**
-     * 当前Document 中提供的关联值属性（注：用这个值过滤产生关联数据）
+     * 被关联表的列名
      */
-    private String valueField;
+    private String relatedTargetColumn;
 
     /**
      * 当前Document 注解的对象属性名
      */
     private String relatedField;
+
+
+    private Class relateClazz;
+
+
+    private Class<? extends EsDocument> targetClazz;
 
 
 }

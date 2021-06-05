@@ -66,18 +66,20 @@ public class TableMappingProcessor {
                 if (null != mappingAnnotation) {
                     synchronizedConfiguration.addColumnMapping(documentTableMapping, field.getName(), mappingAnnotation.columnName());
                 } else if (null != relatedColumnAnnotation) {
+                    // 正向映射，前置依赖
                     DatabaseTablePair databaseTablePair = new DatabaseTablePair(relatedColumnAnnotation.databaseName(), relatedColumnAnnotation.tableName());
-
                     ColumnRelatedMapping columnRelatedMapping = new ColumnRelatedMapping(field.getName(), relatedColumnAnnotation.databaseName(), relatedColumnAnnotation.tableName(), relatedColumnAnnotation.relatedColumn(), relatedColumnAnnotation.relatedTargetColumn(), relatedColumnAnnotation.targetColumn());
-
                     synchronizedConfiguration.addColumnRelated(databaseTablePair, clazz, columnRelatedMapping);
+
                 } else if (null != relatedEntityAnnotation) {
                     EntityRelatedMapping entityRelatedMapping = new EntityRelatedMapping(
                             relatedEntityAnnotation.databaseName(),
                             relatedEntityAnnotation.tableName(),
-                            relatedEntityAnnotation.targetField(),
-                            relatedEntityAnnotation.valueFiled(),
-                            field.getName());
+                            relatedEntityAnnotation.relatedValueColumn(),
+                            relatedEntityAnnotation.relatedTargetColumn(),
+                            field.getName(),
+                            clazz,
+                            relatedEntityAnnotation.targetClazz());
 
                     synchronizedConfiguration.addEntityRelated(clazz, entityRelatedMapping);
                 } else {

@@ -1,5 +1,7 @@
 package com.cs.es.binlog.annotation;
 
+import com.cs.es.document.EsDocument;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,25 +20,36 @@ public @interface EntityRelated {
 
     /**
      * 被关联字段数据库名
+     *
      * @return
      */
     String databaseName();
 
     /**
      * 被关联字段表明
+     *
      * @return
      */
     String tableName();
 
     /**
-     * The field of related entity
+     * related value of field, the field of current @Document
+     *
      * @return
      */
-    String targetField();
+    String relatedValueColumn();
 
     /**
-     * related value of field, the field of current @Document
+     * The field of related entity
+     *
      * @return
      */
-    String valueFiled();
+    String relatedTargetColumn();
+
+    /**
+     * target class
+     *
+     * @return
+     */
+    Class<? extends EsDocument> targetClazz();
 }

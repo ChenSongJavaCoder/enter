@@ -1,6 +1,8 @@
 package com.cs.es.document;
 
 import com.cs.es.binlog.annotation.ColumnMapping;
+import com.cs.es.binlog.annotation.ColumnRelated;
+import com.cs.es.binlog.annotation.EntityRelated;
 import com.cs.es.binlog.annotation.TableMapping;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +23,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @Document(indexName = "es_user_info", type = "_doc", shards = 1)
 @TableMapping(databaseName = "mine", tableName = "user")
-public class EsUserInfo {
+public class EsUserInfo implements EsDocument {
     @Id
     @Field(type = FieldType.Long)
     @ColumnMapping(columnName = "id")
@@ -49,4 +51,11 @@ public class EsUserInfo {
     @Field(type = FieldType.Keyword)
     private String password;
 
+    @ColumnRelated(databaseName = "mine", tableName = "user_role", relatedColumn = "id", relatedTargetColumn = "user_id", targetColumn = "role_id")
+    @Field(type = FieldType.Integer)
+    private Integer roleId;
+
+    @EntityRelated(databaseName = "mine", tableName = "user_location", relatedValueColumn = "id", relatedTargetColumn = "user_id", targetClazz = EsUserLocation.class)
+    @Field(type = FieldType.Nested)
+    private EsUserLocation userLocation;
 }

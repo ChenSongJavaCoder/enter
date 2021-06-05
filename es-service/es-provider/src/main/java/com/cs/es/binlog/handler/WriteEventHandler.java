@@ -66,6 +66,7 @@ public class WriteEventHandler implements Handler {
 
     @Override
     public void handle(Event event) {
+        long start = System.currentTimeMillis();
         log.debug("监听到写入事件：{}", event.toString());
         WriteRowsEventData writeRowsEventData = event.getData();
 
@@ -103,6 +104,7 @@ public class WriteEventHandler implements Handler {
 
             });
             elasticsearchRestTemplate.bulkIndex(indexQueries);
+            log.info("写入事件,数据条数: {} 同步耗时: {}", writeRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
         }
     }
 }

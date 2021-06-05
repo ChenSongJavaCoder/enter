@@ -27,6 +27,7 @@ public class SynchronizedConfiguration {
 
     /**
      * 字段映射关系
+     * Map key documentField value cloumn
      */
     private Map<DocumentTableMapping, Map<String, String>> columnMappings = new ConcurrentHashMap<>();
 
@@ -37,9 +38,21 @@ public class SynchronizedConfiguration {
     private Map<Class, Map<String, ColumnRelatedMapping>> relatedColumnMappingForClass = new ConcurrentHashMap<>();
 
     /**
+     * 字段关联关系（逆向取数）
+     */
+
+    private Map<String, Map<Class, ColumnRelatedMapping>> columnRelateClassMappingForClass = new ConcurrentHashMap<>();
+
+    /**
      * 字段关联实体的关系（正向取数）
      */
     private Map<Class, Map<String, EntityRelatedMapping>> entityRelatedMappingForClass = new ConcurrentHashMap<>();
+
+    /**
+     * 字段关联实体的关系（逆向取数）
+     */
+    private Map<String, Map<Class, EntityRelatedMapping>> entityRelatedClassMapping = new ConcurrentHashMap<>();
+
 
     /**
      * 关联表&关联字段记录（同步更新）
@@ -108,6 +121,7 @@ public class SynchronizedConfiguration {
 
     /**
      * 添加字段关联关系
+     * todo 添加被关联关系
      *
      * @param databaseTablePair
      * @param columnRelated
@@ -122,6 +136,12 @@ public class SynchronizedConfiguration {
         }
         this.relatedColumnMapping.get(databaseTablePair).get(clazz).add(columnRelated);
 
+        String columnRelateClassKey = columnKey(columnRelated.getRelatedDatabase(), columnRelated.getRelatedTable(), columnRelated.getTargetColumn());
+        if (!this.columnRelateClassMappingForClass.containsKey(columnRelateClassKey)) {
+            Map<Class, ColumnRelatedMapping> columnClasses = new HashMap<>();
+            this.columnRelateClassMappingForClass.put(columnRelateClassKey, columnClasses);
+        }
+        columnRelateClassMappingForClass.get(columnRelateClassKey).put(clazz, columnRelated);
 
         if (!this.relatedColumnMappingForClass.containsKey(clazz)) {
             this.relatedColumnMappingForClass.put(clazz, new HashMap<>());
@@ -129,12 +149,21 @@ public class SynchronizedConfiguration {
         this.relatedColumnMappingForClass.get(clazz).put(columnRelated.getFieldName(), columnRelated);
     }
 
+    public String columnKey(String database, String table, String column) {
+        return database + table + column;
+    }
+
     public Map<Class, List<ColumnRelatedMapping>> getRelatedClassMapping(DatabaseTablePair databaseTablePair) {
         return this.relatedColumnMapping.get(databaseTablePair);
     }
 
+    public Map<Class, ColumnRelatedMapping> getColumnRelatedClassMapping(String column) {
+        return this.columnRelateClassMappingForClass.get(column);
+    }
+
     /**
      * 构建DatabaseTablePair和被关联的Table Row模型
+     *
      * @param clazz
      * @param entityRelatedMapping
      */
@@ -144,12 +173,19 @@ public class SynchronizedConfiguration {
         }
         this.entityRelatedMappingForClass.get(clazz).put(entityRelatedMapping.getRelatedField(), entityRelatedMapping);
 
+        String columnKey = columnKey(entityRelatedMapping.getDatabase(), entityRelatedMapping.getTableName(), entityRelatedMapping.getRelatedTargetColumn());
+        if (CollectionUtils.isEmpty(this.entityRelatedClassMapping.get(columnKey))) {
+            this.entityRelatedClassMapping.put(columnKey, new HashMap<>());
+        }
+        this.entityRelatedClassMapping.get(columnKey).put(entityRelatedMapping.getRelateClazz(), entityRelatedMapping);
+
+
         DatabaseTablePair databaseTablePair = new DatabaseTablePair(entityRelatedMapping.getDatabase(), entityRelatedMapping.getTableName());
         if (CollectionUtils.isEmpty(this.entityRelatedMapping.get(databaseTablePair))) {
             this.entityRelatedMapping.put(databaseTablePair, new HashMap<>());
         }
 
-        if (CollectionUtils.isEmpty(this.entityRelatedMapping.get(databaseTablePair).get(clazz))){
+        if (CollectionUtils.isEmpty(this.entityRelatedMapping.get(databaseTablePair).get(clazz))) {
             this.entityRelatedMapping.get(databaseTablePair).put(clazz, new ArrayList<>());
         }
         this.entityRelatedMapping.get(databaseTablePair).get(clazz).add(entityRelatedMapping);
@@ -158,11 +194,16 @@ public class SynchronizedConfiguration {
 
     /**
      * 获取DatabaseTablePair和被关联的Table Row
+     *
      * @param databaseTablePair
      * @return
      */
     public Map<Class, List<EntityRelatedMapping>> getRelatedEntityList(DatabaseTablePair databaseTablePair) {
         return this.entityRelatedMapping.get(databaseTablePair);
+    }
+
+    public Map<Class, EntityRelatedMapping> getRelatedEntityClass(String column) {
+        return this.entityRelatedClassMapping.get(column);
     }
 
     public void addColumnConverter(Field field, Class<? extends Converter> converter) {

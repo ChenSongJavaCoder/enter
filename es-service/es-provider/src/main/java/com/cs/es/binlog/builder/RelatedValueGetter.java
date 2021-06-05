@@ -30,7 +30,7 @@ public class RelatedValueGetter {
     public Map<String, Serializable> getRowValue(EntityRelatedMapping entityRelatedMapping, Object relatedValue) {
         return rowValuesCacheGetter.getRowValue(entityRelatedMapping.getDatabase(),
                 entityRelatedMapping.getTableName(),
-                entityRelatedMapping.getTargetField(),
+                entityRelatedMapping.getRelatedValueColumn(),
                 relatedValue);
     }
 }

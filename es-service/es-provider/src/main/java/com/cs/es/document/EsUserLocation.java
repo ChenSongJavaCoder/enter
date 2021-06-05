@@ -13,26 +13,25 @@ import javax.persistence.Id;
 
 /**
  * @author: CS
- * @date: 2021/5/7 下午2:28
+ * @date: 2021/6/4 下午2:27
  * @description:
  */
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode
-@Document(indexName = "keyword_match", type = "_doc", shards = 1)
-@TableMapping(databaseName = "mine", tableName = "keyword_match")
-public class EsKeywordMatch implements EsDocument {
+@Document(indexName = "es_user_location", type = "_doc", shards = 1)
+@TableMapping(databaseName = "mine", tableName = "user_location")
+public class EsUserLocation implements EsDocument {
     @Id
     @Field(type = FieldType.Long)
     @ColumnMapping(columnName = "id")
     private Long id;
-    @ColumnMapping(columnName = "keyword")
-    @Field(type = FieldType.Keyword)
-    private String keyword;
-    @ColumnMapping(columnName = "bm")
-    @Field(type = FieldType.Keyword)
-    private String bm;
-    @ColumnMapping(columnName = "create_time")
-    @Field(type = FieldType.Date)
-    private String createTime;
+
+    @ColumnMapping(columnName = "user_id")
+    @Field(type = FieldType.Integer)
+    private Integer userId;
+
+    @ColumnMapping(columnName = "store_id")
+    @Field(type = FieldType.Integer)
+    private Integer storeId;
 }

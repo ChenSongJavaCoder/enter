@@ -22,7 +22,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @Document(indexName = "es_user_role", type = "_doc", shards = 1)
 @TableMapping(databaseName = "mine", tableName = "user_role")
-public class EsUserRole {
+public class EsUserRole implements EsDocument {
     @Id
     @Field(type = FieldType.Long)
     @ColumnMapping(columnName = "id")
