@@ -1,6 +1,6 @@
 package com.cs.es.binlog.handler;
 
-import com.cs.es.binlog.config.DatabaseTablePair;
+import com.cs.es.binlog.bean.DatabaseTablePair;
 import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.mysql.TableMetadata;
 import com.cs.es.binlog.mysql.TableMetadataBuilder;

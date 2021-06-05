@@ -2,12 +2,12 @@ package com.cs.es.binlog.handler;
 
 import cn.hutool.json.JSONUtil;
 import com.cs.es.binlog.bean.ColumnModifyBean;
+import com.cs.es.binlog.bean.DatabaseTablePair;
 import com.cs.es.binlog.bean.SourceTargetPair;
 import com.cs.es.binlog.builder.DocumentMappingBuilder;
 import com.cs.es.binlog.cache.RowValuesCache;
 import com.cs.es.binlog.cache.RowValuesKeyProvider;
 import com.cs.es.binlog.config.ColumnRelatedMapping;
-import com.cs.es.binlog.config.DatabaseTablePair;
 import com.cs.es.binlog.config.DocumentTableMapping;
 import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.converter.Converter;
@@ -127,6 +127,8 @@ public class UpdateEventHandler implements Handler {
 
         // 更新对应数据
         elasticsearchRestTemplate.bulkIndex(indexQueries);
+        log.info("更新事件,数据条数: {} 同步耗时: {}", updateRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
+
 
     }
 

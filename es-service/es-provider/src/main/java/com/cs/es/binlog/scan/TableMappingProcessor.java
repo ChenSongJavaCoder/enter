@@ -1,9 +1,12 @@
 package com.cs.es.binlog.scan;
 
 import cn.hutool.core.util.ClassUtil;
-import com.cs.es.binlog.annotation.ColumnMapping;
 import com.cs.es.binlog.annotation.*;
-import com.cs.es.binlog.config.*;
+import com.cs.es.binlog.bean.DatabaseTablePair;
+import com.cs.es.binlog.config.ColumnRelatedMapping;
+import com.cs.es.binlog.config.DocumentTableMapping;
+import com.cs.es.binlog.config.EntityRelatedMapping;
+import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.google.common.base.CaseFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

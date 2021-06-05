@@ -29,12 +29,12 @@ public enum ScriptTemplate {
 
     public static String buildScript(String name, Object value) {
         String script;
-        if (value instanceof String && ((String) value).contains(DocumentMappingBuilder.NESTED_KEY)) {
+        if (value instanceof String && ((String) value).startsWith(DocumentMappingBuilder.NESTED_KEY)) {
             script = String.format(NESTED_VALUE.getTemplate(), name, value);
         } else if (value instanceof Number) {
             script = String.format(NUMBER_VALUE.getTemplate(), name, value);
         } else if (value instanceof Enum) {
-            script = String.format(NUMBER_VALUE.getTemplate(), name, ((Enum) value).name());
+            script = String.format(STRING_VALUE.getTemplate(), name, ((Enum) value).name());
         } else if (value instanceof LocalDateTime) {
             script = String.format(LOCAL_DATE_TIME_VALUE.getTemplate(), name, LocalDateTimeUtil.timeFormatPattern((LocalDateTime) value));
         } else if (value instanceof LocalDate) {

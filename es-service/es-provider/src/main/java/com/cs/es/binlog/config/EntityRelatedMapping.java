@@ -38,7 +38,7 @@ public class EntityRelatedMapping {
     private String relatedField;
 
 
-    private Class relateClazz;
+    private Class relatedClazz;
 
 
     private Class<? extends EsDocument> targetClazz;

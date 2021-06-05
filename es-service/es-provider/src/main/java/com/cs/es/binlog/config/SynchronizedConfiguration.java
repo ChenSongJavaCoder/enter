@@ -1,5 +1,6 @@
 package com.cs.es.binlog.config;
 
+import com.cs.es.binlog.bean.DatabaseTablePair;
 import com.cs.es.binlog.converter.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -177,7 +178,7 @@ public class SynchronizedConfiguration {
         if (CollectionUtils.isEmpty(this.entityRelatedClassMapping.get(columnKey))) {
             this.entityRelatedClassMapping.put(columnKey, new HashMap<>());
         }
-        this.entityRelatedClassMapping.get(columnKey).put(entityRelatedMapping.getRelateClazz(), entityRelatedMapping);
+        this.entityRelatedClassMapping.get(columnKey).put(entityRelatedMapping.getRelatedClazz(), entityRelatedMapping);
 
 
         DatabaseTablePair databaseTablePair = new DatabaseTablePair(entityRelatedMapping.getDatabase(), entityRelatedMapping.getTableName());

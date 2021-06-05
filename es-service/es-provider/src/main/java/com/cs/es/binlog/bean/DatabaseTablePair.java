@@ -1,4 +1,4 @@
-package com.cs.es.binlog.config;
+package com.cs.es.binlog.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
