@@ -29,7 +29,9 @@ public enum ScriptTemplate {
 
     public static String buildScript(String name, Object value) {
         String script;
-        if (value instanceof String && ((String) value).startsWith(DocumentMappingBuilder.NESTED_KEY)) {
+        if (null == value) {
+            script = String.format(NESTED_VALUE.getTemplate(), name, "null");
+        } else if (value instanceof String && ((String) value).startsWith(DocumentMappingBuilder.NESTED_KEY)) {
             script = String.format(NESTED_VALUE.getTemplate(), name, value);
         } else if (value instanceof Number) {
             script = String.format(NUMBER_VALUE.getTemplate(), name, value);
