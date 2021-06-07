@@ -11,11 +11,12 @@ import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.converter.Converter;
 import com.cs.es.binlog.converter.ConverterFactory;
 import com.cs.es.binlog.handler.ScriptTemplate;
+import com.cs.es.document.EsUserInfo;
+import com.cs.es.document.EsUserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
@@ -24,7 +25,6 @@ import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.mapping.ElasticsearchPersistentEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -35,7 +35,9 @@ import java.util.*;
 /**
  * @author: CS
  * @date: 2021/5/22 下午9:42
- * @description: 构建document实例
+ * @description: 1、构建表->document直接映射对象
+ * 2、处理关联字段、对象 正向关联取值关系 使用{@link DocumentMappingBuilder#LOCAL_FIELD_PREFIX}  {@link EsUserRole#getUserId()} 和 {@link EsUserRole#getUsername()}
+ * 3、处理关联字段、对象 逆向关联取值关系 {@link EsUserInfo#getRoleId()}
  */
 @Slf4j
 @Component
@@ -49,9 +51,11 @@ public class DocumentMappingBuilder {
     RelatedValueGetter relatedValueGetter;
     @Autowired
     ConverterFactory converterFactory;
-
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Autowired
+    UpdateByQueryBuilder updateByQueryBuilder;
 
     /**
      * 构建实例对象
@@ -81,7 +85,7 @@ public class DocumentMappingBuilder {
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
                     }
-                    // 映射字段
+                    // 数据库映射字段
                     String column = null;
                     if (columnMappings.keySet().contains(field.getName())) {
                         log.trace("Got  mapping column {}", field.getName());
@@ -98,10 +102,10 @@ public class DocumentMappingBuilder {
                                 currentFieldCache.put(field.getName(), value);
                             }
                         }
-
-
                     }
-                    // 关联字段映射
+
+
+                    // 关联字段映射 正向关联
                     if (null != relatedColumnMappings && relatedColumnMappings.keySet().contains(field.getName())) {
                         log.info("Got related mapping column {}", field.getName());
                         ColumnRelatedMapping relatedColumnMapping = relatedColumnMappings.get(field.getName());
@@ -110,34 +114,46 @@ public class DocumentMappingBuilder {
                         String relatedCol = relatedColumnMapping.getRelatedColumn();
                         if (relatedCol.startsWith(LOCAL_FIELD_PREFIX)) {
                             relatedValue = currentFieldCache.get(relatedCol.replaceFirst(LOCAL_FIELD_PREFIX, StringUtils.EMPTY));
+                            // 获取关联值
+                            Serializable value = relatedValueGetter.getValue(relatedColumnMapping, relatedValue);
+                            Class<?> valueClass = null == value ? Null.class : value.getClass();
+                            Converter converter = getConverter(field, valueClass);
+                            if (null != converter && null != value) {
+                                field.set(t, converter.convert(value));
+                                currentFieldCache.put(field.getName(), value);
+                            } else {
+                                if (null != value) {
+                                    field.set(t, value);
+                                    currentFieldCache.put(field.getName(), value);
+                                }
+                            }
                         } else {
+                            // 逆向关联
                             relatedValue = keyValues.get(relatedCol);
                         }
-                        // 获取关联值
-                        Serializable value = relatedValueGetter.getValue(relatedColumnMapping, relatedValue);
-                        Class<?> valueClass = null == value ? Null.class : value.getClass();
-                        Converter converter = getConverter(field, valueClass);
-                        if (null != converter && null != value) {
-                            field.set(t, converter.convert(value));
-                            currentFieldCache.put(field.getName(), value);
-                        } else {
-                            if (null != value) {
-                                field.set(t, value);
-                                currentFieldCache.put(field.getName(), value);
+                    }
+                    //todo 关联实体类 正向关联
+                    if (null != entityRelatedColumnMappings && entityRelatedColumnMappings.keySet().contains(field.getName())) {
+                        log.info("Got related entity column {}", field.getName());
+                        EntityRelatedMapping entityRelatedColumnMapping = entityRelatedColumnMappings.get(field.getName());
+                        String relatedCol = entityRelatedColumnMapping.getRelatedValueColumn();
+                        if (relatedCol.startsWith(LOCAL_FIELD_PREFIX)) {
+                            Serializable relatedValue = keyValues.get(relatedCol);
+                            // 脏数据引起数据错乱
+                            Map<String, Serializable> cacheValue = relatedValueGetter.getRowValue(entityRelatedColumnMapping, relatedValue);
+                            if (null != cacheValue) {
+                                //todo 注意形成死循环
+                                Object relatedEntity = build(new DocumentTableMapping(field.getType(), entityRelatedColumnMapping.getDatabase(), entityRelatedColumnMapping.getTableName()), cacheValue);
+                                field.set(t, relatedEntity);
                             }
                         }
                     }
-                    // 关联对象
-//                    if (null != entityRelatedColumnMappings && entityRelatedColumnMappings.keySet().contains(field.getName())) {
-//                        EntityRelatedMapping entityRelatedMapping = entityRelatedColumnMappings.get(field.getName());
-//                        Object relatedValue = currentFieldCache.get(entityRelatedMapping.getRelatedTargetColumn());
-//                        Map<String, Serializable> value = relatedValueGetter.getRowValue(entityRelatedMapping, relatedValue);
-//                        field.set(t, value);
-//                    }
+
                     if (Objects.nonNull(column)) {
                         beingRelatedColumn.add(column);
                     }
                 }
+                // 逆向关联
                 for (String column : beingRelatedColumn) {
                     updateRelatedDocument(t, new DatabaseTableColumn(documentTableMapping.getDatabase(), documentTableMapping.getTable(), column), keyValues);
                 }
@@ -169,17 +185,12 @@ public class DocumentMappingBuilder {
                 String targetFieldName = columnRelatedMapping.getFieldName();
 
                 String relateClassUpdateScript = ScriptTemplate.buildScript(targetFieldName, value);
+                log.info("关联字段类更新脚本：{}", relateClassUpdateScript);
+
                 Script script = new Script(relateClassUpdateScript);
                 TermQueryBuilder queryBuilder = QueryBuilders.termQuery(targetRelateColumn, relateValue);
-                UpdateByQueryRequest updateByQueryRequest = buildUpdateByRequest(tClass, script, queryBuilder);
+                UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(tClass, script, queryBuilder);
                 updateByQueryRequests.add(updateByQueryRequest);
-//                try {
-//                    BulkByScrollResponse response = elasticsearchRestTemplate.getClient().updateByQuery(updateByQueryRequest, RequestOptions.DEFAULT);
-//                    log.info("表【{}】变动 引起【{}】更新的文档数量：{}", databaseTableColumn.getDatabase() + "." + databaseTableColumn.getTable(), tClass, response.getUpdated());
-//                } catch (IOException e) {
-//                    log.error("更新elasticsearch数据出错: ", e);
-//                    e.printStackTrace();
-//                }
             });
         }
         Map<Class, EntityRelatedMapping> entityRelatedMappingMap = synchronizedConfiguration.getRelatedEntityClass(columnKey);
@@ -192,13 +203,14 @@ public class DocumentMappingBuilder {
                 Map<String, Object> params = new HashMap<>(1);
                 params.put(NESTED_KEY, JSONUtil.toBean(JSONUtil.toJsonStr(t), HashMap.class));
                 String relateClassUpdateScript = ScriptTemplate.buildScript(entityRelatedMapping.getRelatedField(), NESTED_KEY + "." + NESTED_KEY);
+                log.info("关联实体类更新脚本：{}", relateClassUpdateScript);
                 Script script = new Script(ScriptType.INLINE, Script.DEFAULT_SCRIPT_LANG, relateClassUpdateScript, params);
                 BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery().filter(QueryBuilders.termQuery(relatedValueColumn, relateValue));
-                UpdateByQueryRequest updateByQueryRequest = buildUpdateByRequest(tClass, script, queryBuilder);
+                UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(tClass, script, queryBuilder);
                 updateByQueryRequests.add(updateByQueryRequest);
             });
         }
-        //todo 多线程优化处理
+        //todo 多线程优化处理,可以使用异步更新方式调用
         updateByQueryRequests.stream().forEach(updateByQueryRequest -> {
             try {
                 BulkByScrollResponse response = elasticsearchRestTemplate.getClient().updateByQuery(updateByQueryRequest, RequestOptions.DEFAULT);
@@ -210,17 +222,6 @@ public class DocumentMappingBuilder {
         });
     }
 
-    private UpdateByQueryRequest buildUpdateByRequest(Class tClass, Script script, QueryBuilder queryBuilder) {
-        ElasticsearchPersistentEntity entity = elasticsearchRestTemplate.getPersistentEntityFor(tClass);
-        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest();
-        updateByQueryRequest.indices(entity.getIndexName());
-        updateByQueryRequest.setDocTypes(entity.getIndexType());
-        updateByQueryRequest.setQuery(queryBuilder);
-        updateByQueryRequest.setScript(script);
-        updateByQueryRequest.setRefresh(true);
-        updateByQueryRequest.setBatchSize(100);
-        return updateByQueryRequest;
-    }
 
     private Converter getConverter(Field field, Class valueClass) {
         // 优先取@Converter的转换器

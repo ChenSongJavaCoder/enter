@@ -81,8 +81,7 @@ public class TableMappingProcessor {
                             relatedEntityAnnotation.relatedValueColumn(),
                             relatedEntityAnnotation.relatedTargetColumn(),
                             field.getName(),
-                            clazz,
-                            relatedEntityAnnotation.targetClazz());
+                            clazz);
 
                     synchronizedConfiguration.addEntityRelated(clazz, entityRelatedMapping);
                 } else {

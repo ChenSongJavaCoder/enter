@@ -104,7 +104,7 @@ public class WriteEventHandler implements Handler {
 
             });
             elasticsearchRestTemplate.bulkIndex(indexQueries);
-            log.info("写入事件,数据条数: {} 同步耗时: {}", writeRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
+            log.error("写入事件,数据条数: {} 同步耗时: {}", writeRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
         }
     }
 }

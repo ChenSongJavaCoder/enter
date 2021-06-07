@@ -169,11 +169,13 @@ public class SynchronizedConfiguration {
      * @param entityRelatedMapping
      */
     public void addEntityRelated(Class clazz, EntityRelatedMapping entityRelatedMapping) {
+        // 正向关联映射
         if (CollectionUtils.isEmpty(this.entityRelatedMappingForClass.get(clazz))) {
             this.entityRelatedMappingForClass.put(clazz, new HashMap<>());
         }
         this.entityRelatedMappingForClass.get(clazz).put(entityRelatedMapping.getRelatedField(), entityRelatedMapping);
 
+        // 逆向关联映射
         String columnKey = columnKey(entityRelatedMapping.getDatabase(), entityRelatedMapping.getTableName(), entityRelatedMapping.getRelatedTargetColumn());
         if (CollectionUtils.isEmpty(this.entityRelatedClassMapping.get(columnKey))) {
             this.entityRelatedClassMapping.put(columnKey, new HashMap<>());

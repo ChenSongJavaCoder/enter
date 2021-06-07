@@ -32,15 +32,15 @@ public class EsUserRole implements EsDocument {
     @Field(type = FieldType.Integer)
     private Integer userId;
 
-    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "user_id", relatedTargetColumn = "id", targetColumn = "username")
+    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "@userId", relatedTargetColumn = "id", targetColumn = "username")
     @Field(type = FieldType.Keyword)
     private String username;
 
-    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "user_id", relatedTargetColumn = "id", targetColumn = "nickname")
+    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "@userId", relatedTargetColumn = "id", targetColumn = "nickname")
     @Field(type = FieldType.Keyword)
     private String nickname;
 
-    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "user_id", relatedTargetColumn = "id", targetColumn = "age")
+    @ColumnRelated(databaseName = "mine", tableName = "user", relatedColumn = "@userId", relatedTargetColumn = "id", targetColumn = "age")
     @Field(type = FieldType.Integer)
     private Integer userAge;
 

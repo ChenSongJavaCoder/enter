@@ -1,6 +1,5 @@
 package com.cs.es.binlog.config;
 
-import com.cs.es.document.EsDocument;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -39,9 +38,6 @@ public class EntityRelatedMapping {
 
 
     private Class relatedClazz;
-
-
-    private Class<? extends EsDocument> targetClazz;
 
 
 }

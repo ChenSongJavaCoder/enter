@@ -55,7 +55,7 @@ public class EsUserInfo implements EsDocument {
     @Field(type = FieldType.Integer)
     private Integer roleId;
 
-    @EntityRelated(databaseName = "mine", tableName = "user_location", relatedValueColumn = "id", relatedTargetColumn = "user_id", targetClazz = EsUserLocation.class)
+    @EntityRelated(databaseName = "mine", tableName = "user_location", relatedValueColumn = "id", relatedTargetColumn = "user_id")
     @Field(type = FieldType.Nested)
     private EsUserLocation userLocation;
 }

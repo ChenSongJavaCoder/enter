@@ -1,7 +1,5 @@
 package com.cs.es.binlog.annotation;
 
-import com.cs.es.document.EsDocument;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -46,10 +44,4 @@ public @interface EntityRelated {
      */
     String relatedTargetColumn();
 
-    /**
-     * target class
-     *
-     * @return
-     */
-    Class<? extends EsDocument> targetClazz();
 }
