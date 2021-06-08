@@ -119,7 +119,6 @@ public class UpdateEventHandler implements Handler {
             }
             log.info("数据变动：{}", JSONUtil.toJsonStr(modifyColumns));
             DatabaseTablePair databaseTablePair = new DatabaseTablePair(tableMetadata.getDatabase(), tableMetadata.getTable());
-            // 根据变动字段处理对应逻辑
 
             // 更新字段映射类
             updateByColumnMapping(databaseTablePair, modifyColumns, String.valueOf(beanMap.get(TABLE_ID)));
@@ -127,6 +126,7 @@ public class UpdateEventHandler implements Handler {
             // 更新关联字段映射类
             updateByRelateColumn(databaseTablePair, modifyColumns, beanMap);
 
+            // 更新关联映射该类的实体类
             updateByRelateEntity(databaseTablePair, modifyColumns, beanMap);
         }
 
@@ -149,8 +149,16 @@ public class UpdateEventHandler implements Handler {
 
         javaClass.forEach(clazz -> {
             Map<String, String> fieldColumnMap = synchronizedConfiguration.getColumnMapping(new DocumentTableMapping(clazz, databaseTablePair.getDatabase(), databaseTablePair.getTable()));
+            // 判断是否需要更新
+            Set<String> relatedColumnSet = fieldColumnMap.values().stream().collect(Collectors.toSet());
+            Set<String> modifyColumnSet = modifyColumns.stream().map(ColumnModifyBean::getColumn).collect(Collectors.toSet());
+            List<ColumnModifyBean> relatedModifyColumns = modifyColumns.stream().filter(f -> relatedColumnSet.contains(f.getColumn())).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(relatedModifyColumns)) {
+                log.warn("更新字段:{} 不在被{}映射的字段:{}中,将不会同步更新！", modifyColumnSet.toString(), clazz.getSimpleName(), relatedColumnSet.toString());
+                return;
+            }
             // 根据主键更新
-            UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(clazz, modifyColumns, fieldColumnMap, QueryBuilders.termQuery(DOCUMENT_ID, documentId));
+            UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(clazz, relatedModifyColumns, fieldColumnMap, QueryBuilders.termQuery(DOCUMENT_ID, documentId));
             elasticsearchRestTemplate.getClient().updateByQueryAsync(updateByQueryRequest, RequestOptions.DEFAULT, updateByQueryActionListener);
         });
     }
@@ -171,6 +179,13 @@ public class UpdateEventHandler implements Handler {
         }
 
         relatedClass.forEach((clazz, relatedMappings) -> {
+            Set<String> relatedColumnSet = relatedMappings.stream().map(ColumnRelatedMapping::getTargetColumn).collect(Collectors.toSet());
+            Set<String> modifyColumnSet = modifyColumns.stream().map(ColumnModifyBean::getColumn).collect(Collectors.toSet());
+            List<ColumnModifyBean> relatedModifyColumns = modifyColumns.stream().filter(f -> relatedColumnSet.contains(f.getColumn())).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(relatedModifyColumns)) {
+                log.warn("更新字段:{} 不在{}被映射关联的集合:{}中,将不会关联更新！", modifyColumnSet.toString(), clazz.getSimpleName(), relatedColumnSet.toString());
+                return;
+            }
             //根据关联字段值更新
             ColumnRelatedMapping relatedMapping = relatedMappings.get(0);
             String documentFieldName = relatedMapping.getFieldName();
@@ -182,7 +197,7 @@ public class UpdateEventHandler implements Handler {
             }
             QueryBuilder queryBuilder = QueryBuilders.termQuery(relatedValueField, relatedValue);
             Map<String, String> fieldColumnMap = relatedMappings.stream().collect(Collectors.toMap(ColumnRelatedMapping::getFieldName, ColumnRelatedMapping::getTargetColumn));
-            UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(clazz, modifyColumns, fieldColumnMap, queryBuilder);
+            UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildUpdateByRequest(clazz, relatedModifyColumns, fieldColumnMap, queryBuilder);
             elasticsearchRestTemplate.getClient().updateByQueryAsync(updateByQueryRequest, RequestOptions.DEFAULT, updateByQueryActionListener);
         });
     }

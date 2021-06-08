@@ -4,6 +4,7 @@ import com.cs.es.binlog.annotation.ColumnMapping;
 import com.cs.es.binlog.annotation.ColumnRelated;
 import com.cs.es.binlog.annotation.EntityRelated;
 import com.cs.es.binlog.annotation.TableMapping;
+import com.cs.es.model.SexEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -46,6 +47,10 @@ public class EsUserInfo implements EsDocument {
     @ColumnMapping(columnName = "age")
     @Field(type = FieldType.Integer)
     private Integer age;
+
+    @ColumnMapping(columnName = "sex")
+    @Field(type = FieldType.Keyword)
+    private SexEnum sex;
 
     @ColumnMapping(columnName = "password")
     @Field(type = FieldType.Keyword)

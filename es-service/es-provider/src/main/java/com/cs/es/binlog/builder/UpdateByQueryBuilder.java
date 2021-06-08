@@ -77,7 +77,7 @@ public class UpdateByQueryBuilder {
             scriptString.append(updateCodeTemplate);
         }
         Script script = new Script(scriptString.toString());
-        log.info("更新脚本为：{}", scriptString.toString());
+        log.info("buildNestedUpdateByRequest更新脚本为：{}", scriptString.toString());
         return buildUpdateByRequest(documentClass, script, queryBuilder);
     }
 
@@ -119,7 +119,7 @@ public class UpdateByQueryBuilder {
             scriptString.append(updateCodeTemplate);
         }
         Script script = new Script(scriptString.toString());
-        log.info("更新脚本为：{}", scriptString.toString());
+        log.info("buildUpdateByRequest更新脚本为：{}", scriptString.toString());
         return buildUpdateByRequest(clazz, script, queryBuilder);
     }
 
