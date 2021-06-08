@@ -44,4 +44,5 @@ public @interface EntityRelated {
      */
     String relatedTargetColumn();
 
+
 }

@@ -39,5 +39,7 @@ public class EntityRelatedMapping {
 
     private Class relatedClazz;
 
+    private Class targetClazz;
+
 
 }

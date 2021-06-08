@@ -36,6 +36,53 @@ public class UpdateByQueryBuilder {
 
 
     /**
+     * 被关联实体更新时引起关联实体的更新
+     *
+     * @param documentClass
+     * @param documentField
+     * @param clazz
+     * @param modifyColumns
+     * @param fieldColumnMap
+     * @param queryBuilder
+     * @return
+     */
+    public UpdateByQueryRequest buildNestedUpdateByRequest(Class documentClass, String documentField, Class clazz, List<ColumnModifyBean> modifyColumns, Map<String, String> fieldColumnMap, QueryBuilder queryBuilder) {
+        StringBuffer scriptString = new StringBuffer();
+        for (ColumnModifyBean columnModifyBean : modifyColumns) {
+            Optional<Map.Entry<String, String>> fieldColumnEntry = fieldColumnMap.entrySet().stream().filter(f -> f.getValue().equals(columnModifyBean.getColumn())).findAny();
+            if (!fieldColumnEntry.isPresent()) {
+                continue;
+            }
+            Serializable newColumnValue = columnModifyBean.getNewValue();
+            // 获取需要更新的值
+            Object newFieldValue;
+            Field field = null;
+            Converter converter;
+            try {
+                field = clazz.getDeclaredField(fieldColumnEntry.get().getKey());
+            } catch (NoSuchFieldException e) {
+                log.error("获取类字段异常：", e);
+            }
+            log.info("column：{} modified, document：{}.{} need sync update!：", columnModifyBean.getColumn(), documentClass.getSimpleName(), documentField);
+
+            converter = converterFactory.getConverter(new SourceTargetPair(newColumnValue.getClass(), field.getType()));
+            if (null != converter) {
+                newFieldValue = converter.convert(newColumnValue);
+            } else {
+                newFieldValue = newColumnValue;
+            }
+
+            // 编写script脚本，注意脚本newFieldValue的属性问题
+            String updateCodeTemplate = ScriptTemplate.buildScript(documentField + "." + field.getName(), newFieldValue);
+            scriptString.append(updateCodeTemplate);
+        }
+        Script script = new Script(scriptString.toString());
+        log.info("更新脚本为：{}", scriptString.toString());
+        return buildUpdateByRequest(documentClass, script, queryBuilder);
+    }
+
+
+    /**
      * @param clazz          document class
      * @param modifyColumns
      * @param fieldColumnMap
@@ -72,6 +119,7 @@ public class UpdateByQueryBuilder {
             scriptString.append(updateCodeTemplate);
         }
         Script script = new Script(scriptString.toString());
+        log.info("更新脚本为：{}", scriptString.toString());
         return buildUpdateByRequest(clazz, script, queryBuilder);
     }
 

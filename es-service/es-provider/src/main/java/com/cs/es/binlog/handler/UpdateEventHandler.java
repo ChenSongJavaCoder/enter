@@ -10,6 +10,7 @@ import com.cs.es.binlog.cache.RowValuesCache;
 import com.cs.es.binlog.cache.RowValuesKeyProvider;
 import com.cs.es.binlog.config.ColumnRelatedMapping;
 import com.cs.es.binlog.config.DocumentTableMapping;
+import com.cs.es.binlog.config.EntityRelatedMapping;
 import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.converter.ConverterFactory;
 import com.cs.es.binlog.mysql.TableMetadata;
@@ -125,6 +126,8 @@ public class UpdateEventHandler implements Handler {
 
             // 更新关联字段映射类
             updateByRelateColumn(databaseTablePair, modifyColumns, beanMap);
+
+            updateByRelateEntity(databaseTablePair, modifyColumns, beanMap);
         }
 
         log.error("更新事件,数据条数: {} 同步耗时: {}", updateRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
@@ -188,9 +191,33 @@ public class UpdateEventHandler implements Handler {
      * 更新被关联字段的文档对象字段对象
      *
      * @param databaseTablePair
-     * @param entry
      */
-    private void updateByRelateEntity(DatabaseTablePair databaseTablePair, Map.Entry<Serializable[], Serializable[]> entry) {
+    private void updateByRelateEntity(DatabaseTablePair databaseTablePair, List<ColumnModifyBean> modifyColumns, Map<String, Serializable> beanMap) {
+
+        Map<Class, List<EntityRelatedMapping>> beRelatedEntityMap = synchronizedConfiguration.getBeRelatedEntityList(databaseTablePair);
+        if (CollectionUtils.isEmpty(beRelatedEntityMap)) {
+            return;
+        }
+
+        beRelatedEntityMap.forEach((clazz, entityRelatedMappings) -> {
+            entityRelatedMappings.stream().forEach(e -> {
+
+                Class relatedClazz = e.getRelatedClazz();
+                Class targetClazz = e.getTargetClazz();
+                String relatedField = e.getRelatedField();
+                // 约定为主键字段
+                String relatedValueField = e.getRelatedValueColumn();
+                Serializable relatedValue = beanMap.get(e.getRelatedTargetColumn());
+                Map<String, String> fieldColumnMap = synchronizedConfiguration.getColumnMapping(new DocumentTableMapping(targetClazz, databaseTablePair.getDatabase(), databaseTablePair.getTable()));
+
+                // query条件
+                QueryBuilder queryBuilder = QueryBuilders.termQuery(relatedValueField, relatedValue);
+                // 构建修改目标类字段脚本
+                UpdateByQueryRequest updateByQueryRequest = updateByQueryBuilder.buildNestedUpdateByRequest(relatedClazz, relatedField, targetClazz, modifyColumns, fieldColumnMap, queryBuilder);
+                elasticsearchRestTemplate.getClient().updateByQueryAsync(updateByQueryRequest, RequestOptions.DEFAULT, updateByQueryActionListener);
+
+            });
+        });
 
     }
 

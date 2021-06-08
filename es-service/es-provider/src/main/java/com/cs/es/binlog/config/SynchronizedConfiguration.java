@@ -66,6 +66,11 @@ public class SynchronizedConfiguration {
     private Map<DatabaseTablePair, Map<Class, List<EntityRelatedMapping>>> entityRelatedMapping = new ConcurrentHashMap<>();
 
     /**
+     * 属性关联对象关联关系(同步更新)
+     */
+    private Map<DatabaseTablePair, Map<Class, List<EntityRelatedMapping>>> beEntityRelatedMapping = new ConcurrentHashMap<>();
+
+    /**
      * 缓存字段转换器
      */
     private Map<Field, Converter> fieldConverterCache = new ConcurrentHashMap<>();
@@ -193,6 +198,15 @@ public class SynchronizedConfiguration {
         }
         this.entityRelatedMapping.get(databaseTablePair).get(clazz).add(entityRelatedMapping);
 
+        // 逆向
+        if (CollectionUtils.isEmpty(this.beEntityRelatedMapping.get(databaseTablePair))) {
+            this.beEntityRelatedMapping.put(databaseTablePair, new HashMap<>());
+        }
+        if (CollectionUtils.isEmpty(this.beEntityRelatedMapping.get(databaseTablePair).get(entityRelatedMapping.getTargetClazz()))) {
+            this.beEntityRelatedMapping.get(databaseTablePair).put(entityRelatedMapping.getTargetClazz(), new ArrayList<>());
+        }
+        this.beEntityRelatedMapping.get(databaseTablePair).get(entityRelatedMapping.getTargetClazz()).add(entityRelatedMapping);
+
     }
 
     /**
@@ -207,6 +221,10 @@ public class SynchronizedConfiguration {
 
     public Map<Class, EntityRelatedMapping> getRelatedEntityClass(String column) {
         return this.entityRelatedClassMapping.get(column);
+    }
+
+    public Map<Class, List<EntityRelatedMapping>> getBeRelatedEntityList(DatabaseTablePair databaseTablePair) {
+        return this.beEntityRelatedMapping.get(databaseTablePair);
     }
 
     public void addColumnConverter(Field field, Class<? extends Converter> converter) {
