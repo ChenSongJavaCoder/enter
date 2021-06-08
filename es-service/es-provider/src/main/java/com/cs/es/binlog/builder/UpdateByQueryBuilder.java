@@ -4,7 +4,6 @@ import com.cs.es.binlog.bean.ColumnModifyBean;
 import com.cs.es.binlog.bean.SourceTargetPair;
 import com.cs.es.binlog.converter.Converter;
 import com.cs.es.binlog.converter.ConverterFactory;
-import com.cs.es.binlog.handler.ScriptTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;

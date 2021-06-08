@@ -9,7 +9,6 @@ import com.cs.es.binlog.config.SynchronizedConfiguration;
 import com.cs.es.binlog.mysql.ColumnMetadata;
 import com.cs.es.binlog.mysql.TableMetadata;
 import com.cs.es.binlog.mysql.TableMetadataCache;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.shyiko.mysql.binlog.event.Event;
 import com.github.shyiko.mysql.binlog.event.EventType;
 import com.github.shyiko.mysql.binlog.event.WriteRowsEventData;
@@ -38,8 +37,6 @@ public class WriteEventHandler implements Handler {
 
     private static final String TABLE_ID = "id";
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     TableMetadataCache tableMetadataCache;

@@ -1,7 +1,6 @@
-package com.cs.es.binlog.handler;
+package com.cs.es.binlog.builder;
 
 import com.cs.common.util.LocalDateTimeUtil;
-import com.cs.es.binlog.builder.DocumentMappingBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
