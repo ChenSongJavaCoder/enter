@@ -2,9 +2,9 @@ package com.cs.es.binlog.converter.impl;
 
 import com.cs.es.binlog.converter.Converter;
 
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 /**

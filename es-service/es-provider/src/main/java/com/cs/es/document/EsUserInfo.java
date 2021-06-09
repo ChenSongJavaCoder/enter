@@ -5,14 +5,17 @@ import com.cs.es.binlog.annotation.ColumnRelated;
 import com.cs.es.binlog.annotation.EntityRelated;
 import com.cs.es.binlog.annotation.TableMapping;
 import com.cs.es.model.SexEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 /**
  * @author: CS
@@ -63,4 +66,9 @@ public class EsUserInfo implements EsDocument {
     @EntityRelated(databaseName = "mine", tableName = "user_location", relatedValueColumn = "id", relatedTargetColumn = "user_id")
     @Field(type = FieldType.Nested)
     private EsUserLocation userLocation;
+
+    @ColumnMapping(columnName = "create_time")
+    @Field(store = true, type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
 }
