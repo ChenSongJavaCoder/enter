@@ -91,7 +91,7 @@ public class WriteEventHandler implements Handler {
                 // 单表可以直接进行映射转换，对于关联组合字段需要独立逻辑处理 objectMapper.readValue()
                 // 关联表数据更新，存在先后关系
                 DocumentTableMapping documentTableMapping = new DocumentTableMapping(clazz, tableMetadata.getDatabase(), tableMetadata.getTable());
-                Object instance = documentMappingBuilder.build(documentTableMapping, beanMap);
+                Object instance = documentMappingBuilder.build(documentTableMapping, beanMap, true);
                 IndexQuery indexQuery = new IndexQueryBuilder()
                         // 对于符合数据库规范来说id即documentId
                         .withId(Objects.nonNull(beanMap.get(TABLE_ID)) ? String.valueOf(beanMap.get(TABLE_ID)) : null)

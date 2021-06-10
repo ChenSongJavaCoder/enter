@@ -51,7 +51,7 @@ public class DocumentMappingBuilder {
      * @param <T>                  实例对象
      * @return
      */
-    public <T> T build(DocumentTableMapping documentTableMapping, Map<String, Serializable> keyValues) {
+    public <T> T build(DocumentTableMapping documentTableMapping, Map<String, Serializable> keyValues, boolean isRootObject) {
         Class<T> clazz = documentTableMapping.getDocumentClass();
         // 字段映射
         Map<String, String> columnMappings = synchronizedConfiguration.getColumnMapping(documentTableMapping);
@@ -113,8 +113,8 @@ public class DocumentMappingBuilder {
                             }
                         }
                     }
-                    //todo 关联实体类 正向关联
-                    if (null != entityRelatedColumnMappings && entityRelatedColumnMappings.keySet().contains(field.getName())) {
+                    // 关联实体类 正向关联, action: 通过isRootObject不进行内部对象的创建
+                    if (isRootObject && null != entityRelatedColumnMappings && entityRelatedColumnMappings.keySet().contains(field.getName())) {
                         log.info("Got related entity column {}", field.getName());
                         EntityRelatedMapping entityRelatedColumnMapping = entityRelatedColumnMappings.get(field.getName());
                         String relatedCol = entityRelatedColumnMapping.getRelatedValueColumn();
@@ -122,14 +122,15 @@ public class DocumentMappingBuilder {
                             Serializable relatedValue = keyValues.get(relatedCol);
                             // 脏数据引起数据错乱,因为id的值可能会串！
                             Map<String, Serializable> cacheValue = relatedValueGetter.getRowValue(entityRelatedColumnMapping, relatedValue);
-                            if (null != cacheValue) {
-                                //todo 注意形成死循环
-                                Object relatedEntity = build(new DocumentTableMapping(field.getType(), entityRelatedColumnMapping.getDatabase(), entityRelatedColumnMapping.getTableName()), cacheValue);
+                            // 注意形成死循环 action: 通过isRootObject不进行内部对象的创建
+                            if (null != cacheValue && isRootObject) {
+                                Object relatedEntity = build(new DocumentTableMapping(field.getType(), entityRelatedColumnMapping.getDatabase(), entityRelatedColumnMapping.getTableName()), cacheValue, false);
                                 field.set(t, relatedEntity);
                             }
                         }
                     }
-                    if (Objects.nonNull(column)) {
+                    // 通过isRootObject判断是否需要依赖关系的更新
+                    if (isRootObject && Objects.nonNull(column)) {
                         beingRelatedColumn.add(column);
                     }
                 }

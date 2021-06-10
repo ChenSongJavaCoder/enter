@@ -45,7 +45,8 @@ public class AsynchronousRelatedDocumentUpdater {
     UpdateByQueryBuilder updateByQueryBuilder;
 
 
-    public <T> void doUpdate(T t, List<String> beingRelatedColumn, DocumentTableMapping documentTableMapping, Map<String, Serializable> keyValues) {
+    public <T> void doUpdate(final T t, List<String> beingRelatedColumn, DocumentTableMapping documentTableMapping, Map<String, Serializable> keyValues) {
+        //todo 考虑使用线程池
         for (String column : beingRelatedColumn) {
             new UpdateRelatedDocument(t, new DatabaseTableColumn(documentTableMapping.getDatabase(), documentTableMapping.getTable(), column), keyValues).start();
         }
