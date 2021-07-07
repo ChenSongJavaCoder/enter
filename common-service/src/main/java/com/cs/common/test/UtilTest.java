@@ -1,8 +1,6 @@
 package com.cs.common.test;
 
-import cn.hutool.system.SystemUtil;
-
-import java.lang.management.ThreadMXBean;
+//import org.apache.poi.ss.usermodel.Row;
 
 /**
  * @Author: CS
@@ -38,7 +36,16 @@ public class UtilTest {
 //            System.out.println(bean.getName());
 //        }
 
-        System.out.println(SystemUtil.getHostInfo().getName());
-        ThreadMXBean info = SystemUtil.getThreadMXBean();
+//        System.out.println(SystemUtil.getHostInfo().getName());
+//        ThreadMXBean info = SystemUtil.getThreadMXBean();
+
+//        List<File> files = FileUtil.loopFiles("/Users/chensong/Downloads/fpxls");
+//        files.stream().filter(f -> f.getName().contains("91350203079382792K-20210527181665800-201610-进项票-增值税普通发票-1.xls")).forEach(e -> {
+//            ExcelReader reader = ExcelUtil.getReader(e, 1);
+//            int count = reader.getRowCount();
+//            Row row = reader.getSheet().getRow(3);
+//        });
+
+//        System.out.println(files.size());
     }
 }

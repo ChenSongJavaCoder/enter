@@ -4,6 +4,7 @@ import com.cs.common.bean.PagedResult;
 import com.cs.common.bean.Result;
 import com.cs.es.common.EsIndices;
 import com.cs.es.common.EsRestService;
+import com.cs.es.document.EsUserInfo;
 import com.cs.es.entity.BmSpfl;
 import com.cs.es.entity.KeywordMapping;
 import com.cs.es.entity.KeywordMatch;
@@ -15,9 +16,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author chenS
@@ -87,6 +95,21 @@ public class TestController {
     public Result<String> addKeywordMatch(@RequestBody KeywordMatch keywordMatch) throws JsonProcessingException {
         keywordMatchMapper.insertSelective(keywordMatch);
         return Result.success().build();
+    }
+
+    @Autowired
+    ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @ApiOperation("查询EsUserInfo")
+    @GetMapping("queryEsUserInfo")
+    public Result<List<EsUserInfo>> queryEsUserInfo() {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.matchAllQuery())
+                .withPageable(PageRequest.of(0, 100))
+                .withIndices("es_user_info")
+                .build();
+        List<EsUserInfo> list = elasticsearchRestTemplate.queryForList(searchQuery, EsUserInfo.class);
+        return Result.success().data(list).build();
     }
 
     @ApiOperation("更新字段")

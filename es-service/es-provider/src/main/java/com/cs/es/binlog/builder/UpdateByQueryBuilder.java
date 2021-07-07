@@ -133,6 +133,7 @@ public class UpdateByQueryBuilder {
         updateByQueryRequest.setScript(script);
         updateByQueryRequest.setRefresh(true);
         updateByQueryRequest.setBatchSize(100);
+        updateByQueryRequest.setRequestsPerSecond(1000);
         updateByQueryRequest.setAbortOnVersionConflict(false);
         return updateByQueryRequest;
     }

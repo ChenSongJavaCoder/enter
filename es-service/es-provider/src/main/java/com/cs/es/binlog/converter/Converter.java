@@ -1,6 +1,7 @@
 package com.cs.es.binlog.converter;
 
 import com.cs.es.binlog.bean.SourceTargetPair;
+import org.springframework.core.convert.support.GenericConversionService;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -9,6 +10,8 @@ import java.lang.reflect.Type;
  * @author: CS
  * @date: 2021/5/10 上午10:30
  * @description: 用于字段值之间转化
+ * @see org.springframework.core.convert.converter.Converter
+ * @see GenericConversionService
  */
 public interface Converter<S, T> {
 

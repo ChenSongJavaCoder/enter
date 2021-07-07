@@ -27,6 +27,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -120,6 +122,8 @@ public class UpdateEventHandler implements Handler {
             log.info("数据变动：{}", JSONUtil.toJsonStr(modifyColumns));
             DatabaseTablePair databaseTablePair = new DatabaseTablePair(tableMetadata.getDatabase(), tableMetadata.getTable());
 
+            saveIfNotExist(databaseTablePair, beanMap);
+
             // 更新字段映射类
             updateByColumnMapping(databaseTablePair, modifyColumns, String.valueOf(beanMap.get(TABLE_ID)));
 
@@ -133,6 +137,25 @@ public class UpdateEventHandler implements Handler {
         log.error("更新事件,数据条数: {} 同步耗时: {}", updateRowsEventData.getRows().size(), (System.currentTimeMillis() - start));
 
 
+    }
+
+    private void saveIfNotExist(DatabaseTablePair databaseTablePair, Map<String, Serializable> beanMap) {
+        // 拿到对应的document class
+        List<Class> javaClass = synchronizedConfiguration.getMappingDocumentClass(databaseTablePair);
+        List<IndexQuery> indexQueries = new ArrayList<>();
+        javaClass.forEach(clazz -> {
+            // 关联表数据更新，存在先后关系
+            DocumentTableMapping documentTableMapping = new DocumentTableMapping(clazz, databaseTablePair.getDatabase(), databaseTablePair.getTable());
+            Object instance = documentMappingBuilder.build(documentTableMapping, beanMap, true);
+            IndexQuery indexQuery = new IndexQueryBuilder()
+                    // 对于符合数据库规范来说id即documentId
+                    .withId(Objects.nonNull(beanMap.get(TABLE_ID)) ? String.valueOf(beanMap.get(TABLE_ID)) : null)
+                    .withObject(instance)
+                    .build();
+            indexQueries.add(indexQuery);
+
+        });
+        elasticsearchRestTemplate.bulkIndex(indexQueries);
     }
 
 
