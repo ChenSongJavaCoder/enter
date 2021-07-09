@@ -15,8 +15,8 @@ public class GBKInvisibleCharacterUtil {
      * GBK不可见字符的正则表达式
      * 类似<0xa0>
      */
-    final static String regex = "[^\u4E00-\u9FA5\u3000-\u303F\uFF00-\uFFEF\u0000-\u007F\u201c-\u201d]";
-    final static Pattern pattern = Pattern.compile(regex);
+    final static String GBK_EXCLUDE_REGEX = "[^\u4E00-\u9FA5\u3000-\u303F\uFF00-\uFFEF\u0000-\u007F\u201c-\u201d]";
+    final static Pattern GBK_EXCLUDE_PATTERN = Pattern.compile(GBK_EXCLUDE_REGEX);
     final static String DEFAULT_REPLACE_MARK = "";
 
 
@@ -27,7 +27,7 @@ public class GBKInvisibleCharacterUtil {
      * @return true/false
      */
     public static boolean containsInvisibleCharacter(String target) {
-        Matcher matcher = pattern.matcher(target);
+        Matcher matcher = GBK_EXCLUDE_PATTERN.matcher(target);
         return matcher.find();
     }
 
@@ -49,7 +49,7 @@ public class GBKInvisibleCharacterUtil {
      */
     public static String replaceWithMark(String target, String replaceMark) {
         if (containsInvisibleCharacter(target)) {
-            target = target.replaceAll(regex, replaceMark);
+            target = target.replaceAll(GBK_EXCLUDE_REGEX, replaceMark);
         }
         return target;
     }
