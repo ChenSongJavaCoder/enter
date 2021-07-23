@@ -45,4 +45,11 @@ eureka:
 
 logging:
   level:
-    com.cs.analyzer.mapper: debug
+    com: error
+    org: error
+    edu: error
+#    com.cs.analyzer.mapper: debug
+#    org:
+#      apdplat:
+#        word: error
+

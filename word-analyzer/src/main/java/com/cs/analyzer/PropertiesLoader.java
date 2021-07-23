@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.wltea.analyzer.cfg.DefaultConfig;
 import org.wltea.analyzer.dic.Dictionary;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class PropertiesLoader {
     @Autowired
     KeywordMapper keywordMapper;
 
-    @PostConstruct
+    //    @PostConstruct
     private void init() {
         // 初始化读取数据库中的关键词
         List<Keyword> list = keywordMapper.selectAll();
