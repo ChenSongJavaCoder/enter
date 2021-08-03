@@ -1,6 +1,5 @@
 package com.cs.common.test;
 
-//import org.apache.poi.ss.usermodel.Row;
 
 /**
  * @Author: CS
@@ -47,5 +46,8 @@ public class UtilTest {
 //        });
 
 //        System.out.println(files.size());
+        // 获取系统cpu数量
+        System.out.println(Runtime.getRuntime().availableProcessors());
+        System.out.println(System.getProperty("java.io.tmpdir"));
     }
 }
