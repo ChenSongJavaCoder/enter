@@ -26,7 +26,7 @@ public class ChainNodeUserC implements Chain<User, User> {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.C.getOrder();
     }
 }

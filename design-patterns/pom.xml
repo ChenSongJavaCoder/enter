@@ -11,5 +11,12 @@
 
     <artifactId>design-patterns</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.cs</groupId>
+            <artifactId>common-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

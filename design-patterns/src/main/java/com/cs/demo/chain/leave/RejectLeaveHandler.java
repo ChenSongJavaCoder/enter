@@ -40,7 +40,7 @@ public class RejectLeaveHandler extends AbstractLeaveHandler {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.D.getOrder();
     }
 }

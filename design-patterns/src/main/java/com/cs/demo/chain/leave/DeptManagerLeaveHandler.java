@@ -28,14 +28,20 @@ public class DeptManagerLeaveHandler extends AbstractLeaveHandler {
         LeaveResponse.Node currentNode;
         // 前一个领导审批通过
         if (nodes.get(nodes.size() - 1).isSuccess()) {
-            currentNode = new LeaveResponse.Node(managerName, false, "不同意");
+            currentNode = new LeaveResponse.Node(managerName, true, "同意");
             nodes.add(currentNode);
         }
     }
 
+    /**
+     * 大于1天需要经过主管
+     *
+     * @param leaveRequest
+     * @return
+     */
     @Override
     public boolean support(LeaveRequest leaveRequest) {
-        return leaveRequest.getLeaveDays() >= MIDDLE;
+        return leaveRequest.getLeaveDays() > MIN;
     }
 
     @Override
@@ -44,7 +50,7 @@ public class DeptManagerLeaveHandler extends AbstractLeaveHandler {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.B.getOrder();
     }
 }

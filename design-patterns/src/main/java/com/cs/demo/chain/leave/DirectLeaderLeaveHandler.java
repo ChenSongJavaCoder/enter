@@ -29,7 +29,7 @@ public class DirectLeaderLeaveHandler extends AbstractLeaveHandler {
 
     @Override
     public boolean support(LeaveRequest leaveRequest) {
-        return leaveRequest.getLeaveDays() >= MIN;
+        return leaveRequest.getLeaveDays() > 0;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DirectLeaderLeaveHandler extends AbstractLeaveHandler {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.A.getOrder();
     }
 }

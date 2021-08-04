@@ -65,10 +65,11 @@ public interface Chain<Request, Response> extends Comparable<Chain<Request, Resp
      * 链首位置，该值越小越靠前
      * 使用此属性值确定调用链位置
      * todo 不使用此方式寻找链首位置？直接业务中指定链首处理器的话，存在编码的逻辑风险
+     * 如何保证com.cs.demo.chain.Chain#successor()与order顺序一致呢
      *
      * @return 整条责任链优先级排序
      */
-    int order();
+    Integer order();
 
     /**
      * 默认重写compareTo方法
@@ -79,6 +80,6 @@ public interface Chain<Request, Response> extends Comparable<Chain<Request, Resp
      */
     @Override
     default int compareTo(Chain<Request, Response> o) {
-        return order() - o.order();
+        return order().compareTo(o.order());
     }
 }

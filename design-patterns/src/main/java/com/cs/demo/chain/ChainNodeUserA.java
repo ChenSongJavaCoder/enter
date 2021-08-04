@@ -31,7 +31,7 @@ public class ChainNodeUserA implements Chain<User, User> {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.A.getOrder();
     }
 }

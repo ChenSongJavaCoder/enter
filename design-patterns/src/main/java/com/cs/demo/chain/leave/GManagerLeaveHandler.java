@@ -34,6 +34,12 @@ public class GManagerLeaveHandler extends AbstractLeaveHandler {
         }
     }
 
+    /**
+     * 大于3天需要经过总经理
+     *
+     * @param leaveRequest
+     * @return
+     */
     @Override
     public boolean support(LeaveRequest leaveRequest) {
         return leaveRequest.getLeaveDays() > MIDDLE && leaveRequest.getLeaveDays() < MAX;
@@ -45,7 +51,7 @@ public class GManagerLeaveHandler extends AbstractLeaveHandler {
     }
 
     @Override
-    public int order() {
+    public Integer order() {
         return ChainOrder.D.getOrder();
     }
 }
