@@ -7,6 +7,9 @@ import java.util.Objects;
  * @author: CS
  * @date: 2021/8/2 下午3:11
  * @description: 链式处理，比如说请假审批流程<p>https://www.jianshu.com/p/9f7d9775bdda</p>
+ * 场景1：请求进入后，根据条件只需要一种处理器处理（判断条件没有重合）
+ * 场景2：请求进入后，根据条件需要多个处理器处理（判断条件有重合）
+ * 该框架模式下可以实现2种场景需求，加入对应场景枚举值，chain()方法中确定对应模式下的successor是否继续调用逻辑
  * @see <p>javax.servlet.Filter</p>
  */
 public interface Chain<Request, Response> extends Comparable<Chain<Request, Response>> {
@@ -21,17 +24,14 @@ public interface Chain<Request, Response> extends Comparable<Chain<Request, Resp
      * @param response 响应的结果数据
      */
     default void chain(Request request, Response response) {
+        // 先后处理器的关系建立
         // 如果支持处理，则处理
         if (support(request)) {
             handle(request, response);
         }
-        // 有继任者，则接着处理
-        if (Objects.nonNull(successor())) {
+        // 有继任者并且ChainModel.FLOW时，则接着处理
+        if (Objects.nonNull(successor()) && ChainModel.FLOW.equals(chainModel())) {
             successor().chain(request, response);
-        } else {
-            System.out.println(response.toString());
-            // 目前使用异常抛出提示调用链路缺失
-//            throw new NotSupportChainException("未支持链式处理");
         }
     }
 
@@ -81,5 +81,21 @@ public interface Chain<Request, Response> extends Comparable<Chain<Request, Resp
     @Override
     default int compareTo(Chain<Request, Response> o) {
         return order().compareTo(o.order());
+    }
+
+    /**
+     * 链式处理模式
+     * BLOCK: 条件匹配到处理器时不执行后续处理逻辑
+     * FLOW: 条件匹配到处理器时仍会继续尝试后续处理器处理
+     * 默认BLOCK，如需FLOW，重写此接口
+     *
+     * @return
+     */
+    default ChainModel chainModel() {
+        return ChainModel.BLOCK;
+    }
+
+    enum ChainModel {
+        BLOCK, FLOW
     }
 }
