@@ -10,10 +10,10 @@ import java.util.Objects;
  * 场景1：请求进入后，根据条件只需要一种处理器处理（判断条件没有重合）
  * 场景2：请求进入后，根据条件需要多个处理器处理（判断条件有重合）
  * 该框架模式下可以实现2种场景需求，加入对应场景枚举值，chain()方法中确定对应模式下的successor是否继续调用逻辑
+ * 对于场景1，其实是对if...else...的抽象剥离，对于条件判断复杂的场景使得判断后的逻辑变得清晰
  * @see <p>javax.servlet.Filter</p>
  */
 public interface Chain<Request, Response> extends Comparable<Chain<Request, Response>> {
-
 
     /**
      * 链式处理关系逻辑
