@@ -1,4 +1,4 @@
-package com.cs.demo.chain;
+package com.cs.common.model;
 
 
 import java.util.Objects;
@@ -27,12 +27,24 @@ public interface Chain<Request, Response> extends Comparable<Chain<Request, Resp
         // 先后处理器的关系建立
         // 如果支持处理，则处理
         if (support(request)) {
+            preHandle(request, response);
             handle(request, response);
         }
         // 有继任者并且ChainModel.FLOW时，则接着处理
+        // todo: 疑问：是否需要successor和chainModel做判断？只用successor是否可以满足？
         if (Objects.nonNull(successor()) && ChainModel.FLOW.equals(chainModel())) {
             successor().chain(request, response);
         }
+    }
+
+    /**
+     * 预处理数据
+     *
+     * @param req
+     * @param resp
+     * @return
+     */
+    default void preHandle(Request req, Response resp) {
     }
 
     /**

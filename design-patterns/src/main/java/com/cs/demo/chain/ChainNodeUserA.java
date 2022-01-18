@@ -1,5 +1,6 @@
 package com.cs.demo.chain;
 
+import com.cs.common.model.Chain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

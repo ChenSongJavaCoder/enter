@@ -22,7 +22,5 @@ public interface ThrowingConsumer<T> extends Consumer<T> {
         }
     }
 
-    ;
-
     void accept0(T t) throws Throwable;
 }

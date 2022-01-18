@@ -8,12 +8,7 @@ import javax.validation.constraints.NotNull;
  * @description:
  */
 public class Throwing {
-    /**
-     * BaseCode的异常抛出consumer
-     */
-    private static ThrowingConsumer<BaseCode> baseCodeThrowingConsumer = e -> {
-        throw new BaseCodeException(e);
-    };
+
     /**
      * BaseCodeException的异常抛出consumer
      */
@@ -25,13 +20,14 @@ public class Throwing {
     private Throwing() {
     }
 
+
     /**
      * 抛出异常通用错误码
      *
      * @param baseCode
      */
     public static void throwIt(BaseCode baseCode) {
-        baseCodeThrowingConsumer.accept(baseCode);
+        exceptionThrowingConsumer.accept(new BaseCodeException(baseCode));
     }
 
 

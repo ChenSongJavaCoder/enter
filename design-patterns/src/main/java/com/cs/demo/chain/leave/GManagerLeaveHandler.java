@@ -1,6 +1,6 @@
 package com.cs.demo.chain.leave;
 
-import com.cs.demo.chain.Chain;
+import com.cs.common.model.Chain;
 import com.cs.demo.chain.ChainOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,5 +1,8 @@
 package com.cs.common.util;
 
+import com.cs.common.exception.BizErrorCode;
+import com.cs.common.exception.Throwing;
+
 import java.util.function.Predicate;
 
 /**
@@ -21,6 +24,9 @@ public class Validator<T> {
                 .with(s -> s.contains("."))
                 .validate("cs.cn");
         System.out.println(validated);
+        if (!validated) {
+            Throwing.throwIt(BizErrorCode.DEMO);
+        }
     }
 
     /**
