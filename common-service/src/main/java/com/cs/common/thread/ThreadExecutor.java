@@ -1,7 +1,9 @@
 package com.cs.common.thread;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: CS
@@ -11,11 +13,12 @@ import java.util.concurrent.*;
 public class ThreadExecutor {
 
     private static ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            10,
+            // 这里指定为服务器线程数
+            Runtime.getRuntime().availableProcessors(),
             30,
             60L,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(100),
+            new LinkedBlockingQueue<>(1000),
             (r)-> new Thread(r, "thread-pool-" + r.hashCode()),
             new ThreadPoolExecutor.CallerRunsPolicy());
 

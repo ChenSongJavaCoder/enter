@@ -6,13 +6,16 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.ImageToPDF;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,6 +31,9 @@ public class PDFUtil {
      * 多图片合成pdf的限制后缀
      */
     private static final List IMAGE_SUFFIX = Arrays.asList("jpg", "png", "jpeg");
+    private static final String IMAGE_TYPE = "png";
+    private static final String PDF = ".pdf";
+    private static final String PNG = ".png";
 
     static {
         // Important notice when using PDFBox with Java 8 before 1.8.0_191 or Java 9 before 9.0.4
@@ -109,6 +115,30 @@ public class PDFUtil {
         doc.save(target);
         //关闭pdf
         doc.close();
+    }
+
+    /**
+     * PDF转图片
+     *
+     * @return 转换图片后文件的绝对路径
+     */
+    public static List<String> pdfToImage(String pdfPath) throws IOException {
+        if (pdfPath.indexOf(PDF) < 0) {
+            return Collections.emptyList();
+        }
+        long start = System.currentTimeMillis();
+        List<String> pngPath = new ArrayList<>(8);
+        String destPrefix = pdfPath.substring(0, pdfPath.lastIndexOf(PDF)).concat("-");
+        try (PDDocument document = PDDocument.load(new File(pdfPath))) {
+            PDFRenderer renderer = new PDFRenderer(document);
+            for (int i = 0; i < document.getNumberOfPages(); ++i) {
+                String dest = destPrefix + i + PNG;
+                BufferedImage bufferedImage = renderer.renderImageWithDPI(i, 200);
+                ImageIO.write(bufferedImage, IMAGE_TYPE, new File(dest));
+                pngPath.add(dest);
+            }
+        }
+        return pngPath;
     }
 
 }

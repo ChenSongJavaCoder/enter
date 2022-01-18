@@ -10,6 +10,7 @@ public class ThrowingTest {
 
     static BaseCodeException systemError = new BaseCodeException(SystemErrorCode.DEMO);
 
+
     public static void main(String[] args) {
         Throwing.throwIt(systemError);
     }
