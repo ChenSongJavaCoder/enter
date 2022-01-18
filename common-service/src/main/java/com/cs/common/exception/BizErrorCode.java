@@ -9,6 +9,7 @@ package com.cs.common.exception;
 public enum BizErrorCode implements BaseCode {
 
     DEMO(10001, "业务校验错误"),
+    NOT_NULL(10002, "业务数据为空"),
     ;
 
     int code;

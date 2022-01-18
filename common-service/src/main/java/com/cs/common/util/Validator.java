@@ -1,8 +1,8 @@
 package com.cs.common.util;
 
 import com.cs.common.exception.BizErrorCode;
-import com.cs.common.exception.Throwing;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -17,16 +17,24 @@ public class Validator<T> {
     private Predicate<T> predicate = t -> true;
 
     public static void main(String[] args) {
-        boolean validated = new Validator<String>()
-                .with(s -> s.length() > 5)
-                .with(s -> s.startsWith("cs"))
-                .with(s -> s.endsWith("cn"))
-                .with(s -> s.contains("."))
-                .validate("cs.cn");
-        System.out.println(validated);
-        if (!validated) {
-            Throwing.throwIt(BizErrorCode.DEMO);
-        }
+//        boolean validated = new Validator<String>()
+//                .with(s -> s.length() > 5)
+//                .with(s -> s.startsWith("cs"))
+//                .with(s -> s.endsWith("cn"))
+//                .with(s -> s.contains("."))
+//                .validate("cs.cn");
+//        System.out.println(validated);
+//        if (!validated) {
+//            Throwing.throwIt(BizErrorCode.DEMO);
+//        }
+//        Validator<String> validator = new Validator<String>()
+//                .with(s -> s.length() > 5)
+//                .with(s -> s.startsWith("cs"))
+//                .with(s -> s.endsWith("cn"))
+//                .with(s -> s.contains("."));
+//        Assert.isTrue(validator, "cs.cn", BizErrorCode.DEMO);
+
+        Assert.isTrue(new ValidatorContext<String>(null, Objects::nonNull), BizErrorCode.NOT_NULL);
     }
 
     /**
