@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: CS
  * @date: 2021/5/8 下午2:22
  * @description: 内存缓存
+ * 对于内存失效可以使用
+ * @see com.google.common.cache.Cache
  */
 @Slf4j
 @Component
