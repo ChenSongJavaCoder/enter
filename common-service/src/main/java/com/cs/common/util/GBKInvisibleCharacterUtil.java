@@ -1,5 +1,8 @@
 package com.cs.common.util;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +35,23 @@ public class GBKInvisibleCharacterUtil {
     }
 
     /**
+     * 提取非GBK字符
+     *
+     * @param target
+     * @return
+     */
+    public static List<String> extractUnGBKCharacter(String target) {
+        List<String> unGBKCharacter = Lists.newArrayList();
+        if (containsInvisibleCharacter(target)) {
+            Matcher matcher = GBK_EXCLUDE_PATTERN.matcher(target);
+            while (matcher.find()) {
+                unGBKCharacter.add(matcher.group());
+            }
+        }
+        return unGBKCharacter;
+    }
+
+    /**
      * 移除不可见字符
      *
      * @param target
@@ -58,7 +78,7 @@ public class GBKInvisibleCharacterUtil {
     public static void main(String[] args) {
         String target = "山西省太原市迎泽区迎泽大街269号   0351-8950351";
         System.out.println("是否包含GBK不可见字符：" + containsInvisibleCharacter(target));
-        System.out.println("处理字符串：" + replaceWithMark(target, "&"));
+        System.out.println("处理字符串：" + replaceWithMark(target, "'"));
     }
 
 }

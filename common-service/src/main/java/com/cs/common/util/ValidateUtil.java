@@ -84,6 +84,7 @@ public class ValidateUtil {
         a.a = "a";
 
         String msg = valid(a);
+        System.out.println(msg);
 
     }
 }
