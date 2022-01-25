@@ -146,7 +146,13 @@ public class DocumentMappingBuilder {
         return t;
     }
 
-
+    /**
+     * 获取转换器
+     *
+     * @param field
+     * @param valueClass
+     * @return
+     */
     private Converter getConverter(Field field, Class valueClass) {
         // 优先取@Converter的转换器
         Converter converter = synchronizedConfiguration.getColumnConverter(field);

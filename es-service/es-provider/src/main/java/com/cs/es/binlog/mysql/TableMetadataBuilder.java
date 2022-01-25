@@ -23,18 +23,30 @@ public class TableMetadataBuilder {
     @Autowired
     DataSource dataSource;
 
+    /**
+     * 构建表元数据
+     *
+     * @param database
+     * @param table
+     * @param tableId
+     * @return
+     */
     public TableMetadata build(String database, String table, Long tableId) {
         TableMetadata tableMetadata = new TableMetadata();
         tableMetadata.setDatabase(database);
         tableMetadata.setTable(table);
         tableMetadata.setTableId(tableId);
-
         tableMetadata.setColumnMetadata(getColumnNames(database, table));
-        getColumnNames(database, table);
-
         return tableMetadata;
     }
 
+    /**
+     * 使用jdbc查询表信息，配置表字段关系
+     *
+     * @param database
+     * @param table
+     * @return
+     */
     public Map<Long, ColumnMetadata> getColumnNames(String database, String table) {
         Map<Long, ColumnMetadata> columnInfos = new HashMap<>();
 
@@ -43,7 +55,7 @@ public class TableMetadataBuilder {
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? and TABLE_NAME = ?");
+            preparedStatement = connection.prepareStatement("SELECT COLUMN_NAME, ORDINAL_POSITION, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? and TABLE_NAME = ?");
             preparedStatement.setString(1, database);
             preparedStatement.setString(2, table);
             resultSet = preparedStatement.executeQuery();

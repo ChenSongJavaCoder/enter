@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author keosn
  * @date 2019/3/25 17:53
+ * todo 这个可以放到配置类当中
  */
 @Component
 public class TableMetadataCache {

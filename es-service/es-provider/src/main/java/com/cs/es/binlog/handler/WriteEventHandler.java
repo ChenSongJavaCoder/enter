@@ -34,7 +34,11 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class WriteEventHandler implements Handler {
-
+    /**
+     * todo 关于表主健字段可通过注解配置查询实现
+     *
+     * @see javax.persistence.Id
+     */
     private static final String TABLE_ID = "id";
 
 

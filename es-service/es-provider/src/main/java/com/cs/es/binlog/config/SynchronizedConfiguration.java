@@ -77,7 +77,7 @@ public class SynchronizedConfiguration {
 
     public void addTable(DocumentTableMapping documentTableMapping) {
         DatabaseTablePair databaseTablePair = new DatabaseTablePair(documentTableMapping.getDatabase(), documentTableMapping.getTable());
-
+        // 首次添加数据库&表
         if (!relations.containsKey(databaseTablePair)) {
             relations.put(databaseTablePair, new ArrayList<>());
         }
@@ -96,7 +96,10 @@ public class SynchronizedConfiguration {
      * @return
      */
     public boolean containsDatabaseTablePair(DatabaseTablePair databaseTablePair) {
-        return this.relations.containsKey(databaseTablePair);
+        // 包含 表映射 & 关联字段映射 & 关联实体映射
+        return this.relations.containsKey(databaseTablePair)
+                || this.relatedColumnMapping.containsKey(databaseTablePair)
+                || this.entityRelatedMapping.containsKey(databaseTablePair);
     }
 
     /**
