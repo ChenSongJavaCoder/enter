@@ -14,6 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @description: 内存缓存
  * 对于内存失效可以使用
  * @see com.google.common.cache.Cache
+ * 使用优先级队列，做排序失效
+ * @see java.util.PriorityQueue
+ * @see java.util.concurrent.DelayQueue
  */
 @Slf4j
 @Component

@@ -53,7 +53,8 @@ public class BinlogWatcher {
     }
 
     /**
-     * binlog统计线程
+     * binlog统计线程，
+     * todo 使用计划线程池
      */
     private class BinaryLogClientStatisticsThread extends Thread {
         private BinaryLogClientStatistics binaryLogClientStatistics;

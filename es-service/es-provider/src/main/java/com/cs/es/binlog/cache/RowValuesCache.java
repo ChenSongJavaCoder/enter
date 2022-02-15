@@ -58,9 +58,10 @@ public class RowValuesCache {
         }
 
         result = redisCache.get(key);
-        log.info("Getting from redis key:{} used: {}", key, System.currentTimeMillis() - start);
-
-        memoryCache.put(new CacheNode(key, result, MEMORY_CACHE_TIME));
+        if (null != result) {
+            log.info("Getting from redis key:{} used: {}", key, System.currentTimeMillis() - start);
+            memoryCache.put(new CacheNode(key, result, MEMORY_CACHE_TIME));
+        }
         return result;
     }
 

@@ -1,9 +1,11 @@
 package com.cs.common.thread;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Author: CS
@@ -20,6 +22,7 @@ public class ThreadExecutor {
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(1000),
             (r)-> new Thread(r, "thread-pool-" + r.hashCode()),
+            // 使用主线程调用，需要根据场景来设置，不然会引起主线程阻塞
             new ThreadPoolExecutor.CallerRunsPolicy());
 
     public static void execute(List<Runnable> runnable) {
@@ -35,5 +38,18 @@ public class ThreadExecutor {
     }
 
     public static void main(String[] args) {
+//        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+//            AtomicInteger atomicInteger = new AtomicInteger();
+//            while (atomicInteger.get() < 10) {
+//                System.out.println(atomicInteger.incrementAndGet());
+//            }
+//        },5,10, TimeUnit.SECONDS);
+
+        Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
+            AtomicInteger atomicInteger = new AtomicInteger();
+            while (atomicInteger.get() < 10) {
+                System.out.println(atomicInteger.incrementAndGet());
+            }
+        }, 5, 10, TimeUnit.SECONDS);
     }
 }

@@ -39,12 +39,14 @@ public class UserCache {
 
     public static void main(String[] args) throws InterruptedException {
         AtomicInteger atomicInteger = new AtomicInteger();
-        CACHE.put(UUIDUtil.uuid32(), "a");
+        CACHE.put("a", UUIDUtil.uuid32());
         TimeUnit.SECONDS.sleep(2);
-        CACHE.put(UUIDUtil.uuid32(), "b");
+        CACHE.put("b", UUIDUtil.uuid32());
 
         ThreadExecutor.execute(() -> {
             do {
+                System.out.println(CACHE.getIfPresent("a"));
+                System.out.println(JSONUtil.toJsonStr(CACHE.stats()));
                 System.out.println(atomicInteger.incrementAndGet() + "-" + CACHE.asMap().size() + JSONUtil.toJsonStr(CACHE.asMap()));
                 try {
                     TimeUnit.SECONDS.sleep(1);
@@ -53,7 +55,7 @@ public class UserCache {
                 }
 
             } while (CollectionUtil.isNotEmpty(unAvailableAccount()));
-            System.exit(1);
+            System.exit(0);
         });
 
     }

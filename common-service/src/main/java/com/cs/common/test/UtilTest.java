@@ -1,6 +1,8 @@
 package com.cs.common.test;
 
 
+import java.io.IOException;
+
 /**
  * @Author: CS
  * @Date: 2020/7/13 5:17 下午
@@ -8,7 +10,7 @@ package com.cs.common.test;
  */
 public class UtilTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // 获取屏幕高度
 //        int i = ScreenUtil.getHeight();
 //
@@ -47,7 +49,23 @@ public class UtilTest {
 
 //        System.out.println(files.size());
         // 获取系统cpu数量
-        System.out.println(Runtime.getRuntime().availableProcessors());
-        System.out.println(System.getProperty("java.io.tmpdir"));
+//        System.out.println(Runtime.getRuntime().availableProcessors());
+//        System.out.println(System.getProperty("java.io.tmpdir"));
+
+
+//        String downloadUrl = "http://rys-ops.oss-cn-hangzhou.aliyuncs.com/20220126/9d1be909b9c2a955e3cfb7eba29e7b2f/cloud-gateway.jar?Expires=1643190860&OSSAccessKeyId=LTAI4GJ5JaeXNsQhEbZXPSFD&Signature=s1tZ%2FZoEDARwG71%2Bxj%2BCa5%2BQabc%3D";
+//        String dest = "/Users/chensong/Study/";
+//        // 网络链接下载文件到指定文件夹
+//        HttpUtil.downloadFile(downloadUrl, dest);
+
+        // 验证码
+//        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(200, 200);
+//        System.out.println(circleCaptcha.getImageBase64Data());
+//                ImageIO.write(circleCaptcha.getImage(),"test.png",new File("/Users/chensong/Study/"));
+
+
+//        String join = String.join(",", Arrays.asList("a", "b", "c"));
+//        System.out.println(join);
     }
+
 }

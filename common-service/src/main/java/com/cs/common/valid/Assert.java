@@ -1,4 +1,4 @@
-package com.cs.common.util;
+package com.cs.common.valid;
 
 import com.cs.common.exception.BizErrorCode;
 import com.cs.common.exception.Throwing;

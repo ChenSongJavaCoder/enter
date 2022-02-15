@@ -1,5 +1,6 @@
 package com.cs.common.exception;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.cs.common.bean.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -61,8 +62,9 @@ public class GlobalExceptionConfig {
      */
     @ExceptionHandler(value = RuntimeException.class)
     public Result<Object> runtimeExceptionHandler(RuntimeException e) {
-        log.error("运行时异常异常处理", e.getMessage());
-        return Result.failure().message(e.getMessage()).build();
+        String exception = ExceptionUtil.stacktraceToString(e);
+        log.error("运行时异常异常处理", e);
+        return Result.failure().message(exception).build();
     }
 
     /**

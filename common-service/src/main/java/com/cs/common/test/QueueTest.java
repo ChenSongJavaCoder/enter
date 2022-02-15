@@ -30,8 +30,8 @@ public class QueueTest {
 
     public static void main(String[] args) {
 //        priorityQueue();
-//        delayQueue();
-        concurrentLinkedQueue();
+        delayQueue();
+//        concurrentLinkedQueue();
     }
 
     /**

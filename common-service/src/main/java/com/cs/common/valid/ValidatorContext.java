@@ -1,4 +1,4 @@
-package com.cs.common.util;
+package com.cs.common.valid;
 
 import com.cs.common.exception.BizErrorCode;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class ValidatorContext<T> {
     public ValidatorContext(T validData, Predicate<T>... predicate) {
         Assert.notNull(predicate, BizErrorCode.NOT_NULL);
         this.validator = new Validator<>();
-        Stream.of(predicate).forEach(e -> validator.with(e));
+        Stream.of(predicate).forEach(e -> validator.and(e));
         this.validData = validData;
     }
 }

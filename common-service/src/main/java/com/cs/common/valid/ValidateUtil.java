@@ -1,4 +1,4 @@
-package com.cs.common.util;
+package com.cs.common.valid;
 
 import org.springframework.util.CollectionUtils;
 

@@ -1,4 +1,4 @@
-package com.cs.common.valid;
+package com.cs.common.annotation;
 
 import com.cs.common.util.GBKInvisibleCharacterUtil;
 import org.apache.commons.lang.StringUtils;

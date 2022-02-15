@@ -50,6 +50,7 @@ public class BinaryLogClientConfig {
 //                    EventDeserializer.CompatibilityMode.CHAR_AND_BINARY_AS_BYTE_ARRAY,
                 EventDeserializer.CompatibilityMode.INVALID_DATE_AND_TIME_AS_ZERO
         );
+        // 如果有之前的同步位置，则指定binlog位置
         if (StringUtils.hasText(binlogFile) && StringUtils.hasText(binlogPosition)) {
             client.setBinlogFilename(binlogFile);
             client.setBinlogPosition(Long.valueOf(binlogPosition));
@@ -65,6 +66,12 @@ public class BinaryLogClientConfig {
         return client;
     }
 
+    /**
+     * 注入binlog统计
+     *
+     * @param binaryLogClient
+     * @return
+     */
     @Bean
     public BinaryLogClientStatistics binaryLogClientStatistics(@Autowired BinaryLogClient binaryLogClient) {
         return new BinaryLogClientStatistics(binaryLogClient);

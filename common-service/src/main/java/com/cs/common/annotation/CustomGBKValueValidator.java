@@ -1,4 +1,4 @@
-package com.cs.common.valid;
+package com.cs.common.annotation;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
