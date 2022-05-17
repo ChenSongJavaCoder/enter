@@ -165,7 +165,7 @@ public class CosUtil {
     }
 
     public static void main(String[] args) {
-        double a = getSimilarity("第一个字符和", "第一个字符和最后一个字符没有汉字");
+        double a = getSimilarity("第一个字符和我们之间的关系", "第一个字符和最后一个字符没有汉字");
     }
 
 }

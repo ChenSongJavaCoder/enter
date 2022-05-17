@@ -87,7 +87,7 @@ public class IpUtil {
 
 
     public static void main(String[] args) {
-        String testIp = "185.199.109.153";
+        String testIp = "192.168.153.158";
 
         try {
             String position = getPositionByIp(testIp);
@@ -128,7 +128,7 @@ public class IpUtil {
         // This creates the DatabaseReader object. To improve performance, reuse
         // the object across lookups. The object is thread-safe.
         DatabaseReader reader = new DatabaseReader.Builder(database).withCache(new CHMCache()).build();
-        InetAddress ipAddress = InetAddress.getByName("185.199.109.153");
+        InetAddress ipAddress = InetAddress.getByName(testIp);
 
         // Replace "city" with the appropriate method for your database, e.g.,
         // "country".

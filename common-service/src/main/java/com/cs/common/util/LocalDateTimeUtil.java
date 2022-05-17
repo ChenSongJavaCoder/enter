@@ -1,5 +1,6 @@
 package com.cs.common.util;
 
+import cn.hutool.core.date.DatePattern;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.util.Assert;
@@ -22,17 +23,22 @@ import java.util.*;
  * @see java.time.Year
  * @see java.time.Month
  * @see java.time.MonthDay
+ * @see cn.hutool.core.date.LocalDateTimeUtil
  */
-public class LocalDateTimeUtil {
+public class LocalDateTimeUtil extends cn.hutool.core.date.LocalDateTimeUtil {
 
     /**
      * 默认东8区
      */
     private static ZoneOffset DEFAULT_ZONE_OFFSET = ZoneOffset.of("+8");
 
+    /**
+     * @see cn.hutool.core.date.DatePattern#NORM_DATETIME_FORMATTER
+     */
+    @Deprecated
     private static String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    private static DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATETIME_FORMAT);
+    private static DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DatePattern.NORM_DATETIME_FORMATTER;
 
     private static String Y_M_PATTERN = "yyyyMM";
 
@@ -193,13 +199,11 @@ public class LocalDateTimeUtil {
      * @return
      */
     public static Map<String, Set<Integer>> classifyMonthWeek(LocalDate start, LocalDate end) {
-        Long unit = Long.valueOf(end.format(DateTimeFormatter.ofPattern(Y_M_PATTERN))) - Long.valueOf(start.format(DateTimeFormatter.ofPattern(Y_M_PATTERN)));
-
         start = start.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate tempStart;
+        LocalDate tempStart = start;
         LocalDate tempEnd;
         Map<String, Set<Integer>> map = new LinkedHashMap<>();
-        for (int i = 0; i <= unit; i++) {
+        for (int i = 0; tempStart.isBefore(end.with(TemporalAdjusters.firstDayOfMonth())); i++) {
             tempStart = start.plusMonths(i);
             tempEnd = tempStart.with(TemporalAdjusters.lastDayOfMonth());
             String key = tempStart.format(DateTimeFormatter.ofPattern(Y_M_PATTERN));
@@ -243,5 +247,8 @@ public class LocalDateTimeUtil {
 
     public static void main(String[] args) {
         Long day = dayBetweenEpochDate(LocalDate.now(), LocalDate.now().plusDays(3));
+
+        Map<String, Set<Integer>> stringSetMap = classifyMonthWeek(LocalDate.now(), LocalDate.now().plusYears(1));
+
     }
 }

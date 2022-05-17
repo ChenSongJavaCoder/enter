@@ -1,4 +1,4 @@
-package com.cs.common.annotation;
+package com.cs.common.annotation.validate;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -26,6 +26,7 @@ public class UserCache {
             .expireAfterWrite(10, TimeUnit.SECONDS)
             .initialCapacity(6)
             .maximumSize(6)
+            .removalListener((listener) -> System.out.println("元素：" + listener.getKey() + "被移除"))
             .build();
 
     /**

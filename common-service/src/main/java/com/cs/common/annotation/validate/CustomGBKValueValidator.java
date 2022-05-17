@@ -1,4 +1,4 @@
-package com.cs.common.annotation;
+package com.cs.common.annotation.validate;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
@@ -29,7 +29,8 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
         List<String> unGBKCharacter = GBKInvisibleCharacterUtil.extractUnGBKCharacter(target);
         String join = StrUtil.join(",", unGBKCharacter);
         String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, join, target.substring(target.indexOf(unGBKCharacter.get(0)), target.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
-        System.out.println(customValidMessage);
+        System.out.println("原文：" + target);
+        System.out.println("提示：" + customValidMessage);
     }
 
     @Override

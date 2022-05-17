@@ -1,7 +1,15 @@
 package com.cs.common.test;
 
 
+import cn.hutool.core.io.watch.SimpleWatcher;
+import cn.hutool.core.io.watch.WatchMonitor;
+import cn.hutool.core.io.watch.WatchUtil;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.WatchEvent;
+import java.util.concurrent.Executors;
 
 /**
  * @Author: CS
@@ -66,6 +74,21 @@ public class UtilTest {
 
 //        String join = String.join(",", Arrays.asList("a", "b", "c"));
 //        System.out.println(join);
+
+        // 监听文件，会阻塞当前线程，如需不影响主线程可使用异步线程处理
+        WatchMonitor watchMonitor = WatchUtil.createModify(new File("/Users/chensong/Desktop/其他"), new MyWatcher());
+//        watchMonitor.watch();
+        Executors.newSingleThreadExecutor().execute(watchMonitor);
+
+        System.out.println("初始化完成");
+    }
+
+    public static class MyWatcher extends SimpleWatcher {
+
+        @Override
+        public void onModify(WatchEvent<?> event, Path currentPath) {
+            System.out.println(event.kind() + currentPath.toString());
+        }
     }
 
 }

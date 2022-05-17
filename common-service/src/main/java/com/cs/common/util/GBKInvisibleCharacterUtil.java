@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class GBKInvisibleCharacterUtil {
 
     /**
-     * GBK不可见字符的正则表达式
+     * 属于GBK字符的正则表达式
      * 类似<0xa0>
      */
     final static String GBK_EXCLUDE_REGEX = "[^\u4E00-\u9FA5\u3000-\u303F\uFF00-\uFFEF\u0000-\u007F\u201c-\u201d]";

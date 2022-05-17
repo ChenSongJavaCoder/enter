@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-public class BinlogWatcher {
+public class BinlogMonitor {
 
     @Autowired
     BinaryLogClient client;
@@ -51,6 +51,7 @@ public class BinlogWatcher {
             }
         }
     }
+
 
     /**
      * binlog统计线程，

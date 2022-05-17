@@ -1,5 +1,5 @@
 server:
-  port: 8761
+  port: 10290
   undertow:
     io-threads: 4
     worker-threads: 20

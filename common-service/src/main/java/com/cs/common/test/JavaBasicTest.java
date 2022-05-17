@@ -37,6 +37,10 @@ public class JavaBasicTest {
         ArrayList arrayList = new ArrayList();
         new CopyOnWriteArrayList();
 
+        char[] cha = {'我', '们'};
+        String s1 = new String(cha);
+        System.out.println(s1);
+
         HashMap hashMap = new HashMap(8);
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap(8);
         ReentrantLock reentrantLock = new ReentrantLock();

@@ -138,20 +138,21 @@ public class SensitiveWordUtil {
         while ((lex = ik.next()) != null) {
             list.add(lex.getLexemeText());
         }
-//        System.out.println("分词后的词组：" + list.toString());
+        System.out.println("分词后的词组：" + list.toString());
         return list;
     }
 
     public static void main(String[] args) throws IOException {
 
         Set<String> sensitiveWordSet = new HashSet<>();
-        sensitiveWordSet.add("丁点儿");
+        sensitiveWordSet.add("一丁点");
         sensitiveWordSet.add("爱恋");
         sensitiveWordSet.add("静静");
         sensitiveWordSet.add("哈哈");
         sensitiveWordSet.add("啦啦");
         sensitiveWordSet.add("感动");
         sensitiveWordSet.add("发呆");
+        sensitiveWordSet.add("支付宝");
         //初始化敏感词库
         SensitiveWordUtil.init(sensitiveWordSet);
 
