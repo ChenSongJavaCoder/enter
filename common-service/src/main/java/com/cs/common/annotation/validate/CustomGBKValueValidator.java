@@ -2,7 +2,7 @@ package com.cs.common.annotation.validate;
 
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
-import com.cs.common.util.GBKInvisibleCharacterUtil;
+import com.cs.common.util.GBKCharacterUtil;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -26,7 +26,7 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
 
     public static void main(String[] args) {
         String target = "山西省太原市迎泽区迎泽大街269号   0351-8950351℃,㎡,m³,°abc😊";
-        List<String> unGBKCharacter = GBKInvisibleCharacterUtil.extractUnGBKCharacter(target);
+        List<String> unGBKCharacter = GBKCharacterUtil.extractUnGBKCharacter(target);
         String join = StrUtil.join(",", unGBKCharacter);
         String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, join, target.substring(target.indexOf(unGBKCharacter.get(0)), target.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
         System.out.println("原文：" + target);
@@ -38,14 +38,14 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
         if (StringUtils.isEmpty(value)) {
             return true;
         }
-        List<String> unGBKCharacter = GBKInvisibleCharacterUtil.extractUnGBKCharacter(value);
+        List<String> unGBKCharacter = GBKCharacterUtil.extractUnGBKCharacter(value);
         if (CollectionUtils.isEmpty(unGBKCharacter)) {
             return true;
         }
         // 禁用默认的提示消息
         context.disableDefaultConstraintViolation();
         String character = StrUtil.join(StrPool.COMMA, unGBKCharacter);
-        String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, character, value.substring(value.indexOf(unGBKCharacter.get(0)), value.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1))));
+        String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, character, value.substring(value.indexOf(unGBKCharacter.get(0)), value.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
         // 使用自定义的提示消息
         context.buildConstraintViolationWithTemplate(customValidMessage).addConstraintViolation();
         return false;
@@ -53,6 +53,7 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
 
     @Override
     public void initialize(CustomGBKValue constraintAnnotation) {
+        // 将注解中的message传递入自定义的校验类中
         message = constraintAnnotation.message();
     }
 

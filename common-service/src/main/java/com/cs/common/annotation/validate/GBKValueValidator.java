@@ -1,6 +1,6 @@
 package com.cs.common.annotation.validate;
 
-import com.cs.common.util.GBKInvisibleCharacterUtil;
+import com.cs.common.util.GBKCharacterUtil;
 import org.apache.commons.lang.StringUtils;
 
 import javax.validation.ConstraintValidator;
@@ -18,6 +18,6 @@ public class GBKValueValidator implements ConstraintValidator<GBKValue, String> 
         if (StringUtils.isBlank(value)) {
             return true;
         }
-        return !GBKInvisibleCharacterUtil.containsInvisibleCharacter(value);
+        return !GBKCharacterUtil.containsUnGBKCharacter(value);
     }
 }
