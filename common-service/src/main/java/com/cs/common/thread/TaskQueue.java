@@ -21,10 +21,14 @@ import java.util.concurrent.Executor;
 public class TaskQueue {
 
     static final Logger log = LoggerFactory.getLogger(TaskQueue.class);
-    // @protectedby tasks
+    /**
+     * @protectedby tasks
+     */
     private final LinkedList<Task> tasks = new LinkedList<>();
     private final Runnable runner;
-    // @protectedby tasks
+    /**
+     * @protectedby tasks
+     */
     private Executor current;
 
     public TaskQueue() {

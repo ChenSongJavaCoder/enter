@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {GBKValueValidator.class})
 public @interface GBKValue {
 
-    String message() default "GBK包含非法字符，请确认！";
+    String message() default "包含非法字符，请确认！";
 
     Class<?>[] groups() default {};
 

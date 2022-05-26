@@ -25,7 +25,7 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
     private String message;
 
     public static void main(String[] args) {
-        String target = "山西省太原市迎泽区迎泽大街269号   0351-8950351℃,㎡,m³,°abc😊";
+        String target = "山西省太原市迎泽区迎泽大街269号   0351-8950351℃,㎡,m³,°abc😊d";
         List<String> unGBKCharacter = GBKCharacterUtil.extractUnGBKCharacter(target);
         String join = StrUtil.join(",", unGBKCharacter);
         String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, join, target.substring(target.indexOf(unGBKCharacter.get(0)), target.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
@@ -45,7 +45,7 @@ public class CustomGBKValueValidator implements ConstraintValidator<CustomGBKVal
         // 禁用默认的提示消息
         context.disableDefaultConstraintViolation();
         String character = StrUtil.join(StrPool.COMMA, unGBKCharacter);
-        String customValidMessage = String.format(CUSTOM_MESSAGE_TEMPLATE, character, value.substring(value.indexOf(unGBKCharacter.get(0)), value.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
+        String customValidMessage = message + String.format(CUSTOM_MESSAGE_TEMPLATE, character, value.substring(value.indexOf(unGBKCharacter.get(0)), value.indexOf(unGBKCharacter.get(unGBKCharacter.size() - 1)) + 1));
         // 使用自定义的提示消息
         context.buildConstraintViolationWithTemplate(customValidMessage).addConstraintViolation();
         return false;

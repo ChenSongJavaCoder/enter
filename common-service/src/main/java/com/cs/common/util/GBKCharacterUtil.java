@@ -1,5 +1,6 @@
 package com.cs.common.util;
 
+import cn.hutool.core.text.UnicodeUtil;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -13,10 +14,12 @@ import java.util.regex.Pattern;
  * @see <p>https://blog.csdn.net/genglei01/article/details/8876485<p/>
  * @see <p>https://blog.csdn.net/archer119/article/details/52202065</p>
  * @see <p>https://blog.csdn.net/aodiyi6351/article/details/101705140</>
+ * @see <p>https://www.qqxiuzi.cn/bianma/zifuji.php</p>
  * @see cn.hutool.core.text.UnicodeUtil
  * @see cn.hutool.core.util.ReUtil
 
  * GBK汉字范围：\u4E00-\u9FA5 (汉字范围\u4E00-\u9FFF)
+ * ASCII范围：\u0000-\u007F 对应全部128个ACSII字符
  *
  *
  *
@@ -26,7 +29,7 @@ public class GBKCharacterUtil {
 
     /**
      * 属于GBK字符的正则表达式
-     * 目前还不完善
+     * todo 目前还不完善
      * “”㎡ 都是属于GBK的字符符号
      *
      * 类似<0xa0>为不可见字符
@@ -89,6 +92,7 @@ public class GBKCharacterUtil {
 
 
     public static void main(String[] args) {
+        String s = UnicodeUtil.toString("\u007F");
         String target = "山西省太原市迎泽区迎泽大街269号   0351-8950351㎡  m²😀😃";
         System.out.println("是否包含GBK不可见字符：" + containsUnGBKCharacter(target));
         System.out.println("处理字符串：" + replaceWithMark(target, "'"));

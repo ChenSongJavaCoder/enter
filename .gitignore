@@ -25,10 +25,13 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+build/it
 
 ### VS Code ###
 .vscode/
 /mvnw.cmd
 /mvnw
 /.mvn/
+
+*.DS_Store
+
