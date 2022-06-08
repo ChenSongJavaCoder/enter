@@ -2,6 +2,7 @@ package com.cs.common.annotation.validate;
 
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.*;
 
 
@@ -19,6 +20,10 @@ public @interface EnumValue {
     String[] strValues() default {};
 
     int[] intValues() default {};
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 
 
     @Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
