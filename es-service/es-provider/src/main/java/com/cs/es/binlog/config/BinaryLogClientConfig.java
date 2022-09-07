@@ -60,9 +60,7 @@ public class BinaryLogClientConfig {
         client.registerEventListener((event ->
                 handlerDispatcher.getHandler(event).ifPresent(handler -> handler.handle(event))
         ));
-        redisTemplate.opsForValue().set(BINLOG_FILE_PREFIX + documentDatabaseConfig.getServiceId(), client.getBinlogFilename());
-        redisTemplate.opsForValue().set(BINLOG_POSITION_PREFIX + documentDatabaseConfig.getServiceId(), String.valueOf(client.getBinlogPosition()));
-
+        client.registerLifecycleListener(new DisconnectListener());
         return client;
     }
 
@@ -75,5 +73,19 @@ public class BinaryLogClientConfig {
     @Bean
     public BinaryLogClientStatistics binaryLogClientStatistics(@Autowired BinaryLogClient binaryLogClient) {
         return new BinaryLogClientStatistics(binaryLogClient);
+    }
+
+    /**
+     * 断开连接时记录最后的binlog位置，可以支持断点续传
+     */
+    public class DisconnectListener extends BinaryLogClient.AbstractLifecycleListener {
+
+        @Override
+        public void onDisconnect(BinaryLogClient client) {
+            log.info("binlog disconnect...");
+            redisTemplate.opsForValue().set(BINLOG_FILE_PREFIX + documentDatabaseConfig.getServiceId(), client.getBinlogFilename());
+            redisTemplate.opsForValue().set(BINLOG_POSITION_PREFIX + documentDatabaseConfig.getServiceId(), String.valueOf(client.getBinlogPosition()));
+
+        }
     }
 }

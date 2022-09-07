@@ -52,6 +52,7 @@
             <artifactId>db-repository</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!--https://github.com/osheroff/mysql-binlog-connector-java-->
         <dependency>
             <groupId>com.zendesk</groupId>
             <artifactId>mysql-binlog-connector-java</artifactId>
